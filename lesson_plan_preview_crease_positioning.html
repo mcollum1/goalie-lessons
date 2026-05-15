@@ -574,6 +574,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
+    margin-left: auto;
     font-size: 13.5px;
     font-weight: 600;
     color: #535862;
@@ -746,6 +747,9 @@
   .start-session-btn:hover  { background: #243d63; }
   .start-session-btn:active { transform: scale(0.98); }
   .start-session-btn svg    { width: 18px; height: 18px; flex-shrink: 0; }
+
+  .start-session-btn.unsaved             { background: #b45309; }
+  .start-session-btn.unsaved:hover       { background: #92400e; }
 
   /* Push page content up so the sticky footer doesn't overlap */
   body { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
@@ -1049,7 +1053,6 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#lp-arrow-left"/></svg>
     Back
   </button>
-  <div class="ph-title">Lesson Plan</div>
   <button class="ph-rebuild" id="rebuildBtn" title="Rebuild plan">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
     Rebuild
@@ -1475,35 +1478,42 @@ const SESSION = {
 };
 
 // Save plan
-const saveBtn  = document.getElementById('saveBtn');
+const saveBtn   = document.getElementById('saveBtn');
 const saveToast = document.getElementById('saveToast');
 
-saveBtn.addEventListener('click', () => {
-  // Mark saved state visually
+// Tracks whether the coach has made edits since the plan loaded
+let isDirty = false;
+
+// Core save logic — shared by the Save button and Save & Start
+function executeSave() {
   saveBtn.classList.add('saved');
   saveBtn.innerHTML = `<svg viewBox="0 0 24 24"><use href="#lp-check"/></svg> Saved`;
+
+  // Reset Start Session button back to normal
+  const startBtn = document.getElementById('startSessionBtn');
+  if (startBtn) {
+    startBtn.classList.remove('unsaved');
+    startBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg> Start Session`;
+  }
+  isDirty = false;
 
   // Collect current drill order from the DOM (coach may have reordered/swapped)
   const drillCards = Array.from(document.querySelectorAll('.drill-card'));
   const drillIds = drillCards.map(c => c.dataset.drillId).filter(Boolean);
 
   if (window.DB) {
-    // Find or create the plan record for this session
     const sessionId = SESSION.sessionId || null;
     let plan = sessionId
       ? DB.PlanStore.getBySessionId(sessionId)[0]
       : null;
 
     if (plan) {
-      // Update existing plan with current drill order + saved status
       DB.PlanStore.update(plan.id, {
-        status:     'saved',
-        drill_ids:  drillIds,  // flat ordered list for quick reference
+        status:    'saved',
+        drill_ids: drillIds,
       });
       DB.commitPlan(plan.id, sessionId);
     } else {
-      // No pre-existing plan (opened directly, not via chat sheet)
-      // Create a minimal plan record so hasSavedPlan() returns true
       const goalieIds = SESSION.goalie
         ? [DB.GoalieStore.where(g => g.name === SESSION.goalie)[0]?.id].filter(Boolean)
         : [];
@@ -1524,23 +1534,20 @@ saveBtn.addEventListener('click', () => {
       DB.commitPlan(newPlan.id, sessionId);
     }
 
-    // Legacy fallback key so old "See plan" check still works if page reloads
-    // before the button state is refreshed from DB
     if (SESSION.goalie) {
       const legacyKey = 'savedPlan_' + SESSION.goalie.replace(/[^a-zA-Z0-9]/g, '_');
       localStorage.setItem(legacyKey, 'lesson_plan_preview_crease_positioning.html');
     }
   }
+}
 
-  // Show toast
+// Save button — saves then returns home
+saveBtn.addEventListener('click', () => {
+  executeSave();
   saveToast.classList.add('show');
   clearTimeout(saveToast._t);
   saveToast._t = setTimeout(() => saveToast.classList.remove('show'), 1800);
-
-  // Navigate back to home after the toast settles
-  setTimeout(() => {
-    window.location.href = 'index.html';
-  }, 1200);
+  setTimeout(() => { window.location.href = 'index.html'; }, 1200);
 });
 
 // Remove a drill
@@ -1858,10 +1865,17 @@ document.getElementById('drillPickerModal').addEventListener('click', function(e
   if (e.target === this) closeDrillPicker();
 });
 
-// Mark plan as unsaved (resets the Save button if it was in saved state)
+// Mark plan as unsaved — resets Save button and flips Start Session to "Save & Start"
 function markUnsaved() {
+  isDirty = true;
   saveBtn.classList.remove('saved');
   saveBtn.innerHTML = `<svg viewBox="0 0 24 24"><use href="#lp-save"/></svg> Save`;
+
+  const startBtn = document.getElementById('startSessionBtn');
+  if (startBtn && !startBtn.classList.contains('unsaved')) {
+    startBtn.classList.add('unsaved');
+    startBtn.innerHTML = `<svg viewBox="0 0 24 24"><use href="#lp-save"/></svg> Save & Start`;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -2184,6 +2198,9 @@ async function buildPlan() {
    Start Session — navigates to on-ice mode
    ───────────────────────────────────────────────────────────── */
 function startSession() {
+  // If the coach made edits, save first before going on-ice
+  if (isDirty) executeSave();
+
   const p = new URLSearchParams({
     goalie:    SESSION.goalie    || '',
     sessionId: SESSION.sessionId || '',
