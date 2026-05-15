@@ -1,0 +1,49 @@
+{
+  "id": "puck-circuit-arc-forward-cut-t-push",
+  "name": "Puck Circuit — Arc Forward Cut T-Push",
+  "description": "Intermediate skating circuit with 4 pucks evenly spaced along the arc of the crease. Goalie starts on P3, t-pushes to P2, butterfly slides to P4, cuts forward around P4 in butterfly, powerslides to P1, t-pushes to P2, then t-pushes back to P3.",
+  "drill_category": [
+    "skating"
+  ],
+  "session_slot": "warmup",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": [
+    "in_tight"
+  ],
+  "setup_required": "puck_setup",
+  "goalie_starting_position": "standing on P3 on crease arc",
+  "movement_sequence": [
+    "start_on_p3",
+    "t_push_to_p2",
+    "butterfly_slide_to_p4",
+    "forward_butterfly_cut_around_p4",
+    "powerslide_to_p1",
+    "t_push_to_p2",
+    "t_push_to_p3"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Stay low through the forward butterfly cut — use P4 as your pivot point, not a stopping point",
+    "Load your edges after the cut before the powerslide — don't rush the push",
+    "Back-to-back t-pushes at the end get the same explosion as the first — no coasting to finish",
+    "Keep your chest up through the butterfly slide — stay long and controlled"
+  ],
+  "tags": [
+    "t_push",
+    "butterfly_slide",
+    "butterfly_pivot",
+    "power_slide",
+    "puck_circuit",
+    "edge_control",
+    "crease_movement"
+  ],
+  "variations": [],
+  "clip_file": "drill-clips/puck-circuit-arc-forward-cut-t-push.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Four pucks evenly spaced on the crease arc. The forward butterfly cut around P4 is the technical focal point — the puck is a pivot marker and the cut should be tight and continuous, not a stop-and-reset. The back-to-back t-pushes at the end (P1→P2→P3) are the conditioning challenge; both should be full-extension explosions. Good intermediate bridge between the simpler arc-t-push-slide circuit and the more complex four-point-arc. Run multiple reps and switch directions."
+}

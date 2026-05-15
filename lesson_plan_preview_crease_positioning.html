@@ -1,0 +1,2213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>Lesson Plan</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #f2f2f7;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 16px 56px;
+    min-height: 100vh;
+  }
+
+  /* ── Session header ── */
+  .session-header {
+    width: 100%;
+    max-width: 390px;
+    background: #1c3150;
+    border-radius: 20px;
+    padding: 20px 18px 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 20px rgba(28,49,80,0.28);
+  }
+
+  .session-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.38);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 5px;
+  }
+
+  .session-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 13px;
+  }
+
+  /* ── Pre-session coaching brief ── */
+  .brief-wrapper {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .brief-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brief-master-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.30);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+  }
+
+  .brief-section {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .brief-section-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.28);
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+  }
+
+  .brief-body {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.60);
+    line-height: 1.55;
+  }
+
+  .brief-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+  }
+
+
+  .session-stats {
+    display: flex;
+    gap: 7px;
+  }
+
+  .session-stat {
+    flex: 1;
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 8px 4px;
+    text-align: center;
+  }
+
+  .stat-label {
+    font-size: 9.5px;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 3px;
+  }
+
+  .stat-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* ── Goalie avatars in session header ── */
+  .lp-goalie-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .lp-goalie-avatars {
+    display: flex;
+  }
+
+  .lp-goalie-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -7px;
+    border: 2px solid #1c3150;
+    flex-shrink: 0;
+  }
+
+  .lp-goalie-avatar:first-child { margin-left: 0; }
+
+  .lp-goalie-avatar.tone-a { background: #eef4ff; color: #1e4fb5; }
+  .lp-goalie-avatar.tone-b { background: #fef0e6; color: #b85c00; }
+  .lp-goalie-avatar.tone-c { background: #ecfdf5; color: #047857; }
+  .lp-goalie-avatar.tone-d { background: #faf5ff; color: #7e22ce; }
+
+  .lp-goalie-names {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.2;
+  }
+
+  /* ── Section divider ── */
+  .section-divider {
+    width: 100%;
+    max-width: 390px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 6px 0 8px;
+  }
+
+  .section-divider-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .section-divider-text { flex: 1; }
+  .section-divider-name { font-size: 13px; font-weight: 700; color: #111; }
+  .section-divider-sub  { font-size: 11px; color: #999; margin-top: 1px; }
+  .section-divider-time { font-size: 12px; font-weight: 600; color: #999; }
+
+  /* ── Drill card ── */
+  .drill-card {
+    width: 100%;
+    max-width: 390px;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.09);
+    margin-bottom: 10px;
+  }
+
+  /* video block */
+  .video-wrap {
+    position: relative;
+    background: #111;
+    width: 100%;
+  }
+
+  .video-wrap video {
+    width: 100%;
+    display: block;
+    max-height: 210px;
+    object-fit: cover;
+  }
+
+  /* badge-section: TOP RIGHT */
+  .badge-section {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: #fff;
+  }
+
+  /* step counter: TOP LEFT */
+  .badge-step {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    background: rgba(0,0,0,0.55);
+    color: rgba(255,255,255,0.8);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  /* shots badge: BOTTOM RIGHT (only on drills that have shooters) */
+  .badge-shots {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    background: rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.85);
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+  }
+
+  /* card body */
+  .card-body {
+    padding: 14px 15px 15px;
+  }
+
+  .drill-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 5px;
+    line-height: 1.25;
+  }
+
+  .drill-desc {
+    font-size: 12.5px;
+    color: #666;
+    line-height: 1.55;
+    margin-bottom: 13px;
+  }
+
+  .drill-stats {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 13px;
+  }
+
+  .drill-stat {
+    flex: 1;
+    background: #f2f2f7;
+    border-radius: 9px;
+    padding: 8px 4px;
+    text-align: center;
+  }
+
+  .drill-stat-label { font-size: 10px; color: #999; margin-bottom: 2px; }
+  .drill-stat-value { font-size: 13px; font-weight: 600; color: #111; }
+  .drill-stat-value.two-goalie-time { color: #378ADD; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #ebebeb;
+    margin: 0 0 12px;
+  }
+
+  .micro-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  .rationale {
+    font-size: 12.5px;
+    color: #444;
+    line-height: 1.55;
+    background: #f8f8f8;
+    border-radius: 9px;
+    padding: 9px 11px;
+    margin-bottom: 12px;
+    border-left: 3px solid #ddd;
+  }
+
+  .cues { display: flex; flex-direction: column; gap: 7px; margin-bottom: 2px; }
+
+  .cue {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    font-size: 13px;
+    color: #222;
+    line-height: 1.45;
+  }
+
+  .cue-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .setup-note {
+    font-size: 12px;
+    color: #666;
+    background: #f2f2f7;
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .setup-note strong { color: #444; }
+
+  .req-pills { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 13px; }
+
+  .req-pill {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: #f2f2f7;
+    color: #555;
+  }
+
+  .partner-pill { background: #e6f7f0; color: #0d7a50; }
+
+  /* ── Bonus drill card ── */
+  .bonus-section-label {
+    width: 100%;
+    max-width: 390px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0 8px;
+  }
+
+  .bonus-rule {
+    flex: 1;
+    height: 1px;
+    background: repeating-linear-gradient(90deg, #ccc 0, #ccc 4px, transparent 4px, transparent 8px);
+  }
+
+  .bonus-label-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+  }
+
+  .drill-card.bonus {
+    opacity: 0.82;
+    border: 2px dashed #d0d0d0;
+    box-shadow: none;
+    background: #fafafa;
+  }
+
+  .drill-card.bonus .video-wrap {
+    opacity: 0.9;
+  }
+
+  .bonus-add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 11px;
+    background: #f2f2f7;
+    border: none;
+    border-top: 1px solid #ebebeb;
+    font-size: 13px;
+    font-weight: 600;
+    color: #378ADD;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* ── Coach's notes ── */
+  .coaches-notes {
+    width: 100%;
+    max-width: 390px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 14px 15px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+    margin-top: 4px;
+  }
+
+  .coaches-notes-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 9px;
+  }
+
+  .cn-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: #f2f2f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  .cn-title { font-size: 11px; font-weight: 700; color: #111; text-transform: uppercase; letter-spacing: 0.05em; }
+  .cn-body  { font-size: 13px; color: #444; line-height: 1.6; }
+
+  /* ── Total bar ── */
+  .total-bar {
+    width: 100%;
+    max-width: 390px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 18px;
+    background: #1c3150;
+    border-radius: 14px;
+    margin: 14px 0 10px;
+    box-shadow: 0 2px 14px rgba(28,49,80,0.22);
+  }
+
+  .total-label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.06em; }
+  .total-value { font-size: 18px; font-weight: 700; color: #fff; }
+  .total-bonus { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; text-align: right; }
+
+  /* ── Color accents ── */
+  .c-skate { background: rgba(24,166,200,0.85); }
+  .c-shot  { background: rgba(224,92,42,0.85); }
+  .c-skill { background: rgba(55,138,221,0.85); }
+  .c-sit   { background: rgba(23,160,100,0.85); }
+
+  .dot-skate { background: #18a6c8; }
+  .dot-shot  { background: #e05c2a; }
+  .dot-skill { background: #378ADD; }
+  .dot-sit   { background: #17a064; }
+
+  .rat-skill { border-left-color: #378ADD; }
+  .rat-sit   { border-left-color: #17a064; }
+
+  .icon-skate { background: #e6f6fb; }
+  .icon-shot  { background: #fff0e8; }
+  .icon-skill { background: #e8f0fb; }
+  .icon-sit   { background: #e6f7f0; }
+
+  /* 2-goalie timing note inline */
+  .two-goalie-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10.5px;
+    color: #378ADD;
+    background: #e8f0fb;
+    border-radius: 20px;
+    padding: 2px 8px;
+    margin-left: 6px;
+    font-weight: 600;
+    vertical-align: middle;
+  }
+
+  /* ── Sticky page header ── */
+  .page-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .ph-back {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #7f56d9;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px 0;
+    font-family: inherit;
+    flex-shrink: 0;
+  }
+
+  .ph-back svg { width: 17px; height: 17px; }
+
+  .ph-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #181d27;
+    letter-spacing: -0.005em;
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ph-save {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #fff;
+    background: #1c3150;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-family: inherit;
+    flex-shrink: 0;
+    transition: background 0.15s ease, transform 0.12s ease;
+  }
+
+  .ph-save:hover  { background: #243d63; }
+  .ph-save:active { transform: scale(0.97); }
+  .ph-save svg    { width: 14px; height: 14px; }
+
+  .ph-save.saved  { background: #17a064; }
+
+  .ph-rebuild {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #535862;
+    background: transparent;
+    border: 1.5px solid #d5d7da;
+    border-radius: 8px;
+    padding: 6px 11px;
+    cursor: pointer;
+    font-family: inherit;
+    flex-shrink: 0;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .ph-rebuild:hover  { background: #f3f4f6; border-color: #adb5bd; color: #181d27; }
+  .ph-rebuild:active { background: #e9eaeb; }
+  .ph-rebuild svg    { width: 14px; height: 14px; }
+
+  /* ── Save toast ── */
+  .save-toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    background: #181d27;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 999px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.25s cubic-bezier(0.22,0.61,0.36,1);
+    z-index: 200;
+    white-space: nowrap;
+  }
+
+  .save-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── Plan loading state ── */
+  .plan-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px 40px;
+    gap: 18px;
+  }
+
+  .plan-loading-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(28,49,80,0.12);
+    border-top-color: #1c3150;
+    border-radius: 50%;
+    animation: spin 0.75s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .plan-loading-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #717680;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .plan-loading-sub {
+    font-size: 12px;
+    color: #a4a7ae;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  /* ── Plan error state ── */
+  .plan-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 24px 40px;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .plan-error-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #fff0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c0392b;
+    margin-bottom: 4px;
+  }
+
+  .plan-error-icon svg { width: 22px; height: 22px; }
+
+  .plan-error-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #181d27;
+  }
+
+  .plan-error-msg {
+    font-size: 13px;
+    color: #717680;
+    line-height: 1.5;
+    max-width: 280px;
+  }
+
+  .plan-error-retry {
+    margin-top: 8px;
+    background: #1c3150;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .plan-error-retry:hover { background: #243d63; }
+
+  /* ── Start Session sticky footer ── */
+  .start-session-bar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 390px;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-top: 1px solid rgba(0,0,0,0.08);
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    z-index: 90;
+  }
+
+  .start-session-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    background: #1c3150;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 15px 16px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.12s ease;
+    box-shadow: 0 2px 14px rgba(28,49,80,0.24);
+  }
+
+  .start-session-btn:hover  { background: #243d63; }
+  .start-session-btn:active { transform: scale(0.98); }
+  .start-session-btn svg    { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* Push page content up so the sticky footer doesn't overlap */
+  body { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+
+  /* ── Per-drill edit controls ── */
+  .drill-controls {
+    display: flex;
+    border-top: 1px solid #f0f0f5;
+    background: #fafafa;
+  }
+
+  .drill-ctrl {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 11px 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #717680;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+
+  .drill-ctrl:hover { background: #f0f0f5; color: #535862; }
+  .drill-ctrl:active { background: #e9eaeb; }
+  .drill-ctrl + .drill-ctrl { border-left: 1px solid #ebebeb; }
+  .drill-ctrl svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .drill-ctrl.ctrl-remove { color: #c0392b; }
+  .drill-ctrl.ctrl-remove:hover { background: #fff0f0; color: #a93226; }
+
+  .drill-ctrl.ctrl-swap   { color: #378ADD; }
+  .drill-ctrl.ctrl-swap:hover { background: #e8f0fb; }
+
+  /* ── Add drill button ── */
+  .add-drill-btn {
+    width: 100%;
+    max-width: 390px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 12px;
+    background: #fff;
+    border: 1.5px dashed #d5d7da;
+    border-radius: 14px;
+    color: #7f56d9;
+    font-size: 13.5px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .add-drill-btn:hover {
+    background: #f4ebff;
+    border-color: #b692f6;
+  }
+
+  .add-drill-btn svg { width: 16px; height: 16px; }
+
+  /* ── Removed drill placeholder ── */
+  .drill-card.removed {
+    display: none;
+  }
+
+  /* ── Swap modal overlay ── */
+  .swap-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,24,40,0.5);
+    z-index: 300;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .swap-modal-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .swap-modal {
+    width: 100%;
+    max-width: 390px;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 20px 16px calc(28px + env(safe-area-inset-bottom));
+    transform: translateY(24px);
+    transition: transform 0.28s cubic-bezier(0.22,0.61,0.36,1);
+  }
+
+  .swap-modal-backdrop.open .swap-modal { transform: translateY(0); }
+
+  .swap-modal-handle {
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: #d5d7da;
+    margin: 0 auto 16px;
+  }
+
+  .swap-modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #181d27;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .swap-modal-sub {
+    font-size: 12.5px;
+    color: #717680;
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+
+  .swap-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.12s ease;
+    border: 1.5px solid #e9eaeb;
+    margin-bottom: 8px;
+  }
+
+  .swap-option:hover { background: #f4ebff; border-color: #b692f6; }
+
+  .swap-option-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .swap-option-name {
+    flex: 1;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #181d27;
+    line-height: 1.3;
+  }
+
+  .swap-option-meta {
+    font-size: 11.5px;
+    color: #717680;
+    margin-top: 1px;
+  }
+
+  .swap-cancel {
+    width: 100%;
+    padding: 13px;
+    background: #f3f4f6;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #535862;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: background 0.12s ease;
+  }
+
+  .swap-cancel:hover { background: #e9eaeb; }
+
+  /* ── Drill library picker modal ── */
+  .drill-picker-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,24,40,0.5);
+    z-index: 300;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .drill-picker-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .drill-picker-sheet {
+    width: 100%;
+    max-width: 390px;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 20px 16px 0;
+    transform: translateY(24px);
+    transition: transform 0.28s cubic-bezier(0.22,0.61,0.36,1);
+    max-height: 82vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .drill-picker-backdrop.open .drill-picker-sheet { transform: translateY(0); }
+
+  .drill-picker-search {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    border: 1.5px solid #e9eaeb;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #181d27;
+    background: #fafafa;
+    outline: none;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+
+  .drill-picker-search:focus { border-color: #7f56d9; background: #fff; }
+
+  .drill-picker-list {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .picker-drill-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.12s ease;
+    border: 1.5px solid #e9eaeb;
+    margin-bottom: 8px;
+  }
+
+  .picker-drill-item:hover { background: #f4ebff; border-color: #b692f6; }
+
+  .picker-drill-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .picker-drill-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #181d27;
+    line-height: 1.3;
+  }
+
+  .picker-drill-meta {
+    font-size: 11.5px;
+    color: #717680;
+    margin-top: 2px;
+  }
+
+  .drill-picker-footer {
+    padding: 12px 0 calc(20px + env(safe-area-inset-bottom));
+    flex-shrink: 0;
+  }
+
+  /* Adjust body padding for sticky header */
+  body { padding-top: 0; }
+</style>
+
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+  <defs>
+    <symbol id="lp-arrow-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="lp-save" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="17 21 17 13 7 13 7 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="7 3 7 8 15 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="lp-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="lp-arrow-up" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="lp-arrow-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="lp-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M21 3v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M8 16H3v5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="lp-trash" viewBox="0 0 24 24"><path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="lp-plus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  </defs>
+</svg>
+<script src="db.js"></script>
+<script src="drill_library.js"></script>
+</head>
+<body>
+
+<!-- Sticky page header -->
+<header class="page-header">
+  <button class="ph-back" onclick="history.back(); return false;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#lp-arrow-left"/></svg>
+    Back
+  </button>
+  <div class="ph-title">Lesson Plan</div>
+  <button class="ph-rebuild" id="rebuildBtn" title="Rebuild plan">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+    Rebuild
+  </button>
+  <button class="ph-save" id="saveBtn">
+    <svg viewBox="0 0 24 24"><use href="#lp-save"/></svg>
+    Save
+  </button>
+</header>
+
+<div class="save-toast" id="saveToast">Plan saved — heading home</div>
+
+<!-- Swap drill modal -->
+<div class="swap-modal-backdrop" id="swapModal">
+  <div class="swap-modal">
+    <div class="swap-modal-handle"></div>
+    <div class="swap-modal-title">Swap drill</div>
+    <div class="swap-modal-sub" id="swapContext">Pick a replacement from the library</div>
+    <div id="swapOptions">
+      <!-- populated by JS -->
+    </div>
+    <button class="swap-cancel" onclick="closeSwapModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- Drill library picker modal -->
+<div class="drill-picker-backdrop" id="drillPickerModal">
+  <div class="drill-picker-sheet">
+    <div class="swap-modal-handle"></div>
+    <div class="swap-modal-title" id="drillPickerTitle">Add drill</div>
+    <div class="swap-modal-sub" id="drillPickerSub">Tap a drill to add it to the plan</div>
+    <input class="drill-picker-search" id="drillPickerSearch" type="text" placeholder="Search drills…" autocomplete="off" oninput="filterPickerDrills()">
+    <div class="drill-picker-list" id="drillPickerList">
+      <!-- populated by JS -->
+    </div>
+    <div class="drill-picker-footer">
+      <button class="swap-cancel" onclick="closeDrillPicker()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Session header -->
+<div class="session-header">
+  <div class="lp-goalie-row" id="goalieAvatarRow">
+    <!-- populated by JS from URL params -->
+  </div>
+  <p class="session-eyebrow" id="sessionEyebrow">Today's Plan · 2 Goalies</p>
+  <p class="session-title" id="sessionTitle">Crease Movement &amp; Positioning Angles</p>
+  <div class="brief-wrapper">
+
+    <div class="brief-header">
+      <span class="brief-master-label">Coach's Notes</span>
+    </div>
+
+    <!-- Focus -->
+    <div class="brief-section">
+      <span class="brief-section-label">Focus</span>
+      <p class="brief-body" id="briefFocus">Crease movement and positioning — specifically T-push load and reading the shooter before committing to any movement.</p>
+    </div>
+
+    <div class="brief-divider"></div>
+
+    <!-- Drills -->
+    <div class="brief-section">
+      <span class="brief-section-label">Drills</span>
+      <p class="brief-body" id="briefDrills">Two skating warmups to activate movement patterns, a low-intensity shot warmup to add the puck, then two skill drills building the overlap-to-T-push-to-locate sequence. Bonus drill if time allows.</p>
+    </div>
+
+  </div><!-- /brief-wrapper -->
+  <div class="session-stats" id="sessionStats">
+    <div class="session-stat"><div class="stat-label">Duration</div><div class="stat-value" id="statDuration">~58 min</div></div>
+    <div class="session-stat"><div class="stat-label">Level</div><div class="stat-value" id="statLevel">Intermediate</div></div>
+    <div class="session-stat"><div class="stat-label">Shooters</div><div class="stat-value" id="statShooters">1</div></div>
+    <div class="session-stat"><div class="stat-label">Goalies</div><div class="stat-value" id="statGoalies">2</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PLAN SECTIONS — replaced by JS when an AI plan is stored
+═══════════════════════════════════ -->
+<div id="planSections">
+
+<!-- ═══════════════════════════════════
+     SKATING WARM-UP
+═══════════════════════════════════ -->
+<div class="section-divider">
+  <div class="section-divider-icon icon-skate">⛸️</div>
+  <div class="section-divider-text">
+    <div class="section-divider-name">Skating Warm-Up</div>
+    <div class="section-divider-sub">No shooters · 2 drills</div>
+  </div>
+  <div class="section-divider-time">~10 min</div>
+</div>
+
+<!-- Drill 1 -->
+<div class="drill-card" data-drill-id="1" data-drill-name="Board-to-Board Movement Series" data-drill-phase="skating">
+  <div class="video-wrap">
+    <video controls playsinline loop>
+      <source src="drill-clips/diagonal-t-push-pivots.mp4" type="video/mp4">
+    </video>
+    <span class="badge-step">1 of 6</span>
+    <span class="badge-section c-skate">Skating warmup</span>
+    <!-- No shooter badge on skating drills -->
+  </div>
+  <div class="card-body">
+    <p class="drill-name">Board-to-Board Movement Series</p>
+    <p class="drill-desc">Laterals board to board using a pivot-and-push pattern. Run as a progression — V1 T-push pivots → V2 shuffle pivots → V3 butterfly drop + recover → V4 butterfly + powerslide + recover.</p>
+
+    <div class="drill-stats">
+      <div class="drill-stat"><div class="drill-stat-label">Duration</div><div class="drill-stat-value">5 min</div></div>
+      <div class="drill-stat"><div class="drill-stat-label">Difficulty</div><div class="drill-stat-value">Beginner→</div></div>
+      <div class="drill-stat"><div class="drill-stat-label">Setup</div><div class="drill-stat-value">Open ice</div></div>
+    </div>
+
+    <hr class="divider">
+    <p class="micro-label">Coaching cues</p>
+    <div class="cues">
+      <div class="cue"><div class="cue-dot dot-skate"></div><span>Eyes go first on every pivot — head leads the body</span></div>
+      <div class="cue"><div class="cue-dot dot-skate"></div><span>Lean into the push and load hard edges on the stop</span></div>
+      <div class="cue"><div class="cue-dot dot-skate"></div><span>Stay tall through the shuffles — don't sink into the hips</span></div>
+    </div>
+  </div>
+  <div class="drill-controls">
+    <button class="drill-ctrl" onclick="moveDrill(this, -1)" title="Move up"><svg viewBox="0 0 24 24"><use href="#lp-arrow-up"/></svg> Up</button>
+    <button class="drill-ctrl ctrl-swap" onclick="openSwap(this)" title="Swap drill"><svg viewBox="0 0 24 24"><use href="#lp-refresh"/></svg> Swap</button>
+    <button class="drill-ctrl ctrl-remove" onclick="removeDrill(this)" title="Remove drill"><svg viewBox="0 0 24 24"><use href="#lp-trash"/></svg> Remove</button>
+    <button class="drill-ctrl" onclick="moveDrill(this, 1)" title="Move down"><svg viewBox="0 0 24 24"><use href="#lp-arrow-down"/></svg> Down</button>
+  </div>
+</div>
+
+<!-- Drill 2 -->
+<div class="drill-card" data-drill-id="2" data-drill-name="Post Entry & Exit — RVH to Powerslide" data-drill-phase="skating">
+  <div class="video-wrap">
+    <video controls playsinline loop>
+      <source src="drill-clips/post-entry-exit-rvh-powerslide.mp4" type="video/mp4">
+    </video>
+    <span class="badge-step">2 of 6</span>
+    <span class="badge-section c-skate">Skating warmup</span>
+    <!-- No shooter badge on skating drills -->
+  </div>
+  <div class="card-body">
+    <p class="drill-name">Post Entry &amp; Exit — RVH to Powerslide</p>
+    <p class="drill-desc">Continuous loop: shuffle to post → set RVH → bump to butterfly → pivot → powerslide across → recover → T-push back to center. Primes the crease movement patterns used throughout the session.</p>
+
+    <div class="drill-stats">
+      <div class="drill-stat">
+        <div class="drill-stat-label">Time on ice</div>
+        <div class="drill-stat-value two-goalie-time">~8 min</div>
+      </div>
+      <div class="drill-stat"><div class="drill-stat-label">Difficulty</div><div class="drill-stat-value">Intermediate</div></div>
+      <div class="drill-stat"><div class="drill-stat-label">Setup</div><div class="drill-stat-value">Net reqd</div></div>
+    </div>
+
+    <div class="setup-note">⚠️ <strong>2 goalies — takes turns.</strong> Net-required drill; goalies alternate so each gets clean reps. Adds ~3 min vs. a 1-goalie session.</div>
+
+    <hr class="divider">
+    <p class="micro-label">Coaching cues</p>
+    <div class="cues">
+      <div class="cue"><div class="cue-dot dot-skate"></div><span>Set the RVH clean before the bump — don't skip the post</span></div>
+      <div class="cue"><div class="cue-dot dot-skate"></div><span>Stay in butterfly all the way through the powerslide</span></div>
+      <div class="cue"><div class="cue-dot dot-skate"></div><span>Explosive T-push back to center — finish each rep with momentum</span></div>
+    </div>
+  </div>
+  <div class="drill-controls">
+    <button class="drill-ctrl" onclick="moveDrill(this, -1)"><svg viewBox="0 0 24 24"><use href="#lp-arrow-up"/></svg> Up</button>
+    <button class="drill-ctrl ctrl-swap" onclick="openSwap(this)"><svg viewBox="0 0 24 24"><use href="#lp-refresh"/></svg> Swap</button>
+    <button class="drill-ctrl ctrl-remove" onclick="removeDrill(this)"><svg viewBox="0 0 24 24"><use href="#lp-trash"/></svg> Remove</button>
+    <button class="drill-ctrl" onclick="moveDrill(this, 1)"><svg viewBox="0 0 24 24"><use href="#lp-arrow-down"/></svg> Down</button>
+  </div>
+</div>
+
+<button class="add-drill-btn" onclick="addDrill('skating')">
+  <svg viewBox="0 0 24 24"><use href="#lp-plus"/></svg>
+  Add drill to Skating Warm-Up
+</button>
+
+<!-- ═══════════════════════════════════
+     SHOT WARM-UP
+═══════════════════════════════════ -->
+<div class="section-divider">
+  <div class="section-divider-icon icon-shot">🏒</div>
+  <div class="section-divider-text">
+    <div class="section-divider-name">Shot Warm-Up</div>
+    <div class="section-divider-sub">70–80% intensity · both goalies together</div>
+  </div>
+  <div class="section-divider-time">~5 min</div>
+</div>
+
+<!-- Drill 3 -->
+<div class="drill-card" data-drill-id="3" data-drill-name="Butterfly Shot Warmup — Tracking Series" data-drill-phase="shot">
+  <div class="video-wrap">
+    <video controls playsinline loop>
+      <source src="drill-clips/butterfly-shot-warmup.mp4" type="video/mp4">
+    </video>
+    <span class="badge-step">3 of 6</span>
+    <span class="badge-section c-shot">Shot warmup</span>
+    <span class="badge-shots">Low intensity</span>
+  </div>
+  <div class="card-body">
+    <p class="drill-name">Butterfly Shot Warmup — Tracking Series</p>
+    <p class="drill-desc">Both goalies in butterfly side by side. Shooter at top of circles, 70–80%. Run V1 (glove) + V2 (blocker), 5–6 reps each. Tracking work only — not compete.</p>
+
+    <div class="drill-stats">
+      <div class="drill-stat"><div class="drill-stat-label">Duration</div><div class="drill-stat-value">5 min</div></div>
+      <div class="drill-stat"><div class="drill-stat-label">Difficulty</div><div class="drill-stat-value">Beginner</div></div>
+      <div class="drill-stat"><div class="drill-stat-label">Shots</div><div class="drill-stat-value">High rep</div></div>
+    </div>
+
+    <hr class="divider">
+    <p class="micro-label">Coaching cues</p>
+    <div class="cues">
+      <div class="cue"><div class="cue-dot dot-shot"></div><span>Track the puck all the way in — see it into the save, don't guess</span></div>
+      <div class="cue"><div class="cue-dot dot-shot"></div><span>Exaggerate the lean to the save side — drive eyes and nose into it</span></div>
+      <div class="cue"><div class="cue-dot dot-shot"></div><span>Shooter stays at 70–80% — this is tracking work, not compete</span></div>
+    </div>
+  </div>
+  <div class="drill-controls">
+    <button class="drill-ctrl" onclick="moveDrill(this, -1)"><svg viewBox="0 0 24 24"><use href="#lp-arrow-up"/></svg> Up</button>
+    <button class="drill-ctrl ctrl-swap" onclick="openSwap(this)"><svg viewBox="0 0 24 24"><use href="#lp-refresh"/></svg> Swap</button>
+    <button class="drill-ctrl ctrl-remove" onclick="removeDrill(this)"><svg viewBox="0 0 24 24"><use href="#lp-trash"/></svg> Remove</button>
+    <button class="drill-ctrl" onclick="moveDrill(this, 1)"><svg viewBox="0 0 24 24"><use href="#lp-arrow-down"/></svg> Down</button>
+  </div>
+</div>
+
+<button class="add-drill-btn" onclick="addDrill('shot')">
+  <svg viewBox="0 0 24 24"><use href="#lp-plus"/></svg>
+  Add drill to Shot Warm-Up
+</button>
+
+<!-- ═══════════════════════════════════
+     SKILL WORK
+═══════════════════════════════════ -->
+<div class="section-divider">
+  <div class="section-divider-icon icon-skill">🎯</div>
+  <div class="section-divider-text">
+    <div class="section-divider-name">Skill Work</div>
+    <div class="section-divider-sub">2 drills · 2 goalies = 20 min each</div>
+  </div>
+  <div class="section-divider-time">~40 min</div>
+</div>
+
+<!-- Drill 4 -->
+<div class="drill-card" data-drill-id="4" data-drill-name="Overlap — T-Push and Go Call React" data-drill-phase="skill">
+  <div class="video-wrap">
+    <video controls playsinline loop>
+      <source src="drill-clips/overlap-t-push-go-call-react.mp4" type="video/mp4">
+    </video>
+    <span class="badge-step">4 of 6</span>
+    <span class="badge-section c-skill">Skill work</span>
+    <span class="badge-shots">1 shot</span>
+  </div>
+  <div class="card-body">
+    <p class="drill-name">Overlap — T-Push and Go Call React</p>
+    <p class="drill-desc">G starts in far-side overlap, generates momentum back into post, T-pushes to center top of crease. On F1's 'go' call, locates F1 and lateral releases into the save.</p>
+
+    <div class="drill-stats">
+      <div class="drill-stat">
+        <div class="drill-stat-label">Time on ice</div>
+        <div class="drill-stat-value two-goalie-time">20 min</div>
+      </div>
+      <div class="drill-stat"><div class="drill-stat-label">Per goalie</div><div class="drill-stat-value">10 min</div></div>
+      <div class="drill-stat"><div class="drill-stat-label">Difficulty</div><div class="drill-stat-value">Intermediate</div></div>
+    </div>
+
+    <div class="rationale rat-skill">Establishes the session's two foundational habits — using the overlap to load momentum into the post, then a hard T-push to depth before a verbal-cue lateral release. One shot, clean and repeatable. G2 watches and identifies the locate habit while G1 reps.</div>
+
+    <hr class="divider">
+    <p class="micro-label">Coaching cues</p>
+    <div class="cues">
+      <div class="cue"><div class="cue-dot dot-skill"></div><span>Use the overlap to load — don't just walk back to the post</span></div>
+      <div class="cue"><div class="cue-dot dot-skill"></div><span>Hard T-push to center top of crease — get to depth, don't drift</span></div>
+      <div class="cue"><div class="cue-dot dot-skill"></div><span>Eyes find F1 on the 'go' call — locate before you drop, every rep</span></div>
+    </div>
+  </div>
+  <div class="drill-controls">
+    <button class="drill-ctrl" onclick="moveDrill(this, -1)"><svg viewBox="0 0 24 24"><use href="#lp-arrow-up"/></svg> Up</button>
+    <button class="drill-ctrl ctrl-swap" onclick="openSwap(this)"><svg viewBox="0 0 24 24"><use href="#lp-refresh"/></svg> Swap</button>
+    <button class="drill-ctrl ctrl-remove" onclick="removeDrill(this)"><svg viewBox="0 0 24 24"><use href="#lp-trash"/></svg> Remove</button>
+    <button class="drill-ctrl" onclick="moveDrill(this, 1)"><svg viewBox="0 0 24 24"><use href="#lp-arrow-down"/></svg> Down</button>
+  </div>
+</div>
+
+<!-- Drill 5 -->
+<div class="drill-card" data-drill-id="5" data-drill-name="Go Call — Lateral Release and Net Attack" data-drill-phase="skill">
+  <div class="video-wrap">
+    <video controls playsinline loop>
+      <source src="drill-clips/go-call-lateral-drop-net-attack.mp4" type="video/mp4">
+    </video>
+    <span class="badge-step">5 of 6</span>
+    <span class="badge-section c-skill">Skill work</span>
+    <span class="badge-shots">2 shots</span>
+  </div>
+  <div class="card-body">
+    <p class="drill-name">Go Call — Lateral Release and Net Attack</p>
+    <p class="drill-desc">G T-pushes to center top of crease. On 'go' call, locates F1 and lateral releases for shot 1. F1 picks up puck below the goal line and attacks in tight for shot 2.</p>
+
+    <div class="drill-stats">
+      <div class="drill-stat">
+        <div class="drill-stat-label">Time on ice</div>
+        <div class="drill-stat-value two-goalie-time">20 min</div>
+      </div>
+      <div class="drill-stat"><div class="drill-stat-label">Per goalie</div><div class="drill-stat-value">10 min</div></div>
+      <div class="drill-stat"><div class="drill-stat-label">Difficulty</div><div class="drill-stat-value">Intermediate</div></div>
+    </div>
+
+    <div class="rationale rat-skill">Progression from drill 4 — same verbal cue and lateral release, but a second in-tight shot follows immediately. Tests whether the goalie resets mentally and physically before F1 is already on puck 2.</div>
+
+    <hr class="divider">
+    <p class="micro-label">Coaching cues</p>
+    <div class="cues">
+      <div class="cue"><div class="cue-dot dot-skill"></div><span>Eyes find F1 before dropping — don't react to sound alone</span></div>
+      <div class="cue"><div class="cue-dot dot-skill"></div><span>Reset immediately after shot 1 — F1 is already moving to puck 2</span></div>
+      <div class="cue"><div class="cue-dot dot-skill"></div><span>Track F1 attacking from below the goal line and stay live through the rebound</span></div>
+    </div>
+  </div>
+  <div class="drill-controls">
+    <button class="drill-ctrl" onclick="moveDrill(this, -1)"><svg viewBox="0 0 24 24"><use href="#lp-arrow-up"/></svg> Up</button>
+    <button class="drill-ctrl ctrl-swap" onclick="openSwap(this)"><svg viewBox="0 0 24 24"><use href="#lp-refresh"/></svg> Swap</button>
+    <button class="drill-ctrl ctrl-remove" onclick="removeDrill(this)"><svg viewBox="0 0 24 24"><use href="#lp-trash"/></svg> Remove</button>
+    <button class="drill-ctrl" onclick="moveDrill(this, 1)"><svg viewBox="0 0 24 24"><use href="#lp-arrow-down"/></svg> Down</button>
+  </div>
+</div>
+
+<button class="add-drill-btn" onclick="addDrill('skill')">
+  <svg viewBox="0 0 24 24"><use href="#lp-plus"/></svg>
+  Add drill to Skill Work
+</button>
+
+<!-- ═══════════════════════════════════
+     TOTAL BAR
+═══════════════════════════════════ -->
+<div class="total-bar">
+  <div>
+    <div class="total-label">Session Total</div>
+  </div>
+  <div style="text-align:right;">
+    <div class="total-value">~58 min</div>
+    <div class="total-bonus">+ bonus if time allows</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     BONUS DRILL
+═══════════════════════════════════ -->
+<div class="bonus-section-label">
+  <div class="bonus-rule"></div>
+  <span class="bonus-label-text">⏱ Bonus — if time allows</span>
+  <div class="bonus-rule"></div>
+</div>
+
+<!-- Drill 6 — Bonus -->
+<div class="drill-card bonus" data-drill-id="6" data-drill-name="Lateral Release — RVH Post Entry and Bump Out" data-drill-phase="skill">
+  <div class="video-wrap">
+    <video controls playsinline loop>
+      <source src="drill-clips/lateral-release-rvh-bump-out-slot.mp4" type="video/mp4">
+    </video>
+    <span class="badge-step">6 of 6</span>
+    <span class="badge-section c-skill">Skill work</span>
+    <span class="badge-shots">1 shot</span>
+  </div>
+  <div class="card-body">
+    <p class="drill-name">Lateral Release — RVH Post Entry and Bump Out</p>
+    <p class="drill-desc">G lateral releases to dot angle, rotate-pushes into RVH on the near post. On F1's 'go' call, bumps off the post leading with eyes and hands to the slot shot.</p>
+
+    <div class="drill-stats">
+      <div class="drill-stat">
+        <div class="drill-stat-label">Time on ice</div>
+        <div class="drill-stat-value two-goalie-time">20 min</div>
+      </div>
+      <div class="drill-stat"><div class="drill-stat-label">Per goalie</div><div class="drill-stat-value">10 min</div></div>
+      <div class="drill-stat"><div class="drill-stat-label">Difficulty</div><div class="drill-stat-value">Intermediate</div></div>
+    </div>
+
+    <div class="rationale rat-skill">Caps the skill block — the lateral release feeds into a rotate-push RVH and a bump-out challenging the slot. Three distinct habits in one rep and the most complex sequence of the session. Only run if drills 4 and 5 are clean.</div>
+
+    <hr class="divider">
+    <p class="micro-label">Coaching cues</p>
+    <div class="cues">
+      <div class="cue"><div class="cue-dot dot-skill"></div><span>Lead with eyes through the lateral release — head is already on the shooter</span></div>
+      <div class="cue"><div class="cue-dot dot-skill"></div><span>Rotate push into RVH — fully set before the 'go' call fires</span></div>
+      <div class="cue"><div class="cue-dot dot-skill"></div><span>Bump out with eyes and hands, not pads — pad-first means you're already behind</span></div>
+    </div>
+    <div class="drill-controls">
+      <button class="drill-ctrl" onclick="moveDrill(this, -1)"><svg viewBox="0 0 24 24"><use href="#lp-arrow-up"/></svg> Up</button>
+      <button class="drill-ctrl ctrl-swap" onclick="openSwap(this)"><svg viewBox="0 0 24 24"><use href="#lp-refresh"/></svg> Swap</button>
+      <button class="drill-ctrl ctrl-remove" onclick="removeDrill(this)"><svg viewBox="0 0 24 24"><use href="#lp-trash"/></svg> Remove</button>
+      <button class="drill-ctrl" onclick="moveDrill(this, 1)"><svg viewBox="0 0 24 24"><use href="#lp-arrow-down"/></svg> Down</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /planSections -->
+
+<div style="height: 32px;"></div>
+
+<!-- Sticky Start Session footer -->
+<div class="start-session-bar" id="startSessionBar">
+  <button class="start-session-btn" id="startSessionBtn" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="6 3 20 12 6 21 6 3"/>
+    </svg>
+    Start Session
+  </button>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   Lesson Plan — Edit Controls
+   ───────────────────────────────────────────────────────────── */
+
+// Read session params passed from the plan builder (index.html CTA)
+const _sp = new URLSearchParams(window.location.search);
+const SESSION = {
+  shooters:  parseInt(_sp.get('shooters'))  || null,
+  goalies:   parseInt(_sp.get('goalies'))   || null,
+  screener:  _sp.get('screener')  || null,   // 'yes' | 'no' | 'skip'
+  level:     _sp.get('level')     || null,
+  focus:     _sp.get('focus')     || null,
+  goalie:    _sp.get('goalie')    || null,   // display name, e.g. "Jake Reynolds"
+  goalieId:  _sp.get('goalieId')  || null,   // DB id, e.g. "goalie_jake_reynolds"
+  sessionId: _sp.get('sessionId') || null,   // DB id, e.g. "session_jake_0512"
+  duration:  parseInt(_sp.get('duration'))  || null,
+};
+
+// Save plan
+const saveBtn  = document.getElementById('saveBtn');
+const saveToast = document.getElementById('saveToast');
+
+saveBtn.addEventListener('click', () => {
+  // Mark saved state visually
+  saveBtn.classList.add('saved');
+  saveBtn.innerHTML = `<svg viewBox="0 0 24 24"><use href="#lp-check"/></svg> Saved`;
+
+  // Collect current drill order from the DOM (coach may have reordered/swapped)
+  const drillCards = Array.from(document.querySelectorAll('.drill-card'));
+  const drillIds = drillCards.map(c => c.dataset.drillId).filter(Boolean);
+
+  if (window.DB) {
+    // Find or create the plan record for this session
+    const sessionId = SESSION.sessionId || null;
+    let plan = sessionId
+      ? DB.PlanStore.getBySessionId(sessionId)[0]
+      : null;
+
+    if (plan) {
+      // Update existing plan with current drill order + saved status
+      DB.PlanStore.update(plan.id, {
+        status:     'saved',
+        drill_ids:  drillIds,  // flat ordered list for quick reference
+      });
+      DB.commitPlan(plan.id, sessionId);
+    } else {
+      // No pre-existing plan (opened directly, not via chat sheet)
+      // Create a minimal plan record so hasSavedPlan() returns true
+      const goalieIds = SESSION.goalie
+        ? [DB.GoalieStore.where(g => g.name === SESSION.goalie)[0]?.id].filter(Boolean)
+        : [];
+      const newPlan = DB.PlanStore.save({
+        session_id:         sessionId,
+        goalie_ids:         goalieIds,
+        title:              document.querySelector('.brief-title')?.textContent?.trim() || 'Lesson Plan',
+        focus_areas:        SESSION.focus ? [SESSION.focus] : [],
+        duration_minutes:   Number(SESSION.duration) || 60,
+        level:              SESSION.level || 'intermediate',
+        shooter_count:      Number(SESSION.shooters) || 1,
+        screener_available: SESSION.screener === 'yes',
+        status:             'saved',
+        ai_brief:           '',
+        drill_ids:          drillIds,
+        sections:           [],
+      });
+      DB.commitPlan(newPlan.id, sessionId);
+    }
+
+    // Legacy fallback key so old "See plan" check still works if page reloads
+    // before the button state is refreshed from DB
+    if (SESSION.goalie) {
+      const legacyKey = 'savedPlan_' + SESSION.goalie.replace(/[^a-zA-Z0-9]/g, '_');
+      localStorage.setItem(legacyKey, 'lesson_plan_preview_crease_positioning.html');
+    }
+  }
+
+  // Show toast
+  saveToast.classList.add('show');
+  clearTimeout(saveToast._t);
+  saveToast._t = setTimeout(() => saveToast.classList.remove('show'), 1800);
+
+  // Navigate back to home after the toast settles
+  setTimeout(() => {
+    window.location.href = 'index.html';
+  }, 1200);
+});
+
+// Remove a drill
+function removeDrill(btn) {
+  const card = btn.closest('.drill-card');
+  const name = card.dataset.drillName || 'this drill';
+
+  if (!confirm(`Remove "${name}" from the plan?`)) return;
+
+  // Animate out
+  card.style.transition = 'opacity 0.2s ease, transform 0.2s ease, max-height 0.3s ease, margin 0.3s ease, padding 0.3s ease';
+  card.style.opacity = '0';
+  card.style.transform = 'scale(0.97)';
+  card.style.maxHeight = card.offsetHeight + 'px';
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      card.style.maxHeight = '0';
+      card.style.marginBottom = '0';
+      card.style.overflow = 'hidden';
+      setTimeout(() => card.remove(), 320);
+    });
+  });
+
+  markUnsaved();
+}
+
+// Move a drill up or down within the page
+function moveDrill(btn, dir) {
+  const card = btn.closest('.drill-card');
+  const allCards = Array.from(document.querySelectorAll('.drill-card'));
+  const idx = allCards.indexOf(card);
+  const target = allCards[idx + dir];
+  if (!target) return;
+
+  // Swap in DOM — insert card before or after target
+  if (dir < 0) {
+    card.parentNode.insertBefore(card, target);
+  } else {
+    target.parentNode.insertBefore(target, card);
+  }
+
+  // Brief flash to confirm the move
+  card.style.transition = 'box-shadow 0.25s ease';
+  card.style.boxShadow = '0 0 0 2.5px #7f56d9';
+  setTimeout(() => { card.style.boxShadow = ''; }, 500);
+
+  markUnsaved();
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Swap drill — picks from real DRILL_LIBRARY filtered by same phase
+   ───────────────────────────────────────────────────────────── */
+let swapTargetCard = null;
+
+const PHASE_SLOT_FILTER = {
+  skating: d => d.session_slot === 'warmup' && (d.drill_category || []).includes('skating'),
+  shot:    d => d.session_slot === 'warmup' && !(d.drill_category || []).includes('skating'),
+  skill:   d => d.session_slot === 'skill_work',
+  compete: d => d.session_slot === 'compete',
+};
+
+const PHASE_DOT_COLOR = {
+  skating: '#18a6c8',
+  shot:    '#18a6c8',
+  skill:   '#378ADD',
+  compete: '#7f56d9',
+};
+
+function _sessionFilter(d) {
+  if (SESSION.shooters !== null && d.shooter_count_min > SESSION.shooters) return false;
+  if ((SESSION.screener === 'no' || SESSION.screener === 'skip') && d.requires_screener) return false;
+  if (SESSION.level === 'beginner' && d.difficulty === 'advanced') return false;
+  return true;
+}
+
+function openSwap(btn) {
+  swapTargetCard = btn.closest('.drill-card');
+  const currentId   = swapTargetCard.dataset.drillId   || '';
+  const currentName = swapTargetCard.dataset.drillName || 'this drill';
+  const currentPhase = swapTargetCard.dataset.drillPhase || 'skill';
+
+  document.getElementById('swapContext').textContent = `Replacing: ${currentName}`;
+
+  const slotFilter = PHASE_SLOT_FILTER[currentPhase] || PHASE_SLOT_FILTER.skill;
+  const dot = PHASE_DOT_COLOR[currentPhase] || '#378ADD';
+
+  const candidates = (window.DRILL_LIBRARY || [])
+    .filter(d => d.id !== currentId)
+    .filter(slotFilter)
+    .filter(_sessionFilter)
+    .slice(0, 5);
+
+  const optionsEl = document.getElementById('swapOptions');
+  if (!candidates.length) {
+    optionsEl.innerHTML = `<p style="color:#717680;font-size:13px;text-align:center;padding:16px 0">No alternate drills found for this slot.</p>`;
+  } else {
+    optionsEl.innerHTML = candidates.map(d => {
+      const meta = `${d.shooter_count_min} shooter${d.shooter_count_min !== 1 ? 's' : ''} · ${_cap(d.difficulty)} · ${d.duration_minutes} min`;
+      return `
+        <div class="swap-option" onclick="applySwapFromLibrary('${_escA(d.id)}','${_escA(d.name)}','${currentPhase}')">
+          <span class="swap-option-dot" style="background:${dot}"></span>
+          <div>
+            <div class="swap-option-name">${_escH(d.name)}</div>
+            <div class="swap-option-meta">${meta}</div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  document.getElementById('swapModal').classList.add('open');
+}
+
+function closeSwapModal() {
+  document.getElementById('swapModal').classList.remove('open');
+  swapTargetCard = null;
+}
+
+function applySwapFromLibrary(drillId, drillName, phase) {
+  if (!swapTargetCard) return;
+
+  const drill = (window.DRILL_LIBRARY || []).find(d => d.id === drillId);
+  const meta  = PHASE_META[phase] || PHASE_META.skill;
+
+  // Update data attrs
+  swapTargetCard.dataset.drillId   = drillId;
+  swapTargetCard.dataset.drillName = drillName;
+
+  // Rebuild video/badge area
+  const stepBadge   = swapTargetCard.querySelector('.badge-step');
+  const stepText    = stepBadge ? stepBadge.textContent : '';
+  const clip        = drill ? (drill.clip_file || '') : '';
+  const videoHtml   = clip
+    ? `<video controls playsinline loop><source src="${_escA(clip)}" type="video/mp4"></video>`
+    : `<div style="height:120px;display:flex;align-items:center;justify-content:center;background:#111;color:rgba(255,255,255,0.3);font-size:13px;border-radius:12px 12px 0 0">No clip available</div>`;
+  const videoWrap = swapTargetCard.querySelector('.video-wrap');
+  if (videoWrap) {
+    videoWrap.innerHTML = `${videoHtml}
+      <span class="badge-step">${stepText}</span>
+      <span class="badge-section c-${meta.cls}">${_escH(meta.label)}</span>`;
+  }
+
+  // Update text fields
+  const nameEl = swapTargetCard.querySelector('.drill-name');
+  if (nameEl) nameEl.textContent = drillName;
+
+  if (drill) {
+    const descEl = swapTargetCard.querySelector('.drill-desc');
+    if (descEl) descEl.textContent = drill.description || '';
+
+    const statVals = swapTargetCard.querySelectorAll('.drill-stat-value');
+    if (statVals[0]) statVals[0].textContent = drill.duration_minutes + ' min';
+    if (statVals[1]) { statVals[1].textContent = _cap(drill.difficulty); statVals[1].style.textTransform = 'capitalize'; }
+
+    const cues = (drill.coaching_cues || []).slice(0, 3);
+    const cuesEl = swapTargetCard.querySelector('.cues');
+    if (cuesEl) {
+      cuesEl.innerHTML = cues.map(c =>
+        `<div class="cue"><div class="cue-dot dot-${meta.cls}"></div><span>${_escH(c)}</span></div>`
+      ).join('');
+    }
+  }
+
+  // Brief highlight
+  swapTargetCard.style.transition = 'box-shadow 0.25s ease';
+  swapTargetCard.style.boxShadow = '0 0 0 2.5px #378ADD';
+  setTimeout(() => { swapTargetCard.style.boxShadow = ''; }, 600);
+
+  closeSwapModal();
+  markUnsaved();
+}
+
+document.getElementById('swapModal').addEventListener('click', function(e) {
+  if (e.target === this) closeSwapModal();
+});
+
+/* ─────────────────────────────────────────────────────────────
+   Drill library picker — full browse + search, adds to plan
+   ───────────────────────────────────────────────────────────── */
+let _pickerPhase = 'skill';
+window._pickerDrills = [];
+
+function addDrill(phase) {
+  _pickerPhase = phase || 'skill';
+
+  const phaseMeta = PHASE_META[phase] || PHASE_META.skill;
+  document.getElementById('drillPickerTitle').textContent = 'Add to ' + phaseMeta.label;
+  document.getElementById('drillPickerSub').textContent   = 'Tap a drill to add it to the plan';
+  document.getElementById('drillPickerSearch').value = '';
+
+  const slotFilter = PHASE_SLOT_FILTER[phase] || PHASE_SLOT_FILTER.skill;
+
+  // All used drill IDs so we can dim/exclude them
+  const usedIds = new Set(
+    Array.from(document.querySelectorAll('.drill-card[data-drill-id]'))
+      .map(c => c.dataset.drillId)
+  );
+
+  window._pickerDrills = (window.DRILL_LIBRARY || [])
+    .filter(slotFilter)
+    .filter(_sessionFilter)
+    .sort((a, b) => {
+      // Put unused drills first
+      const aUsed = usedIds.has(a.id) ? 1 : 0;
+      const bUsed = usedIds.has(b.id) ? 1 : 0;
+      return aUsed - bUsed;
+    });
+
+  renderPickerDrills(window._pickerDrills);
+  document.getElementById('drillPickerModal').classList.add('open');
+  // Focus search after animation
+  setTimeout(() => document.getElementById('drillPickerSearch').focus(), 320);
+}
+
+function filterPickerDrills() {
+  const q = document.getElementById('drillPickerSearch').value.trim().toLowerCase();
+  const filtered = q
+    ? (window._pickerDrills || []).filter(d => d.name.toLowerCase().includes(q) || (d.tags || []).some(t => t.includes(q)))
+    : (window._pickerDrills || []);
+  renderPickerDrills(filtered);
+}
+
+function renderPickerDrills(drills) {
+  const dot = PHASE_DOT_COLOR[_pickerPhase] || '#378ADD';
+  const usedIds = new Set(
+    Array.from(document.querySelectorAll('.drill-card[data-drill-id]'))
+      .map(c => c.dataset.drillId)
+  );
+  const el = document.getElementById('drillPickerList');
+
+  if (!drills.length) {
+    el.innerHTML = `<p style="color:#717680;font-size:13px;text-align:center;padding:20px 0">No matching drills found.</p>`;
+    return;
+  }
+
+  el.innerHTML = drills.map(d => {
+    const used = usedIds.has(d.id);
+    const meta = `${d.shooter_count_min} shooter${d.shooter_count_min !== 1 ? 's' : ''} · ${_cap(d.difficulty)} · ${d.duration_minutes} min`;
+    return `
+      <div class="picker-drill-item${used ? ' used-drill' : ''}"
+           onclick="pickDrill('${_escA(d.id)}','${_escA(d.name)}')"
+           style="${used ? 'opacity:0.5' : ''}">
+        <span class="picker-drill-dot" style="background:${dot}"></span>
+        <div>
+          <div class="picker-drill-name">${_escH(d.name)}${used ? ' <span style="font-size:10.5px;font-weight:500;color:#717680">(in plan)</span>' : ''}</div>
+          <div class="picker-drill-meta">${meta}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function closeDrillPicker() {
+  document.getElementById('drillPickerModal').classList.remove('open');
+}
+
+function pickDrill(drillId, drillName) {
+  const drill = (window.DRILL_LIBRARY || []).find(d => d.id === drillId);
+  if (!drill) { closeDrillPicker(); return; }
+
+  // Count all current (non-removed) drills for the step badge
+  const existingCards = document.querySelectorAll('.drill-card:not([style*="display: none"])');
+  const newStep = existingCards.length + 1;
+
+  const planDrill = {
+    drill_id:   drill.id,
+    name:       drill.name,
+    phaseLabel: (PHASE_META[_pickerPhase] || PHASE_META.skill).label,
+    duration:   drill.duration_minutes + ' min',
+    difficulty: drill.difficulty,
+    shots:      drill.shot_count ? drill.shot_count + (drill.shot_count === 1 ? ' shot' : ' shots') : '',
+    clip:       drill.clip_file || '',
+    cues:       (drill.coaching_cues || []).slice(0, 3),
+    phase:      _pickerPhase,
+  };
+
+  const cardHtml = buildDrillCardHtml(planDrill, newStep, newStep);
+
+  // Find the matching "Add drill" button for this phase and insert before it
+  let targetBtn = null;
+  document.querySelectorAll('.add-drill-btn').forEach(btn => {
+    const oc = btn.getAttribute('onclick') || '';
+    if (oc.includes(`'${_pickerPhase}'`) || oc.includes(`"${_pickerPhase}"`)) targetBtn = btn;
+  });
+
+  const temp = document.createElement('div');
+  temp.innerHTML = cardHtml.trim();
+  const newCard = temp.firstElementChild;
+
+  if (targetBtn) {
+    targetBtn.parentNode.insertBefore(newCard, targetBtn);
+  } else {
+    const totalBar = document.querySelector('.total-bar');
+    if (totalBar) totalBar.parentNode.insertBefore(newCard, totalBar);
+    else document.getElementById('planSections').appendChild(newCard);
+  }
+
+  // Animate in
+  newCard.style.opacity = '0';
+  newCard.style.transform = 'scale(0.97)';
+  requestAnimationFrame(() => {
+    newCard.style.transition = 'opacity 0.22s ease, transform 0.22s ease';
+    newCard.style.opacity = '1';
+    newCard.style.transform = 'scale(1)';
+  });
+  setTimeout(() => {
+    newCard.style.boxShadow = '0 0 0 2.5px #7f56d9';
+    setTimeout(() => { newCard.style.boxShadow = ''; }, 600);
+  }, 240);
+  setTimeout(() => newCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+
+  closeDrillPicker();
+  markUnsaved();
+}
+
+document.getElementById('drillPickerModal').addEventListener('click', function(e) {
+  if (e.target === this) closeDrillPicker();
+});
+
+// Mark plan as unsaved (resets the Save button if it was in saved state)
+function markUnsaved() {
+  saveBtn.classList.remove('saved');
+  saveBtn.innerHTML = `<svg viewBox="0 0 24 24"><use href="#lp-save"/></svg> Save`;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Dynamic plan rendering — reads hh_pending_plan from localStorage
+   and rebuilds the entire plan sections from the AI response.
+   ───────────────────────────────────────────────────────────── */
+
+function _escH(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function _escA(s) { return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function _cap(s)  { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+const PHASE_META = {
+  skating: { cls: 'skate', icon: '⛸️', label: 'Skating Warm-Up'   },
+  shot:    { cls: 'shot',  icon: '🏒', label: 'Shot Warm-Up'      },
+  skill:   { cls: 'skill', icon: '🎯', label: 'Skill Work'        },
+  compete: { cls: 'skill', icon: '🏆', label: 'Compete / Bonus'   },
+};
+
+function buildDrillCardHtml(planDrill, stepNum, totalDrills) {
+  const lib   = (window.DRILL_LIBRARY || []).find(d => d.id === planDrill.drill_id);
+  const phase = planDrill.phase || 'skill';
+  const meta  = PHASE_META[phase] || PHASE_META.skill;
+
+  const clip       = planDrill.clip || (lib ? lib.clip_file : '') || '';
+  const desc       = lib ? lib.description : '';
+  const difficulty = planDrill.difficulty || (lib ? lib.difficulty : '') || '';
+  const duration   = planDrill.duration   || (lib ? lib.duration_minutes + ' min' : '');
+  const shots      = planDrill.shots || '';
+  const cues       = planDrill.cues || (lib ? (lib.coaching_cues || []).slice(0, 3) : []);
+
+  const videoHtml  = clip
+    ? `<video controls playsinline loop><source src="${_escA(clip)}" type="video/mp4"></video>`
+    : `<div style="height:120px;display:flex;align-items:center;justify-content:center;background:#111;color:rgba(255,255,255,0.3);font-size:13px;border-radius:12px 12px 0 0">No clip available</div>`;
+  const shotsHtml  = shots ? `<span class="badge-shots">${_escH(shots)}</span>` : '';
+  const descHtml   = desc  ? `<p class="drill-desc">${_escH(desc)}</p>` : '';
+  const cuesHtml   = cues.map(c =>
+    `<div class="cue"><div class="cue-dot dot-${meta.cls}"></div><span>${_escH(c)}</span></div>`
+  ).join('');
+
+  return `
+<div class="drill-card" data-drill-id="${_escA(planDrill.drill_id)}" data-drill-name="${_escA(planDrill.name)}" data-drill-phase="${phase}">
+  <div class="video-wrap">
+    ${videoHtml}
+    <span class="badge-step">${stepNum} of ${totalDrills}</span>
+    <span class="badge-section c-${meta.cls}">${_escH(planDrill.phaseLabel || meta.label)}</span>
+    ${shotsHtml}
+  </div>
+  <div class="card-body">
+    <p class="drill-name">${_escH(planDrill.name)}</p>
+    ${descHtml}
+    <div class="drill-stats">
+      <div class="drill-stat"><div class="drill-stat-label">Duration</div><div class="drill-stat-value">${_escH(duration)}</div></div>
+      <div class="drill-stat"><div class="drill-stat-label">Difficulty</div><div class="drill-stat-value" style="text-transform:capitalize">${_escH(difficulty)}</div></div>
+    </div>
+    <hr class="divider">
+    <p class="micro-label">Coaching cues</p>
+    <div class="cues">${cuesHtml}</div>
+  </div>
+  <div class="drill-controls">
+    <button class="drill-ctrl" onclick="moveDrill(this,-1)" title="Move up"><svg viewBox="0 0 24 24"><use href="#lp-arrow-up"/></svg> Up</button>
+    <button class="drill-ctrl ctrl-swap" onclick="openSwap(this)" title="Swap drill"><svg viewBox="0 0 24 24"><use href="#lp-refresh"/></svg> Swap</button>
+    <button class="drill-ctrl ctrl-remove" onclick="removeDrill(this)" title="Remove drill"><svg viewBox="0 0 24 24"><use href="#lp-trash"/></svg> Remove</button>
+    <button class="drill-ctrl" onclick="moveDrill(this,1)" title="Move down"><svg viewBox="0 0 24 24"><use href="#lp-arrow-down"/></svg> Down</button>
+  </div>
+</div>`;
+}
+
+function buildSectionDividerHtml(section) {
+  const meta  = PHASE_META[section.phase] || PHASE_META.skill;
+  const count = section.drills.length;
+  return `
+<div class="section-divider">
+  <div class="section-divider-icon icon-${section.phase}">${meta.icon}</div>
+  <div class="section-divider-text">
+    <div class="section-divider-name">${_escH(section.name)}</div>
+    <div class="section-divider-sub">${count} drill${count !== 1 ? 's' : ''}</div>
+  </div>
+  <div class="section-divider-time">${_escH(section.time)}</div>
+</div>`;
+}
+
+function renderDynamicPlan(plan) {
+  // ── Update session header ───────────────────────────────────────────
+  const titleEl = document.getElementById('sessionTitle');
+  if (titleEl) titleEl.textContent = plan.title || 'Session Plan';
+
+  const focusEl = document.getElementById('briefFocus');
+  if (focusEl && plan.notes?.focus) focusEl.textContent = plan.notes.focus;
+
+  const drillsEl = document.getElementById('briefDrills');
+  if (drillsEl && plan.notes?.drills) drillsEl.textContent = plan.notes.drills;
+
+  // Update stats from SESSION (populated from URL params) + plan total
+  const totalMin = plan.sections.reduce((sum, s) => sum + (parseInt(s.time) || 0), 0);
+  const durEl = document.getElementById('statDuration');
+  if (durEl) durEl.textContent = '~' + totalMin + ' min';
+  if (SESSION.level) {
+    const lvlEl = document.getElementById('statLevel');
+    if (lvlEl) lvlEl.textContent = _cap(SESSION.level);
+  }
+  if (SESSION.shooters !== null) {
+    const shoEl = document.getElementById('statShooters');
+    if (shoEl) shoEl.textContent = SESSION.shooters;
+  }
+  if (SESSION.goalies !== null) {
+    const goaEl = document.getElementById('statGoalies');
+    if (goaEl) goaEl.textContent = SESSION.goalies;
+  }
+
+  // ── Rebuild plan sections ───────────────────────────────────────────
+  const container = document.getElementById('planSections');
+  if (!container) return;
+
+  const allDrills = plan.sections.flatMap(s =>
+    s.drills.map(d => ({ ...d, phase: s.phase }))
+  );
+  const totalDrills = allDrills.length;
+
+  let html = '';
+  let stepNum = 1;
+
+  for (const section of plan.sections) {
+    html += buildSectionDividerHtml(section);
+    for (const drill of section.drills) {
+      html += buildDrillCardHtml({ ...drill, phase: section.phase }, stepNum++, totalDrills);
+    }
+    html += `
+<button class="add-drill-btn" onclick="addDrill('${section.phase}')">
+  <svg viewBox="0 0 24 24"><use href="#lp-plus"/></svg>
+  Add drill to ${_escH(section.name)}
+</button>`;
+  }
+
+  html += `
+<div class="total-bar">
+  <div><div class="total-label">Session Total</div></div>
+  <div style="text-align:right;">
+    <div class="total-value">~${totalMin} min</div>
+  </div>
+</div>`;
+
+  container.innerHTML = html;
+
+  // ── Rebuild swap options from DRILL_LIBRARY ─────────────────────────
+  if (window.DRILL_LIBRARY) {
+    const usedIds = new Set(allDrills.map(d => d.drill_id));
+    window.SWAP_OPTIONS = DRILL_LIBRARY
+      .filter(d => !usedIds.has(d.id))
+      .map(d => {
+        const phase =
+          (d.session_slot === 'warmup' && (d.drill_category || []).includes('skating')) ? 'skating' :
+          (d.session_slot === 'warmup') ? 'shot' :
+          (d.session_slot === 'compete') ? 'compete' : 'skill';
+        return {
+          name:  d.name,
+          phase,
+          meta:  `${d.shooter_count_min} shooter${d.shooter_count_min !== 1 ? 's' : ''} · ${_cap(d.difficulty)}${d.requires_screener ? ' + screener' : ''}`,
+          dot:   (PHASE_META[phase] || PHASE_META.skill).cls === 'skate' ? '#18a6c8' :
+                 (PHASE_META[phase] || PHASE_META.skill).cls === 'shot'  ? '#18a6c8' : '#378ADD',
+        };
+      });
+  }
+}
+
+// Rebuild plan — navigate back to index.html with the rebuild param
+// so the chat sheet auto-opens for this session
+function rebuildPlan() {
+  if (SESSION.sessionId) {
+    window.location.href = 'index.html?rebuild=' + encodeURIComponent(SESSION.sessionId);
+  } else {
+    window.location.href = 'index.html';
+  }
+}
+
+document.getElementById('rebuildBtn').addEventListener('click', rebuildPlan);
+
+/* ─────────────────────────────────────────────────────────────
+   Goalie avatars — rendered from SESSION.goalie URL param
+   Uses same tone-a/b/c/d palette as the home screen cards
+   ───────────────────────────────────────────────────────────── */
+const TONE_CYCLE = ['tone-a', 'tone-b', 'tone-c', 'tone-d'];
+
+function _toneForName(name) {
+  // Deterministic: pick tone based on first char code so same
+  // goalie always gets the same color across pages
+  const c = (name || '').trim().toUpperCase().charCodeAt(0) || 65;
+  return TONE_CYCLE[(c - 65) % 4];
+}
+
+function _initialsFor(name) {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function renderGoalieAvatars() {
+  const row = document.getElementById('goalieAvatarRow');
+  if (!row || !SESSION.goalie) { if (row) row.style.display = 'none'; return; }
+
+  // Support "Mason K. & Lily P." or single name
+  const names = SESSION.goalie.split(/\s*&\s*/).map(n => n.trim()).filter(Boolean);
+
+  const avatarsHtml = names.map(name =>
+    `<div class="lp-goalie-avatar ${_toneForName(name)}">${_initialsFor(name)}</div>`
+  ).join('');
+
+  const nameLabel = names.join(' & ');
+
+  row.innerHTML = `
+    <div class="lp-goalie-avatars">${avatarsHtml}</div>
+    <div class="lp-goalie-names">${_escH(nameLabel)}</div>
+  `;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   buildPlan — calls Edge Function if no fresh cached plan exists
+   ───────────────────────────────────────────────────────────── */
+const EDGE_FUNCTION_URL = 'https://whawnvlctxrfzkyvivca.supabase.co/functions/v1/generate-plan';
+
+function showPlanLoading() {
+  const container = document.getElementById('planSections');
+  if (!container) return;
+  container.innerHTML = `
+    <div class="plan-loading">
+      <div class="plan-loading-spinner"></div>
+      <div class="plan-loading-label">Building your plan…</div>
+      <div class="plan-loading-sub">Selecting drills for ${_escH(SESSION.goalie || 'this session')}</div>
+    </div>`;
+  // Hide Start Session while loading
+  const bar = document.getElementById('startSessionBar');
+  if (bar) bar.style.display = 'none';
+}
+
+function hidePlanLoading() {
+  const bar = document.getElementById('startSessionBar');
+  if (bar) bar.style.display = '';
+}
+
+function showPlanError(msg) {
+  const container = document.getElementById('planSections');
+  if (!container) return;
+  container.innerHTML = `
+    <div class="plan-error">
+      <div class="plan-error-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>
+        </svg>
+      </div>
+      <div class="plan-error-title">Couldn't build plan</div>
+      <div class="plan-error-msg">${_escH(msg || 'Check your connection and try again.')}</div>
+      <button class="plan-error-retry" onclick="buildPlan()">Retry</button>
+    </div>`;
+}
+
+async function buildPlan() {
+  // Check for a fresh cached plan keyed by this session
+  const sessionId = SESSION.sessionId;
+  try {
+    const raw     = localStorage.getItem('hh_pending_plan');
+    const cached  = raw ? JSON.parse(raw) : null;
+    const sid     = localStorage.getItem('hh_pending_plan_session');
+    // Use cache if: plan exists AND (no sessionId OR sessions match)
+    if (cached && cached.sections && cached.sections.length) {
+      if (!sessionId || sid === sessionId) {
+        renderDynamicPlan(cached);
+        return;
+      }
+    }
+  } catch (e) { /* stale or corrupt cache — fall through */ }
+
+  // Call Edge Function
+  showPlanLoading();
+  try {
+    const params = {
+      goalies:  Number(SESSION.goalies)  || 1,
+      shooters: Number(SESSION.shooters) || 0,
+      level:    SESSION.level            || 'intermediate',
+      duration: Number(SESSION.duration) || 45,
+      screener: SESSION.screener         || 'skip',
+      focus:    SESSION.focus            || 'surprise_me',
+      goalie:   SESSION.goalie           || undefined,
+    };
+
+    // Use filterDrills pre-filter if available
+    const drills = (window.filterDrills ? window.filterDrills(params) : window.DRILL_LIBRARY) || [];
+    if (!drills.length) throw new Error('No drills matched these session settings');
+
+    const resp = await fetch(EDGE_FUNCTION_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ params, drills }),
+    });
+
+    if (!resp.ok) {
+      let msg = `Server error (${resp.status})`;
+      try { const e = await resp.json(); if (e.error) msg = e.error; } catch {}
+      throw new Error(msg);
+    }
+
+    const data = await resp.json();
+    if (!data.plan) throw new Error('No plan returned from server');
+
+    // Cache with session key to avoid cross-session pollution
+    try {
+      localStorage.setItem('hh_pending_plan', JSON.stringify(data.plan));
+      if (sessionId) localStorage.setItem('hh_pending_plan_session', sessionId);
+    } catch {}
+
+    hidePlanLoading();
+    renderDynamicPlan(data.plan);
+
+  } catch (err) {
+    console.error('[lesson-plan] buildPlan failed:', err);
+    hidePlanLoading();
+    showPlanError(err.message);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Start Session — navigates to on-ice mode
+   ───────────────────────────────────────────────────────────── */
+function startSession() {
+  const p = new URLSearchParams({
+    goalie:    SESSION.goalie    || '',
+    sessionId: SESSION.sessionId || '',
+    focus:     SESSION.focus     || '',
+    duration:  SESSION.duration  || '',
+    level:     SESSION.level     || '',
+  });
+  window.location.href = 'session.html?' + p.toString();
+}
+
+document.getElementById('startSessionBtn').addEventListener('click', startSession);
+
+/// On load: render avatars, then build plan
+document.addEventListener('DOMContentLoaded', () => {
+  renderGoalieAvatars();
+  // drills may load async via script tag — wait a tick for drill_library.js
+  if (window.DRILL_LIBRARY) {
+    buildPlan();
+  } else {
+    // drill_library.js hasn't finished executing yet — try again after scripts settle
+    setTimeout(buildPlan, 80);
+  }
+});
+</script>
+
+</body>
+</html>

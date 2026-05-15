@@ -1,0 +1,40 @@
+{
+  "id": "lateral-release-rvh-bump-out-slot",
+  "name": "Lateral Release — RVH Post Entry and Bump Out",
+  "description": "F1 is in the slot with a puck. G starts at the top of the crease square to F1, lateral releases to the face-off dot angle, then rotate pushes into RVH on the near side post. On F1's 'go' call, G bumps off the post and leads with eyes and hands to the shot from F1 in the slot. G plays out the rebound. Trains lateral release technique, rotate push into RVH post entry, and a clean bump out with eyes and hands arriving first.",
+  "drill_category": ["crease_movement", "positioning_angles", "save_technique"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 1,
+  "ice_zone": ["hash_marks", "in_tight"],
+  "goalie_starting_position": "Top of crease, square to F1",
+  "movement_sequence": [
+    "start_top_of_crease_square_to_F1",
+    "lateral_release_to_faceoff_dot_angle",
+    "rotate_push_into_RVH_near_post",
+    "set_RVH_on_post",
+    "react_to_go_call",
+    "bump_off_post_to_shot",
+    "eyes_and_hands_lead_to_F1",
+    "save_slot_shot",
+    "play_rebound"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Lead with eyes through the lateral release",
+    "Rotate push into RVH — set clean before the 'go' call",
+    "Eyes and hands lead out of the bump — not the pads",
+    "React to F1's release, not the 'go' call alone",
+    "Challenge the slot — don't bump and stay deep",
+    "Play the rebound out"
+  ],
+  "tags": ["lateral_release", "RVH", "post_play", "bump_out", "rotate_push", "tracking_vision", "crease_movement", "verbal_cue", "rebound", "post_entry_exit"],
+  "variations": [],
+  "clip_file": "drill-clips/lateral-release-rvh-bump-out-slot.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Three distinct habits in one rep: the lateral release getting eyes ahead of the body, the rotate push setting a clean RVH before the call, and the bump out leading with eyes and hands rather than pads. A goalie who bumps out pad-first is already behind the play. The RVH needs to be fully set before F1 calls 'go' — goalies who are still settling into position on the call have no time to read the shot."
+}

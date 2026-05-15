@@ -1,0 +1,40 @@
+{
+  "id": "puck-circuit-t-push-slide-double-powerslide",
+  "name": "Puck Circuit — T-Push, Butterfly Slide, Double Powerslide",
+  "description": "Three pucks are set in a circuit pattern. G starts on puck 2, t-pushes to puck 1, butterfly slides to puck 3, pivots around puck 3, powerslides to puck 1, then chains directly into a second powerslide back to puck 2 and recovers to feet. The double powerslide at the finish is the key challenge — the goalie must generate the second slide immediately off the first without standing up. Trains explosive t-push, butterfly slide technique, low pivot, and chained powerslide generation.",
+  "drill_category": ["skating"],
+  "session_slot": "warmup",
+  "duration_minutes": 8,
+  "difficulty": "advanced",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": ["in_tight"],
+  "setup_required": "puck_setup",
+  "goalie_starting_position": "Puck 2",
+  "movement_sequence": [
+    "start_on_puck_2",
+    "t_push_to_puck_1",
+    "butterfly_slide_to_puck_3",
+    "pivot_around_puck_3",
+    "powerslide_to_puck_1",
+    "powerslide_to_puck_2",
+    "recover_to_feet",
+    "repeat"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Explosive t-push off puck 2 — generate speed early",
+    "Eyes up through the butterfly slide",
+    "Sharp low pivot around puck 3 — stay in butterfly",
+    "Drive the first powerslide from the pivot, don't stand up",
+    "Chain directly into the second powerslide — no reset between",
+    "Full recovery to feet before the next rep"
+  ],
+  "tags": ["t_push", "butterfly_slide", "power_slide", "pivot", "butterfly", "lateral_movement", "edgework", "skating"],
+  "variations": [],
+  "clip_file": "drill-clips/puck-circuit-t-push-slide-double-powerslide.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The double powerslide is what separates this from the other puck circuits — the goalie has to chain two slides back-to-back without standing up to reset. A goalie who pops up between the two powerslides is breaking the sequence. Watch that the pivot around puck 3 stays low and in butterfly; any early stand-up kills the slide generation on the first powerslide and makes the second impossible. This is a conditioning circuit as much as a technique drill — fatigue will expose poor habits."
+}

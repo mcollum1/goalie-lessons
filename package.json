@@ -1,0 +1,12 @@
+{
+  "name": "goalie-lessons",
+  "version": "1.0.0",
+  "description": "Syncs rink ice times to Google Calendar",
+  "main": "fetch-ice-times.js",
+  "scripts": {
+    "sync": "node fetch-ice-times.js"
+  },
+  "dependencies": {
+    "googleapis": "^144.0.0"
+  }
+}

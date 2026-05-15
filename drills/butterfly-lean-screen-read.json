@@ -1,0 +1,40 @@
+{
+  "id": "butterfly-lean-screen-read",
+  "name": "Butterfly Lean Save — Screen Recover Read",
+  "description": "A screen (goalie partner or dummy) is set in front of the crease. G starts in butterfly at the top of the crease, set on F1 who is at the top of the circle above the face-off dot. F1 shoots high far side — G leans into the save. G immediately recovers to feet and t-pushes to F2, who is positioned at the top of the circles center. G picks a side to see F2's release around the screen and reacts to the shot. Focus is on tracking the first shot all the way in, then making a clean, explosive recovery and getting set on F2 in time to find the puck.",
+  "drill_category": ["crease_movement", "tracking_vision", "save_technique"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 2,
+  "shooter_count_max": 2,
+  "shot_count": 2,
+  "ice_zone": ["top_of_circles"],
+  "requires_screener": true,
+  "goalie_starting_position": "Butterfly at top of crease, set on F1",
+  "movement_sequence": [
+    "start_in_butterfly_on_F1_angle",
+    "track_F1_shot_high_far_side",
+    "lean_into_save",
+    "recover_to_feet",
+    "t_push_to_F2_center",
+    "pick_side_to_see_release_around_screen",
+    "save_second_shot",
+    "play_rebound"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Track shot 1 all the way in — don't anticipate the lean",
+    "Lean, don't lunge — stay connected through the save",
+    "Explosive recovery up — don't rest in butterfly",
+    "Hard t-push to get depth on F2 before the shot",
+    "Pick your side early — commit to seeing the release around the screen",
+    "React to the release, not the shooter's body"
+  ],
+  "tags": ["butterfly", "screen", "tracking_vision", "t_push", "lean_save", "recovery", "two_shot", "crease_movement"],
+  "variations": [],
+  "clip_file": "drill-clips/butterfly-lean-screen-read.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The butterfly start is intentional — the goalie has to make a real save before transitioning, not just stand and react. The lean on shot 1 should be controlled; a common error is lunging too far and making the recovery harder. The t-push to F2 needs to be immediate and reach proper depth so the goalie has a realistic angle to peek around the screen. If they come out too shallow, the screen wins every time. Picking a side to see the release is a decision the goalie has to make early — cue them to commit rather than drift looking for a clear sightline that won't come."
+}

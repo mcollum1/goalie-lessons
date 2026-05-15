@@ -1,0 +1,34 @@
+{
+  "id": "screen-release-read",
+  "name": "Screen Release Read",
+  "description": "Tracking drill for reading a shot release through a screen and finding the puck on the far side. F1 positions between the face-off dot and the hash marks, elevated toward the top of the circle, and shoots across the far side of the screen. A screener or goalie partner stands stationary in front of the net. The goalie starts on the near side of the screen, reads F1's release, and tracks the puck across to the far side to make the save. High-rep drill — good to use between a skating warm-up and heavier technique work.",
+  "drill_category": ["save_technique", "tracking_vision"],
+  "session_slot": "skill_work",
+  "duration_minutes": 8,
+  "difficulty": "intermediate",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 1,
+  "ice_zone": ["hash_marks", "top_of_circles"],
+  "requires_screener": true,
+  "goalie_starting_position": "set on near side of screen, tracking F1's release point",
+  "movement_sequence": [
+    "set_on_near_side_of_screen_eyes_on_f1",
+    "read_f1_shot_release_through_screen",
+    "track_puck_across_far_side_of_screen",
+    "make_save_far_side"
+  ],
+  "save_types": ["blocker_save", "glove_save", "pad_save"],
+  "coaching_cues": [
+    "Eyes on F1's blade, not the screen — find the release before the puck moves",
+    "Pick up the puck as it clears the screen — don't wait for it to appear in the net",
+    "Stay patient on the near side — don't lunge or guess before the puck appears",
+    "Track low through the screen — most pucks travel at pad height"
+  ],
+  "tags": ["screen", "tracking", "release_read", "far_side", "top_of_circles", "eyes"],
+  "variations": [],
+  "clip_file": "drill-clips/screen-release-read.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Low-complexity, high-tracking-value drill. The screener is passive and stationary — this is a pure eyes drill, not a jam play or rebound situation. F1 should shoot at a consistent tempo and location to give the goalie enough reps to build the tracking habit. Run 10–15 shots per side before switching. The skill being trained (reading the release through obstruction and finding the puck on the far side) transfers directly to any game situation with traffic in front. Screener can be a goalie partner if only one shooter is available."
+}

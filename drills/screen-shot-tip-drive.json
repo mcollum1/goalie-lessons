@@ -1,0 +1,43 @@
+{
+  "id": "screen-shot-tip-drive",
+  "name": "Screen — Shot, Tip, Net Drive",
+  "description": "A screen (goalie partner or dummy) is set just above the hash marks. G starts square to F1 at the top of the circles. F1 skates in and shoots from around the screen. F1 then moves to the net as F2 shoots through the screen — F1 tips the second shot. F1 retreats to the corner, picks up a puck, and passes to F2 who drives the net for the third shot. G plays the third shot and rebound out. On shots 1 and 2, G focuses on finding the release through or around the screen. On shot 3, G identifies F2's hand and reads whether to push or slide.",
+  "drill_category": ["crease_movement", "tracking_vision"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "advanced",
+  "shooter_count_min": 2,
+  "shooter_count_max": 2,
+  "shot_count": 3,
+  "ice_zone": ["top_of_circles", "hash_marks", "in_tight"],
+  "requires_screener": true,
+  "goalie_starting_position": "Square to F1 at top of circles",
+  "movement_sequence": [
+    "start_square_to_F1",
+    "track_F1_skating_through_screen",
+    "save_first_shot_around_screen",
+    "reset_and_locate_F2",
+    "track_shot_through_screen",
+    "save_tip_at_net",
+    "recover_position",
+    "read_F2_hand_and_drive_line",
+    "push_or_slide_to_angle",
+    "save_third_shot",
+    "play_rebound"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save", "tip_save"],
+  "coaching_cues": [
+    "Find the release — don't watch the screen",
+    "Pick up shot 1 around the edge of the screen early",
+    "See through the screen to find F2's release on shot 2",
+    "Locate F1's stick before the tip — expect it, don't chase it",
+    "On shot 3, read F2's hand and drive line before committing",
+    "Push if the angle is clean, slide if they're taking you across"
+  ],
+  "tags": ["screen", "tip", "tracking_vision", "net_drive", "three_shot", "crease_movement", "rebound"],
+  "variations": [],
+  "clip_file": "drill-clips/screen-shot-tip-drive.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The screen is the constant — the goalie must find the release rather than watch traffic in front. On shot 2, the tip is predictable since F1 is already planted at the net; cue the goalie to locate F1's stick early and hold position until release. Shot 3 is the decision rep: the goalie reads F2's hand (lefty/righty) and drive direction to choose the right movement — push to challenge vs. slide if F2 is going cross-crease."
+}

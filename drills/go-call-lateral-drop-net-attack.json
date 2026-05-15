@@ -1,0 +1,41 @@
+{
+  "id": "go-call-lateral-drop-net-attack",
+  "name": "Go Call — Lateral Release and Net Attack",
+  "description": "F1 is positioned just below the face-off dot. G starts on the post on F1's side, t-pushes out to the center top of the crease. On F1's 'go' call, G locates F1 and lateral releases into the save for the first shot. F1 then picks up a second puck below the goal line and attacks the net in tight. G plays the second shot and rebound out. Trains reaction to a verbal cue, locating the shooter before committing to the lateral release, and transitioning from a reaction save to an in-tight play.",
+  "drill_category": ["crease_movement", "save_technique"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 2,
+  "ice_zone": ["hash_marks", "in_tight"],
+  "goalie_starting_position": "Post on F1's side",
+  "movement_sequence": [
+    "start_on_post_F1_side",
+    "t_push_out_to_center_top_of_crease",
+    "react_to_go_call",
+    "locate_F1",
+    "lateral_release_into_save",
+    "save_first_shot",
+    "track_F1_picking_up_puck_below_goal_line",
+    "set_position_for_in_tight_attack",
+    "save_second_shot",
+    "play_rebound"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save", "desperation_save"],
+  "coaching_cues": [
+    "Eyes find F1 before dropping — don't react blind to the call",
+    "Locate first, drop second — the head turn is the trigger",
+    "Stay connected through the lateral release",
+    "Reset immediately after shot 1 — F1 is already moving to the puck",
+    "Track F1 attacking from below the goal line",
+    "Play the rebound — stay live after shot 2"
+  ],
+  "tags": ["t_push", "lateral_movement", "tracking_vision", "in_tight", "jam_play", "rebound", "two_shot", "crease_movement", "desperation_save", "verbal_cue"],
+  "variations": [],
+  "clip_file": "drill-clips/go-call-lateral-drop-net-attack.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The 'go' call is a key element — the goalie has to find F1 before dropping, not react to the sound alone. A goalie who drops without locating the shooter first is guessing. After shot 1, the reset has to be immediate; F1 is already picking up the second puck. The in-tight attack on shot 2 rewards a goalie who stays mentally engaged after the first save rather than relaxing."
+}

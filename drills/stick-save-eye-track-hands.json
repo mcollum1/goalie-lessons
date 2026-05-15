@@ -1,0 +1,37 @@
+{
+  "id": "stick-save-eye-track-hands",
+  "name": "Stick Save + Eye Track + Hands",
+  "description": "Two-shot technique drill emphasizing rebound control, eye tracking, and sequential saves. F1 positions in the slot with pucks. The goalie starts on the post, t-pushes out, and makes a low on-ice stick save directed to the far side. The goalie powerslides to reset, finds F1 with their eyes first before moving, then powerslides back out to challenge. F1 shoots to the hands for the second save. Focus is on intentional rebound direction on shot 1, leading with eyes before body movement on the reset, and tracking into the hands save on shot 2.",
+  "drill_category": ["save_technique", "tracking_vision", "rebound_control"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 2,
+  "ice_zone": ["in_tight", "hash_marks"],
+  "goalie_starting_position": "on post",
+  "movement_sequence": [
+    "start_on_post",
+    "t_push_out_to_challenge",
+    "make_low_on_ice_stick_save_directing_rebound_far_side",
+    "powerslide_to_reset",
+    "find_f1_with_eyes_before_body_moves",
+    "powerslide_back_out_to_challenge_f1",
+    "make_hands_save_on_f1_slot_shot"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Explode on the t-push — set your depth before the shot arrives",
+    "Direct the stick save far side — place the rebound, don't just stop the puck",
+    "Eyes find F1 before your body moves — track first, push second",
+    "Hands ready before F1 shoots — the powerslide delivers you, your hands make the save",
+    "A clean rebound on shot 1 sets up shot 2 — bad direction makes the read harder"
+  ],
+  "tags": ["t_push", "stick_save", "rebound_control", "power_slide", "tracking", "hands", "eye_tracking", "sequential_saves"],
+  "variations": [],
+  "clip_file": "drill-clips/stick-save-eye-track-hands.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The 'eyes first' principle is the coaching spine of this drill. After the stick save and powerslide reset, the goalie's eyes should be locked on F1 before the body starts moving back out — goalies who move before they look will consistently be late or off-angle on shot 2. The stick save must direct the rebound to the far side intentionally, not just stop the puck. Good drill for goalies who tend to move before they look, or who give up soft second-shot opportunities after clean first saves."
+}

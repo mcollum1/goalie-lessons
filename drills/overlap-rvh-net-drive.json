@@ -1,0 +1,35 @@
+{
+  "id": "overlap-rvh-net-drive",
+  "name": "T-Push to Overlap — RVH Net Drive",
+  "description": "G starts on top of the crease square to the far top of the circle. T-pushes across and down to the post, then takes a quick double c-cut out in an overlap to challenge F1 just above the goal line. F1 drives the net tight and either shoots or pulls across to the far side. G regains momentum back, drops into RVH, and makes the save.",
+  "drill_category": ["crease_movement", "save_technique"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 1,
+  "shooter_count_max": 2,
+  "shot_count": 1,
+  "ice_zone": ["in_tight"],
+  "goalie_starting_position": "Top of crease, square to far top of the circle",
+  "movement_sequence": [
+    "t_push_across_to_post",
+    "double_c_cut_out_overlap",
+    "challenge_F1",
+    "regain_momentum_back",
+    "drop_RVH"
+  ],
+  "save_types": ["pad_save", "blocker_save"],
+  "coaching_cues": [
+    "Explosive t-push to post",
+    "Attack the angle on the overlap",
+    "Read F1's hands — shoot or pull",
+    "Regain momentum before the drop",
+    "Seal the post in RVH"
+  ],
+  "tags": ["in_tight", "net_drive", "post_play", "lateral_movement", "overlap", "RVH"],
+  "variations": [],
+  "clip_file": "drill-clips/overlap-rvh-net-drive.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The overlap is the key teaching point — goalie has to commit to getting out and challenging, not hanging back on the post. The RVH drop needs momentum already moving back toward the net before the drop; if they're flat-footed when F1 pulls far side the post is exposed."
+}

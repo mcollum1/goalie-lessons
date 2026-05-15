@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Booking Approval – Coach Mitch</title>
+  <!-- Google Identity Services for Calendar OAuth -->
+  <script src="https://accounts.google.com/gsi/client" async></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --newington: #0a7c87;
+      --champions: #c73d00;
+      --blue:      #1d4ed8;
+      --blue-dark: #1e3a8a;
+      --green:     #15803d;
+      --red:       #dc2626;
+      --orange:    #ea580c;
+      --bg:        #f3f4f6;
+      --card:      #ffffff;
+      --text:      #111827;
+      --muted:     #6b7280;
+      --border:    #e5e7eb;
+      --radius:    18px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px 16px 64px;
+    }
+
+    /* ── HEADER ── */
+    .header { text-align: center; padding: 14px 0 20px; }
+    .header-icon { font-size: 2rem; margin-bottom: 4px; }
+    .header h1 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.3px; }
+    .header h1 span { display: block; font-size: 0.82rem; font-weight: 400; color: var(--muted); margin-top: 2px; }
+
+    /* ── SETUP BANNER ── */
+    .setup-banner {
+      background: #fffbeb;
+      border: 1.5px solid #fde68a;
+      border-radius: 13px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+    }
+    .setup-banner-title { font-size: 0.78rem; font-weight: 700; color: #92400e; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+    .setup-banner p { font-size: 0.78rem; color: #78350f; line-height: 1.5; margin-bottom: 8px; }
+    .setup-link { display: inline-block; font-size: 0.78rem; font-weight: 700; color: var(--blue); text-decoration: none; }
+    .setup-link:hover { text-decoration: underline; }
+    .setup-steps { font-size: 0.75rem; color: #78350f; line-height: 1.7; padding-left: 14px; }
+    .setup-expand-btn { font-size: 0.72rem; font-weight: 600; color: #92400e; background: none; border: none; cursor: pointer; padding: 0; margin-top: 4px; }
+    .setup-details { margin-top: 8px; display: none; }
+    .setup-details.open { display: block; }
+
+    /* ── BOOKING CARD ── */
+    .booking-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .card-rink-bar { height: 5px; background: var(--blue); }
+    .card-rink-bar.newington { background: var(--newington); }
+    .card-rink-bar.champions { background: var(--champions); }
+    .card-body { padding: 18px 18px 22px; }
+    .booking-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin-bottom: 14px; }
+
+    .detail-row { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-icon { font-size: 1rem; width: 22px; flex-shrink: 0; text-align: center; margin-top: 2px; }
+    .detail-content { flex: 1; min-width: 0; }
+    .detail-label { font-size: 0.65rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; }
+    .detail-value { font-size: 0.92rem; font-weight: 600; margin-top: 1px; }
+    .detail-value.big { font-size: 1.05rem; font-weight: 800; }
+    .detail-value a { color: inherit; text-decoration: none; }
+    .detail-value a:hover { text-decoration: underline; }
+
+    /* ── APPROVE BUTTON ── */
+    .approve-wrap { margin-bottom: 12px; }
+
+    .approve-btn {
+      width: 100%;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 18px 20px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: -0.2px;
+      transition: filter .14s, transform .1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .approve-btn:hover:not(:disabled) { filter: brightness(0.92); }
+    .approve-btn:active:not(:disabled) { transform: scale(0.98); }
+    .approve-btn:disabled { background: #6b7280; cursor: default; }
+    .approve-btn.loading { background: #4b7c64; }
+    .approve-btn.success { background: #059669; }
+
+    .approve-sub {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+    .approve-sub.no-oauth {
+      color: var(--orange);
+      font-weight: 600;
+    }
+
+    /* ── SECONDARY ACTIONS ── */
+    .secondary-actions { display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; }
+
+    .sec-btn {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text);
+      transition: background .12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sec-btn:hover { background: var(--bg); }
+    .sec-btn .sec-label { flex: 1; }
+    .sec-btn .sec-arrow { font-size: 0.75rem; color: var(--muted); }
+    .sec-btn.email { color: var(--blue); border-color: #bfdbfe; background: #eff6ff; }
+    .sec-btn.email:hover { background: #dbeafe; }
+    .sec-btn.decline { color: var(--red); border-color: #fecaca; background: #fee2e2; }
+    .sec-btn.decline:hover { background: #fecaca; }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 4px 0 12px; }
+
+    /* ── STATUS CARD ── */
+    .status-card {
+      border-radius: 13px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .status-card.show { display: block; }
+    .status-card.success { background: #f0fdf4; border: 1.5px solid #bbf7d0; }
+    .status-card.error   { background: #fef2f2; border: 1.5px solid #fecaca; }
+    .status-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 4px; }
+    .status-card.success .status-title { color: var(--green); }
+    .status-card.error   .status-title { color: var(--red); }
+    .status-body { font-size: 0.78rem; line-height: 1.5; color: var(--muted); }
+
+    /* ── NO PARAMS ── */
+    .no-params { text-align: center; padding: 60px 20px; }
+    .no-params-icon { font-size: 3rem; margin-bottom: 12px; }
+    .no-params h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .no-params p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── BACK LINK ── */
+    .back-link { display: flex; align-items: center; gap: 5px; font-size: 0.78rem; color: var(--blue); font-weight: 600; text-decoration: none; justify-content: center; margin-top: 24px; }
+
+    /* ── SPINNER ── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+
+    /* ── TOAST ── */
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: #111827; color: #fff; font-size: 0.82rem; font-weight: 600; padding: 10px 20px; border-radius: 24px; opacity: 0; transition: opacity .2s; pointer-events: none; white-space: nowrap; z-index: 999; }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="header">
+    <div class="header-icon">🥅</div>
+    <h1>Coach Mitch<span>Booking Approval</span></h1>
+  </header>
+
+  <div id="main-content"></div>
+
+  <a class="back-link" href="availability.html">← Back to booking page</a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════════════════════════════════════════════════════
+   CONFIG — edit once, then leave alone
+   ════════════════════════════════════════════════════
+
+   GOOGLE_CLIENT_ID:
+     Paste your OAuth 2.0 Client ID from Google Cloud Console.
+     Steps (5 min, one-time):
+       1. Go to console.cloud.google.com → "APIs & Services" → "Credentials"
+       2. Click "Create Credentials" → "OAuth client ID"
+       3. Application type: "Web application"
+       4. Name: "Coach Mitch Admin"
+       5. Authorized JavaScript origins: add your hosted URL
+          (e.g. https://yourdomain.com  OR  http://localhost for local use)
+       6. Click Create → copy the Client ID and paste it below
+       7. Also make sure "Google Calendar API" is enabled in "APIs & Services" → "Library"
+
+   Leave empty ("") to use the manual flow (no auto calendar update).
+   ════════════════════════════════════════════════════ */
+const GOOGLE_CLIENT_ID = "329026777999-v4hljil36dfe58e3bvpsibdet15a4oa1.apps.googleusercontent.com";
+
+const CALENDAR_ID = "721f102eadb73ee43a9d593c80643347c806fccf57b0def9604515a8b2a73a7b@group.calendar.google.com";
+const SCOPES      = "https://www.googleapis.com/auth/calendar.events";
+const CFG         = { phone:"5857759198", venmo:"Mitch-Collum", price:125 };
+
+const RINK_NAMES = { newington:"Newington Arena", champions:"Champions Skating Center" };
+const RINK_ADDRS = {
+  newington: "300 Alumni Rd, Newington, CT 06111",
+  champions: "6 Progress Dr, Cromwell, CT 06416",
+};
+const MAPS = {
+  newington: "https://maps.google.com/?q=300+Alumni+Rd,+Newington,+CT+06111",
+  champions: "https://maps.google.com/?q=6+Progress+Dr,+Cromwell,+CT+06416",
+};
+
+/* ─── PARSE URL PARAMS ─────────────────────────────── */
+const q = new URLSearchParams(window.location.search);
+const B = {
+  goalie:  q.get("goalie")  || "",
+  parent:  q.get("parent")  || "",
+  phone:   q.get("phone")   || "",
+  email:   q.get("email")   || "",
+  date:    q.get("date")    || "",
+  time:    q.get("time")    || "",
+  endTime: q.get("endTime") || "",
+  rink:    q.get("rink")    || "",
+  eid:     q.get("eid")     || "",
+};
+const hasBooking  = !!(B.goalie && B.date && B.rink);
+const oauthReady  = !!GOOGLE_CLIENT_ID;
+const canAutoCalendar = oauthReady && !!B.eid;
+
+/* ─── OAUTH STATE ──────────────────────────────────── */
+let tokenClient  = null;
+let accessToken  = null;
+let approvalStep = "idle"; // idle | requesting-token | updating-cal | sending-sms | done | error
+
+/* ─── UTILS ────────────────────────────────────────── */
+function pad(n) { return String(n).padStart(2,"0"); }
+function fmtLong(ds) {
+  const [y,mo,d] = ds.split("-").map(Number);
+  return new Date(y,mo-1,d).toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"});
+}
+function fmtShort(ds) {
+  const [y,mo,d] = ds.split("-").map(Number);
+  return new Date(y,mo-1,d).toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
+}
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2400);
+}
+
+/* ─── MESSAGE BUILDERS ─────────────────────────────── */
+function timeRange() {
+  return B.time + (B.endTime ? ` – ${B.endTime}` : "");
+}
+function suggestedTitle() {
+  const short = B.rink === "newington" ? "Newington" : "Champions";
+  return `Goalie Lesson – ${B.goalie} – ${short}`;
+}
+function confirmMsg() {
+  return [
+    `Hi ${B.parent}! ✅ Your goalie lesson is CONFIRMED.`,
+    ``,
+    `Goalie: ${B.goalie}`,
+    `Date: ${fmtLong(B.date)}`,
+    `Time: ${timeRange()}`,
+    `Rink: ${RINK_NAMES[B.rink] || B.rink}`,
+    `Address: ${RINK_ADDRS[B.rink] || ""}`,
+    ``,
+    `$${CFG.price} via Venmo (@${CFG.venmo}) after the session.`,
+    ``,
+    `See you on the ice! 🏒 – Coach Mitch`,
+  ].join("\n");
+}
+function declineMsg() {
+  const bookingUrl = new URL("availability.html", window.location.href).href.split("?")[0];
+  return [
+    `Hi ${B.parent}, thanks for reaching out!`,
+    ``,
+    `Unfortunately I'm unable to confirm ${B.goalie} for the ${B.time} slot on ${fmtLong(B.date)}.`,
+    ``,
+    `Please check the booking page for other available times:`,
+    bookingUrl,
+    ``,
+    `– Coach Mitch`,
+  ].join("\n");
+}
+
+function confSMSUrl()   { return `sms:${B.phone}?body=${encodeURIComponent(confirmMsg())}`; }
+function declineSMSUrl(){ return `sms:${B.phone}?body=${encodeURIComponent(declineMsg())}`; }
+function confEmailUrl() {
+  const subject = `Goalie Lesson Confirmed – ${fmtShort(B.date)}`;
+  return `mailto:${B.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(confirmMsg())}`;
+}
+function declineEmailUrl() {
+  const subject = `Re: Goalie Lesson Request – ${fmtShort(B.date)}`;
+  return `mailto:${B.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(declineMsg())}`;
+}
+
+/* ─── CALENDAR API ─────────────────────────────────── */
+async function patchCalendarEvent(eventId, newTitle) {
+  const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events/${encodeURIComponent(eventId)}`;
+  const res = await fetch(url, {
+    method: "PATCH",
+    headers: {
+      "Authorization": `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      summary: newTitle,
+      colorId: "11",
+      ...(B.email ? { attendees: [{ email: B.email }] } : {}),
+    }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error?.message || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+/* ─── APPROVAL FLOW ────────────────────────────────── */
+async function runApproval() {
+  const btn      = document.getElementById("approve-btn");
+  const statusEl = document.getElementById("status-card");
+
+  // ── Step 1: get access token (if OAuth configured) ──
+  if (canAutoCalendar && !accessToken) {
+    approvalStep = "requesting-token";
+    setBtn(btn, "loading", `<span class="spinner"></span> Signing in to Google…`);
+    tokenClient.requestAccessToken({ prompt: "" });
+    // Flow continues in the OAuth callback → onTokenReceived()
+    return;
+  }
+
+  await doApproval(btn, statusEl);
+}
+
+// Called after OAuth token is received
+async function onTokenReceived(tokenResp) {
+  if (tokenResp.error) {
+    const btn = document.getElementById("approve-btn");
+    setBtn(btn, "", "🏒 Approve Lesson");
+    showStatus("error", "Google sign-in failed", tokenResp.error_description || tokenResp.error);
+    return;
+  }
+  accessToken = tokenResp.access_token;
+  const btn      = document.getElementById("approve-btn");
+  const statusEl = document.getElementById("status-card");
+  await doApproval(btn, statusEl);
+}
+
+async function doApproval(btn, statusEl) {
+  // ── Step 2: update calendar event ──
+  if (canAutoCalendar && accessToken) {
+    approvalStep = "updating-cal";
+    setBtn(btn, "loading", `<span class="spinner"></span> Updating calendar…`);
+    try {
+      await patchCalendarEvent(B.eid, suggestedTitle());
+    } catch (err) {
+      setBtn(btn, "", "🏒 Approve Lesson");
+      showStatus("error", "Calendar update failed", `${err.message}. Try signing out of Google and trying again, or update the event title manually.`);
+      return;
+    }
+  }
+
+  // ── Step 3: show success + open SMS ──
+  approvalStep = "done";
+  setBtn(btn, "success", "✅ Approved!");
+  btn.disabled = true;
+
+  const calNote = canAutoCalendar
+    ? "Calendar event renamed automatically."
+    : (B.eid ? "Calendar not updated (OAuth not configured)." : "No calendar event ID — update manually.");
+
+  showStatus("success",
+    `Lesson confirmed for ${B.goalie}!`,
+    `${calNote} Opening confirmation text to ${B.parent || "parent"}…`
+  );
+
+  // Hide secondary action buttons since we're confirmed
+  const sec = document.getElementById("secondary-actions");
+  if (sec) sec.style.opacity = "0.4";
+
+  // Auto-open SMS after brief pause so Mitchell sees the success state
+  setTimeout(() => {
+    if (B.phone) {
+      window.location.href = confSMSUrl();
+    } else if (B.email) {
+      window.location.href = confEmailUrl();
+    } else {
+      showStatus("success", `✅ Lesson confirmed for ${B.goalie}!`, "No contact info provided — please reach out to the parent directly.");
+    }
+  }, 1400);
+}
+
+function setBtn(btn, state, html) {
+  btn.innerHTML = html;
+  btn.classList.remove("loading", "success");
+  if (state) btn.classList.add(state);
+  btn.disabled = (state === "loading" || state === "success");
+}
+
+function showStatus(type, title, body) {
+  const el = document.getElementById("status-card");
+  el.className = `status-card show ${type}`;
+  el.innerHTML = `<div class="status-title">${title}</div><div class="status-body">${body}</div>`;
+}
+
+/* ─── SETUP EXPAND ─────────────────────────────────── */
+function toggleSetup() {
+  const d = document.getElementById("setup-details");
+  const b = document.getElementById("setup-expand-btn");
+  const open = d.classList.toggle("open");
+  b.textContent = open ? "▲ Hide setup steps" : "▼ Show setup steps";
+}
+
+/* ─── RENDER ────────────────────────────────────────── */
+function render() {
+  const container = document.getElementById("main-content");
+
+  if (!hasBooking) {
+    container.innerHTML = `
+      <div class="no-params">
+        <div class="no-params-icon">📋</div>
+        <h2>No booking details</h2>
+        <p>This page is meant to be opened from the approval link in a parent's booking text.<br><br>Share <strong>availability.html</strong> with parents so they can request a lesson.</p>
+      </div>`;
+    return;
+  }
+
+  const rink = B.rink;
+
+  // Determine approve button sub-text
+  let approveSub = "";
+  let approveSubClass = "";
+  if (!B.phone && !B.email) {
+    approveSub = "No contact info — copy the confirmation message manually after approving.";
+    approveSubClass = "no-oauth";
+  } else if (!oauthReady) {
+    approveSub = B.phone
+      ? `Calendar won't update automatically (OAuth not configured). Opens pre-filled text to ${B.parent} after approving.`
+      : `Calendar won't update automatically (OAuth not configured). Opens pre-filled email to ${B.parent} after approving.`;
+    approveSubClass = "no-oauth";
+  } else if (!B.eid) {
+    approveSub = `No calendar event ID found. Opens pre-filled confirmation to ${B.parent}.`;
+    approveSubClass = "no-oauth";
+  } else {
+    approveSub = B.phone
+      ? `Renames the calendar event → then opens pre-filled text to ${B.parent}. Tap Send in Messages.`
+      : `Renames the calendar event → then opens pre-filled email to ${B.parent}.`;
+  }
+
+  container.innerHTML = `
+    ${!oauthReady ? `
+    <div class="setup-banner">
+      <div class="setup-banner-title">⚠️ One-time setup needed for auto calendar updates</div>
+      <p>To automatically rename calendar events when you approve, paste your Google OAuth Client ID into <code>admin.html</code>.</p>
+      <button class="setup-expand-btn" id="setup-expand-btn" onclick="toggleSetup()">▼ Show setup steps</button>
+      <div class="setup-details" id="setup-details">
+        <ol class="setup-steps">
+          <li>Go to <a class="setup-link" href="https://console.cloud.google.com/apis/credentials" target="_blank">console.cloud.google.com → Credentials ↗</a></li>
+          <li>Click <strong>Create Credentials → OAuth 2.0 Client ID</strong></li>
+          <li>Type: <strong>Web application</strong>, Name: Coach Mitch Admin</li>
+          <li>Authorized JS origins: add your hosting URL (or <code>http://localhost</code>)</li>
+          <li>Copy the Client ID → open <code>admin.html</code> in a text editor</li>
+          <li>Find <code>const GOOGLE_CLIENT_ID = ""</code> near the top → paste it inside the quotes</li>
+          <li>Also enable the <strong>Google Calendar API</strong> in APIs &amp; Services → Library</li>
+        </ol>
+      </div>
+    </div>` : ""}
+
+    <!-- Booking details -->
+    <div class="booking-card">
+      <div class="card-rink-bar ${rink}"></div>
+      <div class="card-body">
+        <div class="booking-label">New Booking Request</div>
+
+        <div class="detail-row">
+          <div class="detail-icon">🥅</div>
+          <div class="detail-content">
+            <div class="detail-label">Goalie</div>
+            <div class="detail-value big">${B.goalie}</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-icon">👤</div>
+          <div class="detail-content">
+            <div class="detail-label">Parent / Guardian</div>
+            <div class="detail-value">${B.parent}</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-icon">📅</div>
+          <div class="detail-content">
+            <div class="detail-label">Date</div>
+            <div class="detail-value">${fmtLong(B.date)}</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-icon">⏱</div>
+          <div class="detail-content">
+            <div class="detail-label">Time</div>
+            <div class="detail-value">${timeRange()}</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-icon">🏒</div>
+          <div class="detail-content">
+            <div class="detail-label">Rink</div>
+            <div class="detail-value" style="color:var(--${rink})">
+              <a href="${MAPS[rink]}" target="_blank">${RINK_NAMES[rink] || rink} ↗</a>
+            </div>
+          </div>
+        </div>
+
+        ${B.phone ? `
+        <div class="detail-row">
+          <div class="detail-icon">📱</div>
+          <div class="detail-content">
+            <div class="detail-label">Phone</div>
+            <div class="detail-value"><a href="tel:${B.phone}">${B.phone}</a></div>
+          </div>
+        </div>` : ""}
+
+        ${B.email ? `
+        <div class="detail-row">
+          <div class="detail-icon">📧</div>
+          <div class="detail-content">
+            <div class="detail-label">Email</div>
+            <div class="detail-value"><a href="mailto:${B.email}">${B.email}</a></div>
+          </div>
+        </div>` : ""}
+
+      </div>
+    </div>
+
+    <!-- Status card (shown after action) -->
+    <div class="status-card" id="status-card"></div>
+
+    <!-- Primary: Approve -->
+    <div class="approve-wrap">
+      <button class="approve-btn" id="approve-btn" onclick="runApproval()">
+        🏒 Approve Lesson
+      </button>
+      <p class="approve-sub ${approveSubClass}">${approveSub}</p>
+    </div>
+
+    <!-- Secondary actions -->
+    <div class="secondary-actions" id="secondary-actions">
+      ${B.email ? `
+      <a class="sec-btn email" href="${confEmailUrl()}">
+        <span>📧</span>
+        <span class="sec-label">Confirm via email instead</span>
+        <span class="sec-arrow">↗</span>
+      </a>` : ""}
+
+      <hr class="divider"/>
+
+      ${B.phone ? `
+      <a class="sec-btn decline" href="${declineSMSUrl()}">
+        <span>❌</span>
+        <span class="sec-label">Decline — text ${B.parent}</span>
+        <span class="sec-arrow">↗</span>
+      </a>` : `
+      <button class="sec-btn decline" onclick="navigator.clipboard && navigator.clipboard.writeText(${JSON.stringify(declineMsg())}).then(() => showToast('Copied!'))">
+        <span>❌</span>
+        <span class="sec-label">Copy decline message</span>
+      </button>`}
+    </div>
+  `;
+}
+
+/* ─── BOOT ──────────────────────────────────────────── */
+render();
+
+// Init Google OAuth token client once GIS script loads
+window.addEventListener("load", () => {
+  if (oauthReady && typeof google !== "undefined") {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: SCOPES,
+      callback: onTokenReceived,
+    });
+  }
+});
+</script>
+</body>
+</html>

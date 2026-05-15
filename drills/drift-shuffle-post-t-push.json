@@ -1,0 +1,38 @@
+{
+  "id": "drift-shuffle-post-t-push",
+  "name": "Drift Out — Shuffle to Post, T-Push",
+  "description": "G starts on the goal line, drifts out to the face of their angle, then drifts back and takes two shuffles into the near post. G then t-pushes out to F1, who is positioned between the edge of the circle and the face-off dot, for a shot. G follows and plays out the rebound. Works on controlled depth adjustment, clean post entry, and an explosive t-push to challenge the shooter.",
+  "drill_category": ["warmup", "crease_movement", "positioning_angles"],
+  "session_slot": "warmup",
+  "duration_minutes": 5,
+  "difficulty": "beginner",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 1,
+  "ice_zone": ["hash_marks"],
+  "goalie_starting_position": "Goal line, near post area",
+  "movement_sequence": [
+    "start_on_goal_line",
+    "drift_out_to_face_of_angle",
+    "drift_back_toward_net",
+    "two_shuffles_to_near_post",
+    "t_push_out_to_F1",
+    "save_shot",
+    "follow_rebound"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Controlled drift out — stay on your angle",
+    "Drift back smooth, don't rush",
+    "Two clean shuffles into the post — stay tight",
+    "Hard t-push out to F1 — get to depth",
+    "Square up before the shot",
+    "Follow the rebound all the way out"
+  ],
+  "tags": ["telescoping", "shuffle", "t_push", "post_play", "crease_movement", "positioning", "warmup", "rebound"],
+  "variations": [],
+  "clip_file": "drill-clips/drift-shuffle-post-t-push.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "A simple drill that isolates depth control and post entry before the t-push. The drift out and back teaches the goalie to adjust their depth actively rather than staying static. The two shuffles into the post should be clean and controlled — not rushed. The t-push out to F1 is the payoff rep; it should reach proper depth so the goalie has a real angle on the shooter."
+}

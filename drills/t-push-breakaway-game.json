@@ -1,0 +1,36 @@
+{
+  "id": "t-push-breakaway-game",
+  "name": "T-Push Breakaway Game",
+  "description": "Compete game to end a lesson. F1 starts in the corner along the goal line boards, F2 starts at the hash marks in the middle. F1 passes to F2; the goalie makes a hard t-push out, trying to beat the pass and set their challenge before F2 gets in range. F2 takes a mini breakaway in and tries to score. Game to 10: players win by scoring 10 goals, goalies win by stopping 10 breakaways. Goalies switch on every goal. Players rotate after every rep. Drill switches sides.",
+  "drill_category": ["compete", "save_technique", "positioning_angles"],
+  "session_slot": "compete",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 2,
+  "shooter_count_max": 5,
+  "shot_count": 10,
+  "ice_zone": ["hash_marks", "in_tight"],
+  "requires_goalie_partner": true,
+  "goalie_starting_position": "set at top of crease, angled to corner side",
+  "movement_sequence": [
+    "track_f1_in_corner_ready_for_pass",
+    "hard_t_push_out_to_beat_pass_to_f2",
+    "set_depth_and_challenge_f2_breakaway",
+    "make_save_or_yield_goal",
+    "switch_goalie_if_scored_on_reset_for_next_rep"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save", "desperation_save"],
+  "coaching_cues": [
+    "Beat the pass — your t-push should arrive at the challenge point as the puck does",
+    "Get your feet set before F2 enters shooting range — don't still be moving when they wind up",
+    "Hold your depth on the breakaway; make F2 beat you, don't give them the net",
+    "Stay patient — let F2 make the first move before you commit",
+    "On a goal, flush it fast — next goalie steps in, game keeps moving"
+  ],
+  "tags": ["t_push", "telescoping", "breakaway", "compete", "game_format", "in_tight", "challenge", "pass_and_shoot"],
+  "variations": [],
+  "clip_file": "drill-clips/t-push-breakaway-game.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Good lesson-ender. The compete format rewards the goalie skill that was trained earlier in the session — aggressive t-push challenge on the pass — and gives players a scoring incentive that keeps energy high. The goalie rotation on goals keeps both goalies sharp and prevents a single goalie from absorbing a bad run. Watch for goalies who stop pushing hard on the t-push under pressure; that's the first thing to erode in a compete game. Keep score visible and called out loud."
+}

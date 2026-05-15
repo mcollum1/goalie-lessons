@@ -1,0 +1,38 @@
+{
+  "id": "post-entry-exit-rvh-powerslide",
+  "name": "Post Entry & Exit — RVH to Powerslide",
+  "description": "G starts at the top center of the crease and shuffles toward the post as if tracking a player coming down. Comes into the post and sets RVH. Bumps off the RVH out to center landing in butterfly. Pivots and powerslides to the opposite post. Recovers to feet and t-pushes back to center. Repeat. Trains post entry and exit, RVH positioning, butterfly pivoting, and powerslide generation.",
+  "drill_category": ["skating", "crease_movement"],
+  "session_slot": "warmup",
+  "duration_minutes": 5,
+  "difficulty": "intermediate",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": ["in_tight"],
+  "setup_required": "net_required",
+  "goalie_starting_position": "Top center of crease",
+  "movement_sequence": [
+    "shuffle_to_post",
+    "set_RVH_on_post",
+    "bump_off_RVH_to_center_in_butterfly",
+    "pivot",
+    "power_slide_to_opposite_post",
+    "recover_to_feet",
+    "t_push_back_to_center",
+    "repeat"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Clean post entry — set the RVH before the bump",
+    "Sharp pivot off the RVH",
+    "Stay in butterfly through the powerslide",
+    "Explosive t-push back to center"
+  ],
+  "tags": ["RVH", "post_play", "butterfly_slide", "power_slide", "t_push", "skating", "post_entry_exit"],
+  "variations": [],
+  "clip_file": "drill-clips/post-entry-exit-rvh-powerslide.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The bump off the RVH is a controlled push, not a fall — the goalie should be generating the butterfly landing deliberately. Common error is pivoting too early before fully landing in butterfly, which kills the powerslide angle. The t-push back to center should be explosive so the next rep starts with momentum."
+}

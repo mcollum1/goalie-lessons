@@ -1,0 +1,36 @@
+{
+  "id": "shuffle-t-push-shot",
+  "name": "Tall Shuffle — Hard T-Push Shot",
+  "description": "F1 is positioned just inside the top of the circle above the hash marks on one side. G starts at the top center of the crease, takes 3 tall shuffles to the far side, locates F1, then drives a hard t-push across to challenge F1 for a shot. G follows and plays out the rebound. Trains the combination of controlled lateral shuffle movement, picking up the shooter, and converting that into an explosive t-push to proper depth.",
+  "drill_category": ["warmup", "crease_movement"],
+  "session_slot": "warmup",
+  "duration_minutes": 5,
+  "difficulty": "beginner",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 1,
+  "ice_zone": ["hash_marks", "top_of_circles"],
+  "goalie_starting_position": "Top center of crease",
+  "movement_sequence": [
+    "start_top_center_crease",
+    "three_tall_shuffles_to_far_side",
+    "locate_F1",
+    "hard_t_push_across_to_F1_angle",
+    "save_shot",
+    "play_rebound"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Stay tall through the shuffle — don't sink",
+    "Find F1 at the end of the shuffle before committing to the push",
+    "Hard t-push — drive to depth, don't drift",
+    "Square up to F1 before the release",
+    "Track the rebound and follow it out"
+  ],
+  "tags": ["shuffle", "t_push", "crease_movement", "lateral_movement", "warmup", "rebound"],
+  "variations": [],
+  "clip_file": "drill-clips/shuffle-t-push-shot.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The 'tall' in the shuffle is the key coaching point — goalies tend to sink into their hips during lateral movement, which slows the transition into the t-push. Staying tall keeps the weight loaded and ready to push. The locate step between the shuffle and the push is important; the goalie should have a clear read on F1 before generating the t-push rather than just launching blind."
+}

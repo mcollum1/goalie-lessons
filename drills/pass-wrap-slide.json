@@ -1,0 +1,38 @@
+{
+  "id": "pass-wrap-slide",
+  "name": "Pass & Wrap — Slide Series",
+  "description": "F1 starts at the hash marks inside the circle and passes to F2 on the goal line. F2 catches and wraps tight trying to score far side. G starts square to F1 and butterfly slides to F2, then power slides across the crease to make the save. Reset and repeat other side.",
+  "drill_category": ["crease_movement", "save_technique"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 2,
+  "shooter_count_max": 2,
+  "shot_count": 1,
+  "ice_zone": ["in_tight"],
+  "goalie_starting_position": "Square to F1, inside the circle just off the hash marks",
+  "movement_sequence": [
+    "butterfly_slide_to_F2",
+    "power_slide_across_crease"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Track the pass",
+    "Quick slide and reaction",
+    "Keep everything tight, rotate effectively",
+    "Hand out and over the puck",
+    "Follow the rebound"
+  ],
+  "tags": ["jam_play", "in_tight", "post_to_post", "pass_and_shoot", "crease_movement"],
+  "variations": [
+    {
+      "name": "Variation 2 — Hybrid VH",
+      "description": "Same setup and read, but goalie sets hybrid VH on the post instead of butterfly sliding to F2, then slides out into the shooter.",
+      "movement_sequence": ["set_VH_on_post", "slide_to_shooter"],
+      "clip_file": "drill_variation2_vh_slide.mp4"
+    }
+  ],
+  "clip_file": "drill_variation1_butterfly_powerslide.mp4",
+  "has_animation": false,
+  "coach_notes": "Hands should be attacking — out and over the puck, not passive. On a glove-to-blocker side slide, paddle down is a good variation to work in."
+}

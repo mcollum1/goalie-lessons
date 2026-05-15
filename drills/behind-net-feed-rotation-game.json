@@ -1,0 +1,36 @@
+{
+  "id": "behind-net-feed-rotation-game",
+  "name": "Behind Net Feed Rotation Game",
+  "description": "King-of-the-hill compete game requiring at least 3 shooters. Pucks are staged behind the net. F1 starts behind the net and passes to any shooter in front, who must shoot immediately. After each save, play continues with one pass allowed per save. If the goalie covers the puck or it hits the boards, the puck is dead — goalie earns a point and players rotate. If a player scores, players earn a point and goalies rotate. Play to 10.",
+  "drill_category": ["compete", "rebound_control", "save_technique", "tracking_vision"],
+  "session_slot": "compete",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 3,
+  "shooter_count_max": 5,
+  "shot_count": 10,
+  "ice_zone": ["behind_net", "in_tight", "hash_marks"],
+  "requires_goalie_partner": true,
+  "goalie_starting_position": "set in crease, tracking F1 behind net",
+  "movement_sequence": [
+    "track_f1_behind_net_read_pass_direction",
+    "adjust_angle_to_receiving_shooter_in_front",
+    "make_save_on_first_shot",
+    "cover_or_direct_to_boards_for_dead_puck_point",
+    "track_one_pass_and_make_second_save_if_live"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save", "desperation_save"],
+  "coaching_cues": [
+    "Track F1 behind the net — the pass direction tells you where to set your angle",
+    "Cover or direct to the boards on every save — a dead puck is your point",
+    "After a save, find the puck immediately — one pass and the next shot is coming",
+    "Know where all shooters are in front before the pass — F1 can go anywhere",
+    "Stay alive after the first shot — don't relax until the puck is dead"
+  ],
+  "tags": ["behind_net", "compete", "game_format", "rebound_control", "rotation", "cover", "tracking", "multi_shooter", "pass_and_shoot"],
+  "variations": [],
+  "clip_file": "drill-clips/behind-net-feed-rotation-game.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "King-of-the-hill format that adds unpredictability through the behind-net feed — F1 can pass to any shooter in front, so the goalie can't cheat to one side. The one-pass-per-save rule maintains pressure after good saves without letting the game turn into chaos. Player rotation on goalie points and goalie rotation on player points keeps everyone engaged and prevents one matchup from dominating. Works best with 4–5 skaters (1 behind net, 3–4 in front) so rotations stay smooth and the pace stays high. Distinct from the rebound game in that shots originate from a feed rather than a set position."
+}

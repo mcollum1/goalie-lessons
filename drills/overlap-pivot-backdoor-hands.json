@@ -1,0 +1,36 @@
+{
+  "id": "overlap-pivot-backdoor-hands",
+  "name": "Overlap Pivot + Backdoor Hands",
+  "description": "Technique drill focused on pivot quality and hand positioning on a lateral powerslide. The goalie starts in overlap at the top of the crease on the post angle, then cuts back into the post. From there they take a small shuffle or t-push out to the face-off dot on the same side. F1 calls 'go' — the goalie butterfly pivots, finds F1, and powerslides across with hands extended toward the shooter's blade to smother the puck. F1 is positioned between the bottom of the circle and the hash marks, just inside the face-off dot angle, emulating a backdoor shot. The focus is on the correct pivot angle, getting hands out facing the blade, and smothering rather than swatting.",
+  "drill_category": ["save_technique", "crease_movement"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 1,
+  "ice_zone": ["in_tight"],
+  "goalie_starting_position": "overlap at top of crease on post angle",
+  "movement_sequence": [
+    "start_overlap_at_top_of_crease_on_post_angle",
+    "cut_back_from_overlap_into_post",
+    "shuffle_or_t_push_out_to_face_off_dot",
+    "react_to_go_call_butterfly_pivot_to_find_f1",
+    "powerslide_across_with_hands_extended_to_shooters_blade",
+    "smother_puck_hands_facing_blade"
+  ],
+  "save_types": ["glove_save", "blocker_save", "pad_save"],
+  "coaching_cues": [
+    "Start the butterfly pivot early — your push angle depends on where you pivot to",
+    "Find F1's blade before you push — your hands need a target before you commit",
+    "Lead with your hands, not your pads — the push gets you there, hands make the save",
+    "Palms open, thumbs up — hands facing the blade, not the body",
+    "Smother it, don't swat — absorb the puck into your equipment"
+  ],
+  "tags": ["overlap", "t_push", "shuffle", "butterfly_pivot", "power_slide", "backdoor", "hands", "lateral_slide", "verbal_cue"],
+  "variations": [],
+  "clip_file": "drill-clips/overlap-pivot-backdoor-hands.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Pure technique rep — the movement chain before the go call is the setup, but the real coaching happens at the pivot and the hands. Two common errors: (1) goalie pivots too late or to the wrong angle, meaning the push takes them past the puck rather than into it; (2) hands are passive or trailing, so the puck finds a gap rather than being smothered. The shooter should aim for the hands deliberately — this isn't about beating the goalie, it's about giving them a target to close on. Run high reps from both sides."
+}

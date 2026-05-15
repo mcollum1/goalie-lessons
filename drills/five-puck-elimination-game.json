@@ -1,0 +1,36 @@
+{
+  "id": "five-puck-elimination-game",
+  "name": "Five Puck Elimination Game",
+  "description": "End-of-session elimination compete game requiring at least 3 shooters. Five pucks are staged behind the net. One shooter at a time has 45 seconds to score as many of the 5 pucks as possible. The play zone is from behind the net out to the hash marks in an arc — all in-tight. If the goalie covers the puck or the puck leaves the zone, that puck is dead. Otherwise the shooter continues playing the same puck. The shooter who scores the least in a round is eliminated. Rounds continue until one shooter is left. Goalies switch after each round.",
+  "drill_category": ["compete", "save_technique", "rebound_control", "recovery_desperation"],
+  "session_slot": "compete",
+  "duration_minutes": 15,
+  "difficulty": "advanced",
+  "shooter_count_min": 3,
+  "shooter_count_max": 5,
+  "shot_count": 5,
+  "ice_zone": ["behind_net", "in_tight"],
+  "requires_goalie_partner": true,
+  "goalie_starting_position": "set in crease, ready for jam play in tight",
+  "movement_sequence": [
+    "track_shooter_starting_behind_net",
+    "adjust_depth_as_shooter_walks_out_into_zone",
+    "challenge_and_make_save_or_cover_in_zone",
+    "cover_or_direct_out_of_zone_to_kill_puck",
+    "reset_quickly_for_next_puck_clock_still_running"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save", "desperation_save", "paddle_down"],
+  "coaching_cues": [
+    "Cover anything in reach — a smothered puck ends that possession",
+    "Track the shooter's hands and body, not just the puck — read intent in tight",
+    "Stay aggressive on your depth — don't retreat to the goal line",
+    "Reset fast after each dead puck — the clock keeps running",
+    "Stay patient between pucks — 45 seconds is long, don't panic early"
+  ],
+  "tags": ["jam_play", "in_tight", "behind_net", "compete", "game_format", "elimination", "cover", "rebound_control", "wrap_around", "desperation_save"],
+  "variations": [],
+  "clip_file": "drill-clips/five-puck-elimination-game.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "High-pressure elimination game that simulates the most chaotic in-tight scenarios a goalie faces. The zone restriction (behind net to hash marks arc) prevents shooters from backing out for clean looks — every attempt is a jam play, wrap-around threat, or in-tight battle. The elimination format keeps stakes high throughout all rounds, not just the final. Goalies switching after each round ensures both face equal pressure and prevents one goalie from getting a favorable matchup every time. Watch for goalies who over-retreat to the goal line — staying tight to the post and aggressive on depth is essential in this zone."
+}

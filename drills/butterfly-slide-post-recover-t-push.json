@@ -1,0 +1,39 @@
+{
+  "id": "butterfly-slide-post-recover-t-push",
+  "name": "Butterfly Slide — Post Recover and T-Push",
+  "description": "G starts at the far face-off dot. F1 is at the near face-off dot on the opposite side. G pivots and butterfly slides across to F1's side, recovers to the near post, head checks to locate F1, then t-pushes out to challenge F1 for a shot. Repeats for multiple reps before switching sides. Works on linking the butterfly slide to a clean post recovery, building the habit of a head check before pushing out, and finishing with an explosive t-push to proper depth.",
+  "drill_category": ["warmup", "save_technique", "crease_movement"],
+  "session_slot": "warmup",
+  "duration_minutes": 5,
+  "difficulty": "beginner",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 1,
+  "ice_zone": ["hash_marks", "in_tight"],
+  "goalie_starting_position": "Far face-off dot",
+  "movement_sequence": [
+    "start_at_far_faceoff_dot",
+    "pivot",
+    "butterfly_slide_to_F1_side",
+    "recover_to_near_post",
+    "head_check_locate_F1",
+    "t_push_out_to_angle",
+    "save_shot",
+    "repeat_same_side",
+    "switch_sides_and_repeat"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Eyes go first — head turns before the slide",
+    "Clean post touch — don't crash into it",
+    "Head check before the t-push, every rep",
+    "Hard t-push out to depth — don't leak in shallow",
+    "Square up to F1 before the shot"
+  ],
+  "tags": ["butterfly_slide", "t_push", "post_play", "tracking_vision", "lateral_movement", "warmup", "head_check", "recovery"],
+  "variations": [],
+  "clip_file": "drill-clips/butterfly-slide-post-recover-t-push.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "A natural progression from the dot-to-dot butterfly slide drill — same start and slide, but now the goalie has to complete a post recovery and head check before pushing back out. The head check is the key habit: the goalie needs to confirm F1's location before committing to the t-push rather than assuming. Common error is rushing through the post touch and skipping the head check entirely. The t-push should reach proper depth so the goalie has a real angle on F1."
+}

@@ -1,0 +1,40 @@
+{
+  "id": "pass-slot-shot-rvh-bump-out",
+  "name": "Pass to Slot — RVH Head-Check and Bump Out",
+  "description": "F1 starts at the dot with a puck and passes to F2 in the slot. F2 takes a one-touch shot or catches and moves back the other way. G pivots and gets eyes and hands to F2 before the first shot. After the shot, F2 skates behind the net to pick up a puck and moves to center behind the net, while F1 drives toward the net. F2 passes to F1 on either side of the net. G sets RVH, head-checks to locate F2 behind the net, reads which side the pass is coming to, and bumps out to challenge F1 for the second shot. Second shot is played out. Works on pivots with eyes and hands arriving first, RVH positioning behind the net, head-checking, and bumping out to the proper angle.",
+  "drill_category": ["crease_movement", "save_technique", "positioning_angles"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 2,
+  "shooter_count_max": 2,
+  "shot_count": 2,
+  "ice_zone": ["hash_marks", "in_tight", "behind_net"],
+  "goalie_starting_position": "Center of crease, square to F1",
+  "movement_sequence": [
+    "track_pass_from_F1_to_F2",
+    "pivot_and_get_eyes_hands_to_F2",
+    "save_first_shot_from_F2",
+    "reset_and_set_RVH_as_F2_goes_behind_net",
+    "head_check_to_locate_F2_behind_net",
+    "read_pass_side",
+    "bump_out_to_challenge_F1",
+    "save_second_shot",
+    "play_rebound"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Pivot early — eyes and hands get there before the shot",
+    "Track the pass, not F2's skates",
+    "Set RVH clean before the head-check",
+    "Head-check before committing — know where F2 is",
+    "Read the pass direction early, bump to that side",
+    "Bump out with authority — get to your angle before F1 shoots"
+  ],
+  "tags": ["RVH", "pivot", "tracking_vision", "behind_net", "bump_out", "post_play", "two_shot", "crease_movement", "pass_and_shoot"],
+  "variations": [],
+  "clip_file": "drill-clips/pass-slot-shot-rvh-bump-out.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Two distinct skill reps in one sequence. Shot 1 tests the pivot habit — the goalie should be getting eyes and hands to F2 before the shot arrives, not reacting after release. Shot 2 is the RVH rep: the head-check is the critical habit, and it has to happen before the bump out so the goalie knows which side to move to. A goalie who bumps out without checking is guessing. Watch that the bump out reaches proper depth — coming out too shallow on a net-front pass leaves the far side open."
+}

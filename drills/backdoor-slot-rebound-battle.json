@@ -1,0 +1,38 @@
+{
+  "id": "backdoor-slot-rebound-battle",
+  "name": "Backdoor + Slot Rebound Battle",
+  "description": "Two-shot battle drill. F1 positions backdoor on the far post side. F2 sets up in the high slot. Coach or goalie partner positions on the face-off dot on the same side as the goalie's starting post. The goalie starts on the post on the passer's side. The passer sends a backdoor pass to F1; the goalie pivots with a hard push and gets hands out to make the save. The goalie then immediately resets eyes to the passer, who passes to F2 in the high slot. The goalie beats the pass to challenge F2, who shoots. Coach and F1 play the rebound. Can be run with 3 rotating shooters or 2 shooters and a goalie partner as passer.",
+  "drill_category": ["save_technique", "crease_movement", "compete"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 2,
+  "shooter_count_max": 3,
+  "shot_count": 2,
+  "ice_zone": ["in_tight", "top_of_circles"],
+  "goalie_starting_position": "on post, same side as passer at face-off dot",
+  "movement_sequence": [
+    "set_on_post_same_side_as_passer",
+    "read_backdoor_pass_to_f1",
+    "pivot_hard_push_hands_out_for_f1_backdoor_shot",
+    "make_save_on_f1_backdoor",
+    "reset_eyes_to_passer_immediately",
+    "beat_pass_to_f2_in_high_slot",
+    "challenge_f2_and_control_rebound_on_slot_shot",
+    "battle_rebound_with_coach_and_f1_crashing"
+  ],
+  "save_types": ["glove_save", "blocker_save", "pad_save", "desperation_save"],
+  "coaching_cues": [
+    "Find F1 with your eyes before the pass is made — don't wait for the puck to move",
+    "Pivot hard and push with hands leading — don't arrive late to the backdoor",
+    "After the save, reset your eyes to the passer immediately — the second pass is coming fast",
+    "Beat the pass to F2 — your push starts as the puck leaves the passer's stick",
+    "Control the rebound on the slot shot — know where F1 and Coach are crashing"
+  ],
+  "tags": ["backdoor", "pivot", "hands", "lateral_slide", "reset", "high_slot", "rebound_control", "compete", "battle", "pass_and_shoot", "two_puck"],
+  "variations": [],
+  "clip_file": "drill-clips/backdoor-slot-rebound-battle.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The battle element comes from the rebound crash after shot 2 — Coach and F1 both attack the net, so the goalie must control the rebound or cover quickly. The critical timing point is the reset between shots: goalies who linger after the backdoor save will be caught flat-footed on the slot pass. In early reps, run each shot option in isolation before chaining them. Can be run with 3 rotating shooters cycling through all roles, or with 2 shooters and a goalie partner feeding as passer."
+}

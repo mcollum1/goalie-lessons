@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Drill Library Review</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#1c3150">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0c1a30;
+      --navy2:   #1c3150;
+      --navy3:   #243d61;
+      --blue:    #3b7dd8;
+      --teal:    #2ac4a0;
+      --orange:  #f0902c;
+      --green:   #28c76f;
+      --red:     #e84d6d;
+      --purple:  #9b6dff;
+      --text:    #e8edf5;
+      --muted:   #8899b0;
+      --card-bg: #182840;
+      --border:  #243d61;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    }
+
+    /* ── Header ── */
+    .header {
+      background: var(--navy2);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px;
+      padding-top: calc(14px + env(safe-area-inset-top));
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .header-icon {
+      font-size: 20px;
+    }
+    .header h1 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .header-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .drill-count-badge {
+      margin-left: auto;
+      background: var(--navy3);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 20px;
+    }
+
+    /* ── Search ── */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 8px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 14px;
+      pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      background: var(--navy);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+      padding: 8px 10px 8px 32px;
+      outline: none;
+    }
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus { border-color: var(--blue); }
+
+    /* ── Slot Filter Pills ── */
+    .filter-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .filter-row::-webkit-scrollbar { display: none; }
+
+    .slot-pill {
+      flex-shrink: 0;
+      padding: 5px 11px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .slot-pill.all        { background: var(--navy3); border-color: var(--border); color: var(--text); }
+    .slot-pill.skating    { background: rgba(59,125,216,0.15); border-color: var(--blue); color: var(--blue); }
+    .slot-pill.shot       { background: rgba(240,144,44,0.15); border-color: var(--orange); color: var(--orange); }
+    .slot-pill.skill      { background: rgba(40,199,111,0.15); border-color: var(--green); color: var(--green); }
+    .slot-pill.compete    { background: rgba(232,77,109,0.15); border-color: var(--red); color: var(--red); }
+    .slot-pill.active {
+      background: var(--blue) !important;
+      border-color: var(--blue) !important;
+      color: #fff !important;
+    }
+    .slot-pill.active.skating { background: var(--blue) !important; }
+    .slot-pill.active.shot    { background: var(--orange) !important; border-color: var(--orange) !important; }
+    .slot-pill.active.skill   { background: var(--green) !important; border-color: var(--green) !important; }
+    .slot-pill.active.compete { background: var(--red) !important; border-color: var(--red) !important; }
+
+    /* ── Group Headers ── */
+    .group-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 20px 16px 8px;
+    }
+    .group-header h2 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    .group-count {
+      font-size: 11px;
+      color: var(--muted);
+      background: var(--navy2);
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    /* ── Drill Cards ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 0 12px;
+    }
+    @media (min-width: 700px) {
+      .cards-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (min-width: 1100px) {
+      .cards-grid { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    .drill-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .drill-card:hover { border-color: var(--blue); }
+
+    /* Video area */
+    .video-wrap {
+      position: relative;
+      background: #060d18;
+      aspect-ratio: 16/9;
+      cursor: pointer;
+    }
+    .drill-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.35);
+      transition: opacity 0.2s;
+    }
+    .video-play-btn {
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.92);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      padding-left: 3px;
+    }
+    .video-wrap.playing .video-overlay { opacity: 0; pointer-events: none; }
+    .video-wrap.no-clip { cursor: default; }
+    .no-clip-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .no-clip-icon { font-size: 28px; opacity: 0.3; }
+
+    /* Card body */
+    .card-body {
+      padding: 12px 14px 14px;
+    }
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .drill-name {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--text);
+    }
+
+    /* Slot badge */
+    .slot-badge {
+      flex-shrink: 0;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 3px 7px;
+      border-radius: 6px;
+    }
+    .slot-badge.skating { background: rgba(59,125,216,0.2); color: #7ab2f0; }
+    .slot-badge.shot    { background: rgba(240,144,44,0.2); color: var(--orange); }
+    .slot-badge.skill   { background: rgba(40,199,111,0.2); color: var(--green); }
+    .slot-badge.compete { background: rgba(232,77,109,0.2); color: var(--red); }
+
+    /* Meta row */
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 9px;
+    }
+    .meta-chip {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 5px;
+      background: var(--navy3);
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .meta-chip.difficulty-beginner     { color: var(--teal); background: rgba(42,196,160,0.12); }
+    .meta-chip.difficulty-intermediate { color: var(--orange); background: rgba(240,144,44,0.12); }
+    .meta-chip.difficulty-advanced     { color: var(--red); background: rgba(232,77,109,0.12); }
+    .meta-chip.cat { color: #9bb8e0; }
+
+    /* Cues */
+    .cues-toggle {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 11px;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+    .cues-toggle:hover { color: var(--text); }
+    .cues-list {
+      display: none;
+      list-style: none;
+      border-left: 2px solid var(--border);
+      padding-left: 10px;
+      margin-bottom: 4px;
+    }
+    .cues-list.open { display: block; }
+    .cues-list li {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      padding: 2px 0;
+    }
+    .cues-list li::before {
+      content: "› ";
+      color: var(--blue);
+    }
+
+    /* Tags */
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 6px;
+    }
+    .tag {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(59,125,216,0.1);
+      color: #6899cc;
+      border: 1px solid rgba(59,125,216,0.2);
+    }
+
+    /* Drill stat row */
+    .stat-row {
+      display: flex;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .stat-row span { display: flex; align-items: center; gap: 3px; }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--muted);
+    }
+    .empty-state .es-icon { font-size: 36px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; }
+
+    /* No-video flag */
+    .flag-no-clip { border-left: 3px solid var(--orange); }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-row">
+    <span class="header-icon">🎯</span>
+    <div>
+      <h1>Drill Library Review</h1>
+      <div class="header-sub">Verify tags, slots &amp; video clips</div>
+    </div>
+    <div class="drill-count-badge" id="visibleCount">– drills</div>
+  </div>
+
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="searchInput" type="search" placeholder="Search by name, tag, category…">
+  </div>
+
+  <div class="filter-row" id="filterRow">
+    <button class="slot-pill all active"    data-slot="all">All</button>
+    <button class="slot-pill skating"       data-slot="skating">⛸ Skating WU</button>
+    <button class="slot-pill shot"          data-slot="shot">🏒 Shot WU</button>
+    <button class="slot-pill skill"         data-slot="skill">🎯 Skill Work</button>
+    <button class="slot-pill compete"       data-slot="compete">🏆 Compete</button>
+    <button class="slot-pill all"           data-slot="noclip" style="border-color:#f0902c;color:#f0902c;">⚠️ No Clip</button>
+  </div>
+</div>
+
+<div id="mainContent"></div>
+
+<!-- Load drill library -->
+<script src="drill_library.js"></script>
+<script>
+/* ── Helpers ─────────────────────────────────────────────── */
+
+function slotClass(drill) {
+  const slot  = drill.session_slot || "";
+  const cats  = drill.drill_category || [];
+  if (slot === "warmup" && cats.includes("skating"))  return "skating";
+  if (slot === "warmup" && cats.includes("warmup"))   return "shot";
+  if (slot === "warmup")                              return "skating"; // fallback
+  if (slot === "skill_work")  return "skill";
+  if (slot === "compete")     return "compete";
+  return "skill";
+}
+
+function slotLabel(drill) {
+  const sc = slotClass(drill);
+  if (sc === "skating")  return "Skating WU";
+  if (sc === "shot")     return "Shot WU";
+  if (sc === "skill")    return "Skill Work";
+  if (sc === "compete")  return "Compete";
+  return drill.session_slot || "?";
+}
+
+function slotGroupOrder(sc) {
+  return { skating:0, shot:1, skill:2, compete:3 }[sc] ?? 99;
+}
+
+function diffClass(d) {
+  return "difficulty-" + (d || "beginner");
+}
+
+function shooterText(drill) {
+  const min = drill.shooter_count_min ?? 0;
+  const max = drill.shooter_count_max ?? 0;
+  if (min === 0 && max === 0) return "No shooters";
+  if (min === max) return `${min} shooter${min !== 1 ? "s" : ""}`;
+  return `${min}–${max} shooters`;
+}
+
+/* ── Video toggle ────────────────────────────────────────── */
+
+let activeVideo = null;
+
+function toggleVideo(wrap, videoEl) {
+  if (!videoEl) return;
+  if (activeVideo && activeVideo !== videoEl) {
+    activeVideo.pause();
+    activeVideo.parentElement.classList.remove("playing");
+    activeVideo = null;
+  }
+  if (videoEl.paused) {
+    videoEl.play();
+    wrap.classList.add("playing");
+    activeVideo = videoEl;
+  } else {
+    videoEl.pause();
+    wrap.classList.remove("playing");
+    activeVideo = null;
+  }
+}
+
+/* ── Card builder ────────────────────────────────────────── */
+
+function buildCard(drill) {
+  const sc    = slotClass(drill);
+  const label = slotLabel(drill);
+  const hasClip = !!(drill.clip_file);
+  const cats  = (drill.drill_category || []).filter(c => c !== "skating" || sc !== "skating");
+  const tags  = (drill.tags || []).slice(0, 8);
+  const cues  = (drill.coaching_cues || []).slice(0, 5);
+
+  const card = document.createElement("div");
+  card.className = "drill-card" + (hasClip ? "" : " flag-no-clip");
+  card.dataset.sc = sc;
+  card.dataset.name = (drill.name || "").toLowerCase();
+  card.dataset.tags = tags.concat(drill.drill_category || []).join(" ").toLowerCase();
+  card.dataset.hasClip = hasClip ? "1" : "0";
+
+  /* video section */
+  let videoHtml = "";
+  if (hasClip) {
+    videoHtml = `
+      <div class="video-wrap" onclick="handleVideoClick(this)">
+        <video class="drill-video" src="${drill.clip_file}" playsinline muted loop preload="none"></video>
+        <div class="video-overlay">
+          <div class="video-play-btn">▶</div>
+        </div>
+      </div>`;
+  } else {
+    videoHtml = `
+      <div class="video-wrap no-clip">
+        <div class="no-clip-placeholder">
+          <div class="no-clip-icon">📹</div>
+          <div>No clip yet</div>
+        </div>
+      </div>`;
+  }
+
+  /* categories */
+  const catChips = (drill.drill_category || []).map(c =>
+    `<span class="meta-chip cat">${c.replace(/_/g," ")}</span>`
+  ).join("");
+
+  /* tags */
+  const tagHtml = tags.length
+    ? `<div class="tags-row">${tags.map(t => `<span class="tag">${t.replace(/_/g," ")}</span>`).join("")}</div>`
+    : "";
+
+  /* cues */
+  const cueId = "cues-" + drill.id;
+  const cuesHtml = cues.length ? `
+    <button class="cues-toggle" onclick="toggleCues('${cueId}', this)">
+      ▸ ${cues.length} coaching cue${cues.length !== 1 ? "s" : ""}
+    </button>
+    <ul class="cues-list" id="${cueId}">
+      ${cues.map(c => `<li>${c}</li>`).join("")}
+    </ul>` : "";
+
+  card.innerHTML = `
+    ${videoHtml}
+    <div class="card-body">
+      <div class="card-top">
+        <div class="drill-name">${drill.name || drill.id}</div>
+        <div class="slot-badge ${sc}">${label}</div>
+      </div>
+      <div class="stat-row">
+        <span>⏱ ${drill.duration_minutes ?? "?"}min</span>
+        <span>👤 ${shooterText(drill)}</span>
+        <span class="meta-chip ${diffClass(drill.difficulty)}" style="margin:0">${drill.difficulty || "?"}</span>
+      </div>
+      <div class="card-meta">${catChips}</div>
+      ${cuesHtml}
+      ${tagHtml}
+    </div>`;
+
+  return card;
+}
+
+function handleVideoClick(wrap) {
+  const video = wrap.querySelector("video");
+  if (video) toggleVideo(wrap, video);
+}
+
+function toggleCues(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle("open");
+  btn.textContent = el.classList.contains("open")
+    ? btn.textContent.replace("▸", "▾")
+    : btn.textContent.replace("▾", "▸");
+}
+
+/* ── Render ──────────────────────────────────────────────── */
+
+let currentSlotFilter = "all";
+let currentSearch     = "";
+
+function render() {
+  const library = window.DRILL_LIBRARY || [];
+  const query = currentSearch.trim().toLowerCase();
+
+  /* filter */
+  const filtered = library.filter(d => {
+    const sc = slotClass(d);
+    if (currentSlotFilter === "noclip" && d.clip_file) return false;
+    if (currentSlotFilter !== "all" && currentSlotFilter !== "noclip" && sc !== currentSlotFilter) return false;
+    if (query) {
+      const haystack = [d.name, ...(d.drill_category||[]), ...(d.tags||[])].join(" ").toLowerCase();
+      if (!haystack.includes(query)) return false;
+    }
+    return true;
+  });
+
+  /* update count badge */
+  document.getElementById("visibleCount").textContent = `${filtered.length} drill${filtered.length !== 1 ? "s" : ""}`;
+
+  const content = document.getElementById("mainContent");
+  content.innerHTML = "";
+
+  if (!filtered.length) {
+    content.innerHTML = `<div class="empty-state">
+      <div class="es-icon">🔍</div>
+      <p>No drills match your filters.</p>
+    </div>`;
+    return;
+  }
+
+  /* group by slot */
+  const groups = {};
+  const groupOrder = [];
+  for (const d of filtered) {
+    const sc = slotClass(d);
+    if (!groups[sc]) { groups[sc] = []; groupOrder.push(sc); }
+    groups[sc].push(d);
+  }
+  groupOrder.sort((a,b) => slotGroupOrder(a) - slotGroupOrder(b));
+
+  const groupNames = {
+    skating: "⛸ Skating Warmup",
+    shot:    "🏒 Shot Warmup",
+    skill:   "🎯 Skill Work",
+    compete: "🏆 Compete / Situational",
+  };
+
+  for (const sc of groupOrder) {
+    /* only show group header if not filtering to one specific slot */
+    if (currentSlotFilter === "all" || currentSlotFilter === "noclip") {
+      const gh = document.createElement("div");
+      gh.className = "group-header";
+      gh.innerHTML = `<h2>${groupNames[sc] || sc}</h2><span class="group-count">${groups[sc].length}</span>`;
+      content.appendChild(gh);
+    }
+
+    const grid = document.createElement("div");
+    grid.className = "cards-grid";
+    for (const d of groups[sc]) {
+      grid.appendChild(buildCard(d));
+    }
+    content.appendChild(grid);
+  }
+}
+
+/* ── Event wiring ────────────────────────────────────────── */
+
+document.getElementById("filterRow").addEventListener("click", e => {
+  const pill = e.target.closest(".slot-pill");
+  if (!pill) return;
+  document.querySelectorAll(".slot-pill").forEach(p => p.classList.remove("active"));
+  pill.classList.add("active");
+  currentSlotFilter = pill.dataset.slot;
+  render();
+});
+
+document.getElementById("searchInput").addEventListener("input", e => {
+  currentSearch = e.target.value;
+  render();
+});
+
+/* ── Init ────────────────────────────────────────────────── */
+
+function init() {
+  if (window.DRILL_LIBRARY) { render(); return; }
+  // Library script may still be evaluating — retry
+  let tries = 0;
+  const poll = setInterval(() => {
+    if (window.DRILL_LIBRARY || ++tries > 20) { clearInterval(poll); render(); }
+  }, 100);
+}
+
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>

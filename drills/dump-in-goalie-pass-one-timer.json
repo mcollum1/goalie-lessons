@@ -1,0 +1,65 @@
+{
+  "id": "dump-in-goalie-pass-one-timer",
+  "name": "Dump-In — Goalie Pass and One-Timer Read",
+  "description": "F1 dumps a puck in from the blue line. G1 starts at the near post and skates behind the net to stop the puck, while G2 shuffles from the far post to cover the near post. F1 skates toward the net. G1 passes to F1 for a one-timer in tight. G2 tracks the pass, reads F1, and butterfly slides or shuffles out to make the save. Rebound is played out. Goalies then switch positions and repeat. Trains puck handling and passing behind the net for G1, and pass-tracking with a quick read-and-react save for G2.",
+  "drill_category": [
+    "stickhandling_puck_play",
+    "crease_movement",
+    "zone_entry"
+  ],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 1,
+  "ice_zone": [
+    "behind_net",
+    "in_tight",
+    "blue_line"
+  ],
+  "requires_goalie_partner": true,
+  "goalie_starting_position": "G1 near post, G2 far post",
+  "movement_sequence": [
+    "F1_dumps_puck_from_blue_line",
+    "G1_skates_behind_net_to_stop_puck",
+    "G2_shuffles_from_far_post_to_near_post",
+    "F1_skates_toward_net",
+    "G1_passes_to_F1_for_one_timer",
+    "G2_tracks_pass_and_reads_F1",
+    "G2_butterfly_slide_or_shuffle_to_make_save",
+    "play_rebound",
+    "goalies_switch_positions",
+    "repeat"
+  ],
+  "save_types": [
+    "pad_save",
+    "blocker_save",
+    "glove_save",
+    "butterfly_slide_save"
+  ],
+  "coaching_cues": [
+    "G1: get behind the net quickly — stop the puck clean",
+    "G1: firm pass, put it on F1's stick",
+    "G2: shuffle to near post as G1 exits — don't wait",
+    "G2: track the pass, not G1",
+    "G2: read F1's hand and body before committing to the slide or shuffle",
+    "G2: play the rebound — don't assume it's dead"
+  ],
+  "tags": [
+    "stickhandling_puck_play",
+    "behind_net",
+    "pass",
+    "one_timer",
+    "butterfly_slide",
+    "shuffle",
+    "zone_entry",
+    "rebound",
+    "two_goalie"
+  ],
+  "variations": [],
+  "clip_file": "drill-clips/dump-in-goalie-pass-one-timer.mp4",
+  "clip_loop": false,
+  "has_animation": false,
+  "coach_notes": "Two separate skill sets in one rep — the G1 role tests puck handling and passing confidence under pressure, and the G2 role tests pass tracking and quick decision-making in tight. Common G1 error is a weak or misdirected pass that kills the one-timer; the pass needs to be firm and well-timed. Common G2 error is committing too early before tracking the pass — G2 should be reading the pass trajectory and F1's body simultaneously. Make sure goalies get equal reps on both sides."
+}

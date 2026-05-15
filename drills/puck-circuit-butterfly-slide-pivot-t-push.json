@@ -1,0 +1,38 @@
+{
+  "id": "puck-circuit-butterfly-slide-pivot-t-push",
+  "name": "Puck Circuit — Butterfly Slide, Pivot, T-Push",
+  "description": "Three pucks are set in a circuit pattern. G starts on puck 1, butterfly slides through the gap between puck 1 and puck 2, pivots down, recovers to feet, t-pushes to puck 3, then drives a big t-push back up to puck 1. Trains controlled butterfly slide with a sharp low pivot, clean recovery, and explosive t-push generation over distance.",
+  "drill_category": ["skating"],
+  "session_slot": "warmup",
+  "duration_minutes": 8,
+  "difficulty": "advanced",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": ["in_tight"],
+  "setup_required": "puck_setup",
+  "goalie_starting_position": "Puck 1",
+  "movement_sequence": [
+    "start_on_puck_1",
+    "butterfly_slide_between_puck_1_and_puck_2",
+    "pivot_down",
+    "recover_to_feet",
+    "t_push_to_puck_3",
+    "big_t_push_back_to_puck_1",
+    "repeat"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Controlled slide through the gap — stay tight between the pucks",
+    "Sharp pivot down off the slide",
+    "Full recovery before generating the t-push",
+    "Explosive t-push to puck 3",
+    "Big t-push back to puck 1 — cover the distance, don't drift"
+  ],
+  "tags": ["butterfly_slide", "t_push", "pivot", "recovery", "lateral_movement", "edgework", "skating"],
+  "variations": [],
+  "clip_file": "drill-clips/puck-circuit-butterfly-slide-pivot-t-push.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The puck gap on the butterfly slide is a precision marker — the goalie should be threading through cleanly, not overshooting. The pivot down after the slide needs to be sharp and low; a lazy pivot bleeds momentum before the recovery. The big t-push back to puck 1 is the power rep — it should cover real ground and finish at depth. If the goalie is taking extra steps to reach puck 1, they're not generating enough push."
+}

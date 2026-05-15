@@ -1,0 +1,35 @@
+{
+  "id": "rvh-seal-bump-read",
+  "name": "RVH Seal + Bump Read",
+  "description": "Technique drill for RVH post entry and multi-option reads. F1 positions on the goal line about 6 feet off the side of the net. F2 sets up in the slot. A third shooter or goalie partner (acting as center) passes to F1 from just beyond the face-off dot. The goalie enters the post in RVH with a tight short-side seal before the pass arrives. F1 can walk the net for a short side attempt, or pass to F2 in the slot. The goalie reads and responds: hold the RVH seal for a short side walk, bump across the crease for a cross-crease drive, or bump out to challenge F2's slot shot. One shot per rep. Can be run with 3 rotating shooters or 2 shooters and a goalie partner feeding as center.",
+  "drill_category": ["save_technique", "positioning_angles", "crease_movement"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 2,
+  "shooter_count_max": 3,
+  "shot_count": 1,
+  "ice_zone": ["in_tight", "hash_marks"],
+  "goalie_starting_position": "RVH at post, short side sealed",
+  "movement_sequence": [
+    "enter_post_in_rvh_with_short_side_seal_before_pass_arrives",
+    "read_f1_receiving_pass_at_goal_line",
+    "option_a_hold_rvh_seal_for_f1_short_side_walk",
+    "option_b_bump_across_crease_for_f1_cross_crease_drive",
+    "option_c_bump_out_to_challenge_f2_slot_shot"
+  ],
+  "save_types": ["RVH", "pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Enter the post in RVH before the pass arrives — don't be late to the post",
+    "Seal short side tight — your first job is to take away the near post",
+    "Read F1's hands: stick blade loading to shoot or head turning to F2",
+    "Bump across stays low — don't stand up to cross the crease",
+    "Bump out to the slot is a controlled push, not a scramble — set your angle on F2"
+  ],
+  "tags": ["RVH", "post_play", "seal", "bump_out", "cross_crease", "slot", "in_tight", "read_and_react", "pass_and_shoot"],
+  "variations": [],
+  "clip_file": "drill-clips/rvh-seal-bump-read.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The goalie must enter the post with a tight RVH seal before the pass arrives — being late to the post makes all three reads irrelevant because short side is already open. In early reps, call or signal which option F1 will take so the goalie can isolate each response; then let F1 decide freely in later reps. The bump-across and bump-out need to be low and controlled — goalies who stand up on either transition give up their positioning advantage. Can be run with 3 rotating shooters (C, F1, F2 cycling roles) or with 2 shooters and a goalie partner feeding as center."
+}

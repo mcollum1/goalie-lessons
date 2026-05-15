@@ -1,0 +1,38 @@
+{
+  "id": "overlap-t-push-go-call-react",
+  "name": "Overlap — T-Push and Go Call React",
+  "description": "F1 is at the face-off dot. G starts on the far side in an overlap position, uses the overlap to generate momentum back into the post, then t-pushes out to the center top of the crease. On F1's 'go' call, G locates F1 and lateral releases into the save. G follows and plays out the rebound. Trains using the overlap to generate momentum into the post, a clean t-push to depth, and a reaction lateral release off a verbal cue.",
+  "drill_category": ["crease_movement", "save_technique"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 1,
+  "ice_zone": ["hash_marks"],
+  "goalie_starting_position": "Far side overlap position",
+  "movement_sequence": [
+    "start_in_far_side_overlap",
+    "generate_momentum_back_into_post",
+    "t_push_out_to_center_top_of_crease",
+    "react_to_go_call",
+    "locate_F1",
+    "lateral_release_into_save",
+    "follow_rebound"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save", "desperation_save"],
+  "coaching_cues": [
+    "Use the overlap to load momentum — don't just walk back to the post",
+    "Clean post touch before the t-push",
+    "Hard t-push to center top of crease — get to depth",
+    "Eyes find F1 on the 'go' call — locate before dropping",
+    "Stay connected through the lateral release",
+    "Follow the rebound all the way out"
+  ],
+  "tags": ["overlap", "t_push", "lateral_movement", "tracking_vision", "crease_movement", "verbal_cue", "rebound", "post_play"],
+  "variations": [],
+  "clip_file": "drill-clips/overlap-t-push-go-call-react.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The overlap is the setup move — it should generate real momentum back into the post rather than just being a stylistic starting position. A goalie who doesn't use the overlap to load will arrive at the post flat-footed and produce a weak t-push. Pairs naturally with the go-call lateral release net attack drill; both use the same verbal cue and lateral release finish but this one emphasizes the overlap and momentum generation as the starting sequence."
+}

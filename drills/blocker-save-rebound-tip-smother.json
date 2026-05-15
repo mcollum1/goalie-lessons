@@ -1,0 +1,37 @@
+{
+  "id": "blocker-save-rebound-tip-smother",
+  "name": "Blocker Save + Rebound + Tip Smother",
+  "description": "Two-shot technique drill requiring a goalie partner. F1 is on the face-off dot. The goalie partner positions backdoor on the far post side. The goalie starts in butterfly, square to F1. F1 shoots high blocker (shot 1); the goalie makes the save and follows the rebound all the way to the near post. The goalie then t-pushes back out to F1, who shoots a pass along the ice to the goalie partner backdoor. The goalie partner tips it and the goalie slides across with hands out to smother the tip (shot 2). Drill switches sides.",
+  "drill_category": ["save_technique", "crease_movement", "rebound_control"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 2,
+  "ice_zone": ["hash_marks", "in_tight"],
+  "requires_goalie_partner": true,
+  "goalie_starting_position": "butterfly, square to F1 at face-off dot",
+  "movement_sequence": [
+    "set_in_butterfly_square_to_f1_at_face_off_dot",
+    "make_blocker_save_on_high_shot",
+    "follow_rebound_all_the_way_to_near_post",
+    "t_push_back_out_to_f1",
+    "read_f1_pass_along_ice_to_gp_backdoor",
+    "slide_across_with_hands_out_to_smother_gp_tip"
+  ],
+  "save_types": ["blocker_save", "glove_save", "pad_save", "desperation_save"],
+  "coaching_cues": [
+    "Start square in butterfly — set your base before F1 shoots",
+    "Follow the rebound all the way to the post — don't stop short",
+    "T-push back out to F1 with purpose — reset your depth before the second play",
+    "Read F1's stick early — a pass along the ice to GP telegraphs early",
+    "Slide with hands leading — palms out, close the gap on the tip before it arrives"
+  ],
+  "tags": ["butterfly", "blocker_save", "rebound_control", "t_push", "backdoor", "tip", "hands", "lateral_slide", "two_puck"],
+  "variations": [],
+  "clip_file": "drill-clips/blocker-save-rebound-tip-smother.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Two-phase technique drill that chains a blocker save and rebound track directly into a backdoor tip reaction. The most common error is the goalie not getting all the way to the post after the blocker save — stopping short leaves the near side open and puts the goalie in a poor position to t-push back out. On the tip smother, the goalie should be reading F1's stick and starting the slide before the tip rather than reacting after contact. The goalie partner should deliver a firm, low pass so the tip is a realistic game-speed reaction."
+}

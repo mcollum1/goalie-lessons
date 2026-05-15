@@ -1,0 +1,39 @@
+{
+  "id": "high-slot-entry-backdoor-curl",
+  "name": "High Slot Entry + Backdoor Curl",
+  "description": "F1 starts in the corner along the goal line against the boards. F2 starts at the top of the circles, center ice, in line with the net (high slot). F1 passes to F2; the goalie makes a hard t-push out to challenge F2. F2 can either walk in a step and shoot, or pass down to F1 driving from the corner for a tip on net. After the first shot, F2 curls up and drives backdoor to the far post. F1 returns to the corner, picks up puck 2, and circles up around the circle. The goalie resets and t-pushes out again to challenge F1's angle. F1 can shoot or hit F2 moving backdoor — the goalie loads momentum toward F1 then slides across for the backdoor save if needed. Play puck 2 out. Drill switches sides.",
+  "drill_category": ["save_technique", "crease_movement", "positioning_angles", "tracking_vision"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 2,
+  "shooter_count_max": 2,
+  "shot_count": 2,
+  "ice_zone": ["top_of_circles", "in_tight"],
+  "goalie_starting_position": "set at top of crease, tracking F1 in corner before the pass",
+  "movement_sequence": [
+    "track_f1_in_corner_set_initial_depth",
+    "t_push_out_to_challenge_f2_at_high_slot",
+    "make_save_on_f2_shot_or_track_f1_tip_drive",
+    "reset_depth_and_track_f2_curling_backdoor",
+    "t_push_out_to_challenge_f1_circling_with_puck_2",
+    "load_momentum_toward_f1_read_pass_to_f2_backdoor",
+    "make_save_on_f1_shot_or_slide_across_for_f2_backdoor",
+    "play_out_second_puck"
+  ],
+  "save_types": ["blocker_save", "glove_save", "pad_save", "desperation_save"],
+  "coaching_cues": [
+    "Hard t-push on the pass — take away F2's shooting lane before they can set",
+    "Stay square to F2 at the high slot; don't let F1's tip drive pull your eyes early",
+    "During the reset, track F2's curl — know where they're going before puck 2 moves",
+    "Match the same aggression on the second t-push as the first — F1 gets the same challenge",
+    "Load momentum toward F1 so you have something to push off for the backdoor slide",
+    "Wait for F2 to receive the pass before committing to the slide — don't go early"
+  ],
+  "tags": ["t_push", "telescoping", "high_slot", "tip", "backdoor", "circle_walk", "lateral_slide", "two_puck", "pass_and_shoot"],
+  "variations": [],
+  "clip_file": "drill-clips/high-slot-entry-backdoor-curl.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "This drill demands two distinct t-push challenges with a full regroup in between. The biggest coaching point is the transition: by the time F1 picks up puck 2 and starts around the circle, the goalie must already know where F2 is setting up backdoor — not be discovering it when the pass comes. Common error is the goalie losing F2's curl path during the reset and getting caught flat-footed. On the backdoor slide, timing is critical — the goalie should be loading off F1's shot angle and reacting to the pass, not anticipating it."
+}

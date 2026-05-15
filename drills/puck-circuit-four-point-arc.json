@@ -1,0 +1,54 @@
+{
+  "id": "puck-circuit-four-point-arc",
+  "name": "Puck Circuit — Four Point Arc",
+  "description": "Advanced skating circuit with 4 pucks evenly spaced along the arc of the crease. Goalie starts on P2, shuffles to P3, butterfly slides to P1, cuts forward around P1 in butterfly, powerslides to P4, cuts forward around P4 in butterfly, powerslides back to P1, cuts forward around P1 in butterfly again, then t-pushes back to P2.",
+  "drill_category": [
+    "skating"
+  ],
+  "session_slot": "warmup",
+  "duration_minutes": 10,
+  "difficulty": "advanced",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": [
+    "in_tight"
+  ],
+  "setup_required": "puck_setup",
+  "goalie_starting_position": "standing on P2 on crease arc",
+  "movement_sequence": [
+    "start_on_p2",
+    "shuffle_to_p3",
+    "butterfly_slide_to_p1",
+    "forward_butterfly_cut_around_p1",
+    "powerslide_to_p4",
+    "forward_butterfly_cut_around_p4",
+    "powerslide_to_p1",
+    "forward_butterfly_cut_around_p1",
+    "t_push_to_p2"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Stay low through every butterfly cut — don't pop up between movements",
+    "The forward butterfly cut is a pivot, not a stop — carry momentum through it",
+    "Load your edges before each powerslide — no coasting between pucks",
+    "P1 is your anchor — you return to it twice, always know where it is",
+    "Finish the t-push all the way back to P2 — complete every movement"
+  ],
+  "tags": [
+    "shuffle",
+    "butterfly_slide",
+    "butterfly_pivot",
+    "power_slide",
+    "t_push",
+    "c_cut",
+    "puck_circuit",
+    "edge_control",
+    "crease_movement"
+  ],
+  "variations": [],
+  "clip_file": "drill-clips/puck-circuit-four-point-arc.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Four pucks evenly spaced on the crease arc. The forward butterfly cut around each puck is the technical centerpiece — the goalie rotates around the puck in butterfly rather than stopping and resetting. P1 is the central anchor of the circuit, visited three times with a cut each time. The back-to-back powerslides (P4→P1) and the repeated cuts at P1 are where form breaks down first. Common errors: popping out of butterfly too early on the cuts, and losing edge load on the powerslides. Run multiple reps and switch directions."
+}

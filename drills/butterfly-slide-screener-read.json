@@ -1,0 +1,41 @@
+{
+  "id": "butterfly-slide-screener-read",
+  "name": "Butterfly Slide — Screener & Second Shot",
+  "description": "G starts at the far face-off dot angle at the top of the crease. F1 is at the opposite face-off dot. On F1's 'go' call, G turns their head to locate the shooter, butterfly slides across, and makes the save while still sliding. G recovers to the post, then t-pushes out to the top of the crease where a goalie partner or screening dummy is set. G sees around the screen and reacts to a second shot from F2 at the top of the circles. Rebound is played out.",
+  "drill_category": ["crease_movement", "tracking_vision"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 2,
+  "shooter_count_max": 2,
+  "shot_count": 2,
+  "ice_zone": ["hash_marks", "top_of_circles"],
+  "requires_screener": true,
+  "goalie_starting_position": "Far face-off dot angle, top of crease",
+  "movement_sequence": [
+    "start_at_far_dot_angle",
+    "head_turn_on_go_call",
+    "butterfly_slide_to_F1_side",
+    "save_first_shot_while_sliding",
+    "recover_to_post",
+    "t_push_out_to_screener",
+    "find_puck_around_screen",
+    "save_second_shot_through_screen",
+    "play_rebound"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Eyes go first — head turns before the slide",
+    "See the puck in on the slide, don't guess",
+    "Clean recovery to post before the t-push",
+    "Hard t-push out — get to your angle",
+    "Find the puck around the screen early",
+    "React to the shot, don't anticipate"
+  ],
+  "tags": ["butterfly_slide", "t_push", "tracking_vision", "screen", "rebound", "two_shot", "lateral_movement"],
+  "variations": [],
+  "clip_file": "drill-clips/butterfly-slide-screener-read.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The head turn on the 'go' call is the critical habit — the goalie must locate the shooter before committing to the slide. A goalie who slides without confirming location is guessing. On the second shot, the t-push out needs to reach proper depth so the goalie has the best angle to see around the screener. If they pop out too shallow, the screen wins."
+}

@@ -1,0 +1,42 @@
+{
+  "id": "puck-circuit-butterfly-powerslide",
+  "name": "Puck Circuit — Butterfly Slide, Rotation, Powerslide",
+  "description": "Three pucks are set up in a semi-circle (right side first, then repeat on the left). Puck 1 is the center starting point, puck 2 is to one side, puck 3 is on the far side of the arc. G starts on puck 1, shuffles to puck 2, t-pushes back to puck 1, butterfly slides to puck 3, rotates forward in butterfly around puck 3, then powerslides back to puck 1 and recovers to feet. Run all reps on the right side, then reset the puck layout and repeat on the left. Trains the full range of butterfly skating — shuffle, t-push, butterfly slide, in-butterfly rotation, and powerslide — in a continuous sequence.",
+  "drill_category": ["skating"],
+  "session_slot": "warmup",
+  "duration_minutes": 8,
+  "difficulty": "advanced",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": ["in_tight"],
+  "setup_required": "puck_setup",
+  "goalie_starting_position": "Puck 1 — center of the semi-circle",
+  "movement_sequence": [
+    "start_on_puck_1",
+    "shuffle_to_puck_2",
+    "t_push_back_to_puck_1",
+    "butterfly_slide_to_puck_3",
+    "rotate_forward_in_butterfly_around_puck_3",
+    "powerslide_back_to_puck_1",
+    "recover_to_feet",
+    "repeat_right_side",
+    "reset_pucks_to_left_side",
+    "repeat_left_side"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Sharp edges on the shuffle — stay under control",
+    "Explosive t-push back to puck 1, don't drift",
+    "Eyes up through the butterfly slide",
+    "Hips stay square through the rotation — don't open up early",
+    "Generate the powerslide from butterfly — don't stand up to push",
+    "Full recovery to feet before resetting for the next rep"
+  ],
+  "tags": ["shuffle", "t_push", "butterfly_slide", "power_slide", "butterfly", "lateral_movement", "edgework", "skating", "rotation"],
+  "variations": [],
+  "clip_file": "drill-clips/puck-circuit-butterfly-powerslide.mp4",
+  "clip_loop": false,
+  "has_animation": false,
+  "coach_notes": "The puck markers force precise edges and destinations — the goalie can't approximate. The in-butterfly rotation around puck 3 is the hardest movement in the sequence; watch for hips opening up or the goalie popping up to reposition instead of staying in butterfly and driving the rotation from the hips. The powerslide back to puck 1 should generate from the butterfly position directly — any early stand-up kills the slide distance and defeats the purpose."
+}

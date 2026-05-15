@@ -1,0 +1,37 @@
+{
+  "id": "butterfly-slide-dot-to-dot",
+  "name": "Butterfly Slide — Dot to Dot",
+  "description": "G starts at the far face-off dot. F1 is at the near face-off dot on the opposite side. G pivots and butterfly slides across to F1 and makes the save. G recovers and repeats for multiple reps before switching sides. A simple, repetitive drill focused on butterfly slide technique, eye tracking through the slide, and hands staying out and ready.",
+  "drill_category": ["warmup", "save_technique", "crease_movement"],
+  "session_slot": "warmup",
+  "duration_minutes": 5,
+  "difficulty": "beginner",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 1,
+  "ice_zone": ["hash_marks"],
+  "goalie_starting_position": "Far face-off dot",
+  "movement_sequence": [
+    "start_at_far_faceoff_dot",
+    "pivot",
+    "butterfly_slide_to_F1",
+    "save_shot_while_sliding",
+    "recover_to_feet",
+    "repeat_same_side",
+    "switch_sides_and_repeat"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Eyes go first — head turns before the slide",
+    "Track the puck through the slide, don't guess",
+    "Hands out and over the puck on contact",
+    "Stay connected through the save — don't reach",
+    "Clean recovery before resetting for the next rep"
+  ],
+  "tags": ["butterfly_slide", "tracking_vision", "lateral_movement", "warmup", "hands", "recovery"],
+  "variations": [],
+  "clip_file": "drill-clips/butterfly-slide-dot-to-dot.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "A clean drill to groove the butterfly slide habit early in a session. The pivot and head turn should happen together — any goalie sliding without first locating the shooter is already guessing. Watch for hands collapsing in on the save; they should stay out and over the puck through contact. Keep reps moving at a steady pace so the goalie is working recovery along with the slide."
+}

@@ -1,0 +1,107 @@
+{
+  "id": "board-to-board-movement-series",
+  "name": "Board-to-Board Movement Series",
+  "description": "G starts on the blueline facing the near boards and moves laterally across the ice using a repeating pivot-and-push pattern, stopping at the far boards then returning. Run as a progression — start with V1 and advance through variations as the goalie builds confidence and conditioning.",
+  "drill_category": ["skating", "crease_movement"],
+  "session_slot": "warmup",
+  "duration_minutes": 5,
+  "difficulty": "beginner",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": ["blue_line"],
+  "setup_required": "open_ice",
+  "goalie_starting_position": "Blueline, facing near boards",
+  "movement_sequence": [
+    "pivot",
+    "t_push_diagonal",
+    "hard_stop",
+    "pivot",
+    "t_push_diagonal_opposite",
+    "hard_stop",
+    "repeat_to_far_boards"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Eyes go first",
+    "Lean into the push",
+    "Lead with hands",
+    "Explosive push and stop",
+    "Hard edges on the stop"
+  ],
+  "tags": ["t_push", "shuffle", "butterfly_slide", "power_slide", "skating", "edgework", "explosiveness", "lateral_movement"],
+  "variations": [
+    {
+      "name": "V2 — Shuffle Pivots",
+      "description": "Same pattern as V1 but replace the t-push with 2-3 quick shuffles on each diagonal. Focus on staying square through the shuffle and short, controlled steps.",
+      "movement_sequence": [
+        "pivot",
+        "shuffle_diagonal_2_to_3",
+        "hard_stop",
+        "pivot",
+        "shuffle_diagonal_opposite_2_to_3",
+        "hard_stop",
+        "repeat_to_far_boards"
+      ],
+      "difficulty": "beginner",
+      "clip_file": "drill-clips/diagonal-shuffle-pivots.mp4",
+      "clip_loop": true
+    },
+    {
+      "name": "V3 — T-Push, Butterfly, Recover",
+      "description": "G pivots, t-pushes on the diagonal, drops into butterfly, recovers to feet, pivots, t-pushes the other diagonal, drops into butterfly, recovers to feet. Repeats board to board. Introduces butterfly drop and recovery into the skating pattern.",
+      "movement_sequence": [
+        "pivot",
+        "t_push_diagonal",
+        "butterfly_drop",
+        "recover_to_feet",
+        "pivot",
+        "t_push_diagonal_opposite",
+        "butterfly_drop",
+        "recover_to_feet",
+        "repeat_to_far_boards"
+      ],
+      "difficulty": "intermediate",
+      "clip_file": null,
+      "clip_loop": true
+    },
+    {
+      "name": "V4 — Butterfly, Pivot, Powerslide, Recover",
+      "description": "G drops into butterfly, pivots, powerslides on the diagonal, recovers to feet. Repeats in the opposite direction board to board. Trains powerslide generation out of butterfly and recovery.",
+      "movement_sequence": [
+        "butterfly_drop",
+        "pivot",
+        "power_slide_diagonal",
+        "recover_to_feet",
+        "pivot",
+        "power_slide_diagonal_opposite",
+        "recover_to_feet",
+        "repeat_to_far_boards"
+      ],
+      "difficulty": "intermediate",
+      "clip_file": null,
+      "clip_loop": true
+    },
+    {
+      "name": "V5 — Butterfly, Pivot, Powerslide, Stop in Butterfly",
+      "description": "G drops into butterfly, pivots, powerslides on the diagonal, stops while remaining in butterfly. Pivots and powerslides back the other direction, stopping in butterfly again. Repeats continuously board to board without recovering to feet. Builds butterfly mobility and powerslide control under fatigue.",
+      "movement_sequence": [
+        "butterfly_drop",
+        "pivot",
+        "power_slide_diagonal",
+        "stop_in_butterfly",
+        "pivot",
+        "power_slide_diagonal_opposite",
+        "stop_in_butterfly",
+        "repeat_to_far_boards"
+      ],
+      "difficulty": "advanced",
+      "clip_file": null,
+      "clip_loop": true
+    }
+  ],
+  "clip_file": "drill-clips/diagonal-t-push-pivots.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Run as a progression within a warmup block — V1 and V2 for all levels, V3 onward for intermediate and advanced goalies. The pivot must be sharp and immediate on all variations; hesitating before the push or slide kills momentum. On V5, watch for hips rotating back — they should stay square through every powerslide."
+}

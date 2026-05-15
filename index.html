@@ -1,0 +1,2864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>Hockey Hub Goalie · Coach Mitch</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ─── Design tokens (HockeyHub + Goalie blend) ─── */
+  :root {
+    --hh-primary:        #7f56d9;
+    --hh-primary-hover:  #6941c6;
+    --hh-primary-tint:   #f4ebff;
+    --hh-primary-tint-2: #e9d7fe;
+
+    --hh-text-primary:   #181d27;
+    --hh-text-secondary: #535862;
+    --hh-text-tertiary:  #717680;
+    --hh-text-muted:     #a4a7ae;
+
+    --hh-border-light:   #e9eaeb;
+    --hh-border-default: #d5d7da;
+
+    --hh-bg-page:        #f9fafb;
+    --hh-bg-surface:     #ffffff;
+    --hh-bg-tertiary:    #fafafa;
+
+    /* Brand navy — goalie identity */
+    --gc-navy:           #1c3150;
+    --gc-navy-2:         #243d63;
+
+    /* Session-phase accents */
+    --phase-skating:     #18a6c8;
+    --phase-shot:        #e05c2a;
+    --phase-skill:       #378ADD;
+    --phase-compete:     #17a064;
+
+    /* Status */
+    --status-open:       #17B26A;
+    --status-warning:    #b54708;
+
+    --shadow-xs:         0px 1px 2px 0px rgba(10,13,18,0.05);
+    --shadow-card:       0px 1px 3px 0px rgba(10,13,18,0.08), 0px 1px 2px 0px rgba(10,13,18,0.04);
+    --shadow-navy:       0px 8px 24px -8px rgba(28,49,80,0.32);
+
+    --r-sm: 8px;
+    --r-md: 10px;
+    --r-lg: 14px;
+    --r-xl: 18px;
+    --r-2xl: 22px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    background: var(--hh-bg-page);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--hh-text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 390px;
+    min-height: 100vh;
+    background: var(--hh-bg-page);
+    position: relative;
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+
+  /* ─── Top header ─── */
+  .top-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--hh-border-light);
+    padding: env(safe-area-inset-top) 16px 0;
+  }
+
+  .top-header-inner {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: var(--gc-navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .brand-mark::before { display: none; }
+
+  .brand-mark svg {
+    width: 18px;
+    height: 18px;
+    color: #fff;
+    position: relative;
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .brand-product {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--hh-text-primary);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .brand-parent {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--hh-text-tertiary);
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: transparent;
+    border: none;
+    color: var(--hh-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    font-family: inherit;
+  }
+
+  .icon-btn:hover { background: var(--hh-bg-tertiary); }
+  .icon-btn:active { background: var(--hh-border-light); }
+
+  .icon-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .icon-btn .dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--hh-primary);
+    border: 1.5px solid #fff;
+  }
+
+  .icon-btn-wrap { position: relative; }
+
+  /* ─── Greeting ─── */
+  .greeting {
+    padding: 18px 18px 4px;
+  }
+
+  .greeting-eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--hh-text-tertiary);
+    line-height: 1.4;
+    margin-bottom: 2px;
+  }
+
+  .greeting-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--hh-text-primary);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  /* ─── Section headers ─── */
+  .section {
+    padding: 20px 16px 0;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 0 2px;
+  }
+
+  .section-head-left {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--hh-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  .section-count {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--hh-text-muted);
+  }
+
+  .section-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--hh-primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .section-link svg { width: 14px; height: 14px; }
+
+  /* ─── Lesson card ─── */
+  .lesson-card {
+    background: var(--hh-bg-surface);
+    border-radius: var(--r-xl);
+    border: 1px solid var(--hh-border-light);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  .lesson-card-body {
+    padding: 14px 14px 12px;
+  }
+
+  .lesson-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .lesson-time {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .lesson-time-block {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .lesson-time-primary {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--hh-text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  .lesson-time-duration {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--hh-text-tertiary);
+    margin-top: 2px;
+  }
+
+  .lesson-info-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--hh-text-tertiary);
+    margin-bottom: 4px;
+  }
+
+  .lesson-info-row svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    color: var(--hh-text-muted);
+  }
+
+  .lesson-goalies {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0 4px;
+    margin-top: 8px;
+    border-top: 1px solid var(--hh-border-light);
+  }
+
+  .goalie-avatars {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .goalie-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--hh-bg-tertiary);
+    border: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--hh-text-secondary);
+    margin-left: -8px;
+  }
+
+  .goalie-avatar:first-child { margin-left: 0; }
+
+  .goalie-avatar.tone-a { background: #eef4ff; color: #1e4fb5; }
+  .goalie-avatar.tone-b { background: #fef0e6; color: #b85c00; }
+  .goalie-avatar.tone-c { background: #ecfdf5; color: #047857; }
+  .goalie-avatar.tone-d { background: #faf5ff; color: #7e22ce; }
+
+  .goalie-details {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .goalie-names {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--hh-text-primary);
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .goalie-context {
+    font-size: 11.5px;
+    color: var(--hh-text-tertiary);
+    margin-top: 1px;
+    line-height: 1.3;
+  }
+
+  /* ─── Lesson card CTA ─── */
+  .lesson-cta-row {
+    display: flex;
+    gap: 0;
+    border-top: 1px solid var(--hh-border-light);
+    background: var(--hh-bg-page);
+  }
+
+  .lesson-cta {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 14px 8px;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--hh-text-secondary);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .lesson-cta.primary {
+    color: var(--hh-primary);
+  }
+
+  /* "See plan" state — plan already built */
+  .lesson-cta.primary.see-plan-mode,
+  .hero-cta.primary.see-plan-mode {
+    color: var(--status-open);
+  }
+
+  /* "Rebuild" secondary action — appears next to "See plan" */
+  .rebuild-plan-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    padding: 5px 10px;
+    background: transparent;
+    border: 1px solid var(--hh-border-light);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--hh-text-secondary);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .rebuild-plan-btn svg { width: 12px; height: 12px; }
+  .rebuild-plan-btn:hover { background: var(--hh-bg-tertiary); color: var(--hh-text-primary); }
+  .rebuild-plan-btn:active { background: var(--hh-border-light); }
+
+  .lesson-cta svg { width: 15px; height: 15px; }
+
+  .lesson-cta:hover { background: var(--hh-bg-tertiary); }
+  .lesson-cta:active { background: var(--hh-border-light); }
+
+  .lesson-cta + .lesson-cta {
+    border-left: 1px solid var(--hh-border-light);
+  }
+
+  /* ─── Hero lesson card (next up) ─── */
+  .lesson-card.hero {
+    background: var(--gc-navy);
+    border-color: transparent;
+    box-shadow: var(--shadow-navy);
+    color: #fff;
+    margin-bottom: 14px;
+  }
+
+  .hero-eyebrow-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 0;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.78);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+  }
+
+  .hero-eyebrow .pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #6ee7b7;
+    box-shadow: 0 0 0 0 rgba(110,231,183,0.7);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(110,231,183,0.7); }
+    70%  { box-shadow: 0 0 0 8px rgba(110,231,183,0); }
+    100% { box-shadow: 0 0 0 0 rgba(110,231,183,0); }
+  }
+
+  .hero-time-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.78);
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.14);
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+
+  .hero-body {
+    padding: 8px 16px 14px;
+  }
+
+  .hero-time {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+
+  .hero-duration {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 10px;
+    letter-spacing: 0.005em;
+  }
+
+  .hero-rink {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.78);
+    margin-bottom: 12px;
+  }
+
+  .hero-rink svg { width: 13px; height: 13px; color: rgba(255,255,255,0.6); }
+
+  .hero-goalies {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.10);
+  }
+
+  .hero-goalie-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 2px solid var(--gc-navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    margin-left: -8px;
+  }
+
+  .hero-goalie-avatar:first-child { margin-left: 0; }
+
+  .hero-goalie-text {
+    flex: 1;
+  }
+
+  .hero-goalie-names {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.25;
+  }
+
+  .hero-goalie-context {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.72);
+    margin-top: 1px;
+  }
+
+  .hero-cta-row {
+    display: flex;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    background: rgba(0,0,0,0.10);
+  }
+
+  .hero-cta {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 15px 8px;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.82);
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .hero-cta.primary { color: #fff; }
+  .hero-cta svg { width: 15px; height: 15px; }
+  .hero-cta:hover { background: rgba(255,255,255,0.06); }
+  .hero-cta:active { background: rgba(255,255,255,0.10); }
+  .hero-cta + .hero-cta { border-left: 1px solid rgba(255,255,255,0.10); }
+
+  /* ─── Recent plan card ─── */
+  .plan-card {
+    background: var(--hh-bg-surface);
+    border-radius: var(--r-lg);
+    border: 1px solid var(--hh-border-light);
+    box-shadow: var(--shadow-xs);
+    padding: 13px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .plan-card:hover { background: var(--hh-bg-tertiary); }
+
+  .plan-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .plan-icon svg { width: 18px; height: 18px; }
+
+  .plan-icon.theme-skill    { background: #e8f0fb; color: var(--phase-skill); }
+  .plan-icon.theme-compete  { background: #e6f7ee; color: var(--phase-compete); }
+  .plan-icon.theme-shot     { background: #fdece2; color: var(--phase-shot); }
+  .plan-icon.theme-skating  { background: #e1f4f8; color: var(--phase-skating); }
+
+  .plan-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Goalie-first row inside recent lessons card */
+  .plan-goalie-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2px;
+    gap: 8px;
+  }
+
+  .plan-goalie-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--hh-text-primary);
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .plan-date {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--hh-text-muted);
+    flex-shrink: 0;
+  }
+
+  .plan-title {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--hh-text-secondary);
+    line-height: 1.3;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .plan-meta {
+    font-size: 11px;
+    color: var(--hh-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .plan-meta-dot {
+    width: 2.5px;
+    height: 2.5px;
+    border-radius: 50%;
+    background: var(--hh-text-muted);
+    opacity: 0.5;
+  }
+
+  .plan-chevron {
+    color: var(--hh-text-muted);
+    flex-shrink: 0;
+  }
+
+  .plan-chevron svg { width: 16px; height: 16px; }
+
+  /* ─── Bottom tab bar ─── */
+  .tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 390px;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-top: 1px solid var(--hh-border-light);
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+    display: flex;
+    z-index: 50;
+  }
+
+  .tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 4px;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    color: var(--hh-text-tertiary);
+    cursor: pointer;
+    border-radius: 10px;
+    transition: color 0.15s ease;
+  }
+
+  .tab.active { color: var(--hh-primary); }
+  .tab:hover { color: var(--hh-text-secondary); }
+  .tab.active:hover { color: var(--hh-primary-hover); }
+
+  .tab svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2;
+  }
+
+  .tab-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  /* Inline lucide icons — ensure they fill the sized container the parent CSS sets */
+  svg.lucide {
+    display: block;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    overflow: visible;
+  }
+
+  /* ───────────────────────────────────────────────────────────
+     CHAT SHEET (bottom-rising modal for AI lesson planning)
+     ─────────────────────────────────────────────────────────── */
+  .chat-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .chat-sheet.open {
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .chat-sheet-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 24, 40, 0);
+    transition: background 0.32s ease;
+    cursor: pointer;
+  }
+
+  .chat-sheet.open .chat-sheet-backdrop { background: rgba(15, 24, 40, 0.52); }
+
+  .chat-sheet-panel {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(calc(100% + 8px));
+    width: 100%;
+    max-width: 390px;
+    /* Full-screen minus a peek gap at the top — iOS sheet convention */
+    height: calc(100dvh - 12px);
+    background: var(--hh-bg-surface);
+    border-radius: 20px 20px 0 0;
+    /* Layered shadow: broad ambient + tight edge */
+    box-shadow:
+      0 -1px 0 rgba(15,24,40,0.06),
+      0 -8px 40px -4px rgba(15,24,40,0.22),
+      0 -32px 80px -16px rgba(15,24,40,0.12);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.38s cubic-bezier(0.22, 0.61, 0.36, 1);
+    will-change: transform;
+  }
+
+  .chat-sheet.open .chat-sheet-panel {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Drag handle — larger hit area, visible pill */
+  .chat-sheet-handle {
+    width: 100%;
+    /* Generous padding so thumbs can grab it easily */
+    padding: 14px 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+    flex-shrink: 0;
+    touch-action: none;
+    background: var(--hh-bg-surface);
+  }
+
+  .chat-sheet-handle::before {
+    content: '';
+    width: 36px;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--hh-border-default);
+    opacity: 0.7;
+  }
+
+  /* Header */
+  .chat-sheet-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 2px 16px 14px;
+    border-bottom: 1px solid var(--hh-border-light);
+    background: var(--hh-bg-surface);
+    flex-shrink: 0;
+  }
+
+  .chat-sheet-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--hh-primary-tint);
+    color: var(--hh-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .chat-sheet-avatar svg { width: 18px; height: 18px; }
+
+  .chat-sheet-title { flex: 1; min-width: 0; }
+
+  .chat-sheet-title-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--hh-text-primary);
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+  }
+
+  .chat-sheet-title-sub {
+    font-size: 12px;
+    color: var(--hh-text-tertiary);
+    line-height: 1.3;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .chat-sheet-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--hh-bg-tertiary);
+    color: var(--hh-text-secondary);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s ease;
+  }
+
+  .chat-sheet-close:hover { background: var(--hh-border-light); }
+  .chat-sheet-close svg { width: 16px; height: 16px; }
+
+  /* Thread */
+  .chat-thread {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px 14px 16px;
+    background: #f3f4f6;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Smooth momentum scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* Direct children must not flex-shrink — otherwise long threads
+     compress later messages and zero-out the plan card */
+  .chat-thread > * { flex-shrink: 0; }
+
+  /* Optional context strip (when opened from a lesson card) */
+  .chat-context-strip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--hh-bg-surface);
+    border: 1px solid var(--hh-border-light);
+    border-radius: var(--r-lg);
+    margin-bottom: 4px;
+  }
+
+  .ctx-avatars {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .ctx-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -6px;
+    border: 2px solid var(--hh-bg-surface);
+    flex-shrink: 0;
+  }
+
+  .ctx-avatar:first-child { margin-left: 0; }
+
+  .chat-context-text {
+    flex: 1;
+    min-width: 0;
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+
+  .chat-context-text strong {
+    color: var(--hh-text-primary);
+    font-weight: 600;
+  }
+
+  .chat-context-text span {
+    color: var(--hh-text-tertiary);
+  }
+
+  /* Message bubble (assistant + user) */
+  .chat-msg {
+    display: flex;
+    gap: 8px;
+    max-width: 100%;
+    animation: msg-fade-in 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  @keyframes msg-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .chat-msg.assistant { align-self: flex-start; }
+  .chat-msg.user      { align-self: flex-end; flex-direction: row-reverse; }
+
+  .chat-msg-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--hh-primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 1px 4px rgba(127,86,217,0.28);
+    align-self: flex-start;
+    margin-top: 1px;
+  }
+
+  .chat-msg-avatar svg { width: 13px; height: 13px; }
+
+  /* Intake question messages — label style, no bubble border */
+  .chat-msg-bubble {
+    flex: 1;
+    padding: 0 0 0 10px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--hh-text-primary);
+    background: transparent;
+    letter-spacing: -0.01em;
+  }
+
+  /* Free-text assistant replies (after plan is generated) get a bubble */
+  .chat-msg.assistant.has-bubble .chat-msg-bubble {
+    flex: unset;
+    max-width: 85%;
+    padding: 11px 14px;
+    border-radius: 18px 18px 18px 4px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--hh-text-primary);
+    background: #ffffff;
+    letter-spacing: normal;
+    box-shadow:
+      0 1px 2px rgba(0,0,0,0.06),
+      0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  /* User free-text messages (only shown after plan is done) */
+  .chat-msg.user .chat-msg-bubble {
+    background: var(--hh-primary);
+    color: #fff;
+    border-radius: 18px 18px 4px 18px;
+    max-width: 82%;
+    padding: 11px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: normal;
+    box-shadow:
+      0 1px 3px rgba(127,86,217,0.25),
+      0 2px 10px rgba(127,86,217,0.15);
+  }
+
+  .chat-msg.user .chat-msg-avatar { display: none; }
+
+  /* Chip row (quick-tap answers) — full width, no indent */
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    /* Full horizontal real estate — no avatar indent */
+    margin: 2px 0 6px 0;
+    animation: msg-fade-in 0.28s 0.04s both cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .chip {
+    appearance: none;
+    background: var(--hh-bg-surface);
+    border: 1.5px solid var(--hh-border-default);
+    color: var(--hh-text-secondary);
+    border-radius: 10px;
+    /* Slightly more pill-like but with a flat bottom to read as a selectable tile */
+    padding: 9px 16px;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease, transform 0.1s ease, box-shadow 0.12s ease;
+  }
+
+  .chip:hover {
+    background: var(--hh-primary-tint);
+    border-color: var(--hh-primary-tint-2);
+    color: var(--hh-primary);
+  }
+
+  .chip:active { transform: scale(0.97); }
+
+  /* Chips stay enabled so you can change your answer */
+  .chip.selected {
+    background: var(--hh-primary);
+    border-color: var(--hh-primary);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(127,86,217,0.25);
+  }
+
+  /* De-emphasize past chip rows that are already answered */
+  .chip-row.answered .chip:not(.selected) {
+    opacity: 0.45;
+    border-color: var(--hh-border-light);
+  }
+
+  .chip-row.answered .chip:not(.selected):hover {
+    opacity: 1;
+    background: var(--hh-primary-tint);
+    border-color: var(--hh-primary-tint-2);
+    color: var(--hh-primary);
+  }
+
+  /* Typing indicator while AI "thinks" */
+  .chat-typing {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 2px;
+  }
+
+  .chat-typing span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--hh-text-muted);
+    animation: typing-bounce 1.2s infinite;
+  }
+
+  .chat-typing span:nth-child(2) { animation-delay: 0.15s; }
+  .chat-typing span:nth-child(3) { animation-delay: 0.30s; }
+
+  @keyframes typing-bounce {
+    0%, 60%, 100% { transform: translateY(0);   opacity: 0.5; }
+    30%           { transform: translateY(-4px); opacity: 1;   }
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     PLAN SUMMARY CARD (replaces full inline plan in thread)
+     ───────────────────────────────────────────────────────── */
+
+  .plan-summary-card {
+    background: var(--gc-navy);
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-navy);
+    animation: msg-fade-in 0.35s both cubic-bezier(0.22, 0.61, 0.36, 1);
+    margin: 2px 0 4px;
+  }
+
+  .plan-summary-inner {
+    padding: 16px 16px 14px;
+  }
+
+  .plan-summary-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.52);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    margin-bottom: 7px;
+  }
+
+  .plan-summary-check {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: rgba(110,231,183,0.2);
+    border: 1.5px solid rgba(110,231,183,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .plan-summary-check svg { width: 8px; height: 8px; color: #6ee7b7; }
+
+  .plan-summary-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin-bottom: 8px;
+  }
+
+  .plan-summary-focus {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.5;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+  }
+
+  .plan-summary-drills {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .plan-summary-drill-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 500;
+  }
+
+  .plan-summary-drill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .plan-summary-drill-dot.phase-skating  { background: var(--phase-skating); }
+  .plan-summary-drill-dot.phase-shot     { background: var(--phase-shot); }
+  .plan-summary-drill-dot.phase-skill    { background: var(--phase-skill); }
+  .plan-summary-drill-dot.phase-compete  { background: var(--phase-compete); }
+
+  .plan-summary-more {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.38);
+    font-weight: 500;
+    padding-left: 15px;
+  }
+
+  .plan-summary-stats {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .plan-summary-stat {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .plan-summary-sep {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    flex-shrink: 0;
+  }
+
+  .plan-summary-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    background: rgba(255,255,255,0.10);
+    color: #fff;
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    padding: 15px 16px;
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    text-align: center;
+  }
+
+  .plan-summary-cta:hover  { background: rgba(255,255,255,0.16); }
+  .plan-summary-cta:active { background: rgba(255,255,255,0.07); }
+  .plan-summary-cta svg    { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ─────────────────────────────────────────────────────────
+     INLINE PLAN RENDERING (the chat thread becomes the plan)
+     ───────────────────────────────────────────────────────── */
+
+  /* Session brief — navy hero inside the thread */
+  .plan-brief {
+    background: var(--gc-navy);
+    color: #fff;
+    border-radius: var(--r-lg);
+    padding: 14px 14px 12px;
+    margin: 6px 0 4px;
+    box-shadow: var(--shadow-navy);
+    animation: msg-fade-in 0.32s both cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .plan-brief-eyebrow {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    margin-bottom: 4px;
+  }
+
+  .plan-brief-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+
+  .plan-brief-notes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+    margin-bottom: 11px;
+  }
+
+  .plan-brief-note-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 3px;
+  }
+
+  .plan-brief-note p {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.78);
+    line-height: 1.5;
+  }
+
+  .plan-brief-stats {
+    display: flex;
+    gap: 6px;
+  }
+
+  .plan-brief-stat {
+    flex: 1;
+    background: rgba(255,255,255,0.08);
+    border-radius: 9px;
+    padding: 7px 4px;
+    text-align: center;
+    line-height: 1.1;
+  }
+
+  .plan-brief-stat-label {
+    font-size: 9px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 3px;
+  }
+
+  .plan-brief-stat-value {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* Phase divider */
+  .plan-phase {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 4px 4px;
+    animation: msg-fade-in 0.28s both;
+  }
+
+  .plan-phase-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .plan-phase-dot.phase-skating  { background: var(--phase-skating); }
+  .plan-phase-dot.phase-shot     { background: var(--phase-shot); }
+  .plan-phase-dot.phase-skill    { background: var(--phase-skill); }
+  .plan-phase-dot.phase-compete  { background: var(--phase-compete); }
+
+  .plan-phase-name {
+    flex: 1;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--hh-text-primary);
+    letter-spacing: -0.005em;
+  }
+
+  .plan-phase-time {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--hh-text-tertiary);
+  }
+
+  /* Drill card (compact in-thread variant) */
+  .plan-drill {
+    background: var(--hh-bg-surface);
+    border: 1px solid var(--hh-border-light);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-xs);
+    animation: msg-fade-in 0.30s both cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .plan-drill-video {
+    position: relative;
+    background: #111;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+
+  .plan-drill-video video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .plan-drill-step {
+    position: absolute;
+    top: 9px;
+    left: 10px;
+    background: rgba(0,0,0,0.55);
+    color: rgba(255,255,255,0.88);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .plan-drill-phase {
+    position: absolute;
+    top: 9px;
+    right: 10px;
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+
+  .plan-drill-phase.phase-skating { background: rgba(24,166,200,0.92); }
+  .plan-drill-phase.phase-shot    { background: rgba(224,92,42,0.92); }
+  .plan-drill-phase.phase-skill   { background: rgba(55,138,221,0.92); }
+  .plan-drill-phase.phase-compete { background: rgba(23,160,100,0.92); }
+
+  .plan-drill-shots {
+    position: absolute;
+    bottom: 9px;
+    right: 10px;
+    background: rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.95);
+    font-size: 10.5px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+  }
+
+  .plan-drill-body { padding: 12px 14px 13px; }
+
+  .plan-drill-name {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--hh-text-primary);
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    margin-bottom: 4px;
+  }
+
+  .plan-drill-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: var(--hh-text-tertiary);
+    margin-bottom: 9px;
+  }
+
+  .plan-drill-meta-dot {
+    width: 2.5px;
+    height: 2.5px;
+    border-radius: 50%;
+    background: var(--hh-text-muted);
+  }
+
+  .plan-drill-cues {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .plan-drill-cue {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--hh-text-primary);
+    line-height: 1.4;
+  }
+
+  .plan-drill-cue-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .plan-drill-cue-dot.phase-skating { background: var(--phase-skating); }
+  .plan-drill-cue-dot.phase-shot    { background: var(--phase-shot); }
+  .plan-drill-cue-dot.phase-skill   { background: var(--phase-skill); }
+  .plan-drill-cue-dot.phase-compete { background: var(--phase-compete); }
+
+  /* "Start session" primary CTA at the end of the plan */
+  .plan-start-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    background: var(--gc-navy);
+    color: #fff;
+    border: none;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    border-radius: var(--r-lg);
+    cursor: pointer;
+    margin: 10px 0 6px;
+    box-shadow: var(--shadow-navy);
+    transition: background 0.15s ease, transform 0.12s ease;
+    animation: msg-fade-in 0.32s both;
+  }
+
+  .plan-start-cta:hover  { background: var(--gc-navy-2); }
+  .plan-start-cta:active { transform: scale(0.99); }
+  .plan-start-cta svg    { width: 16px; height: 16px; }
+
+  /* Inline "what would you like to change?" hint */
+  .plan-refine-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: var(--hh-text-tertiary);
+    padding: 4px 0 8px;
+    animation: msg-fade-in 0.32s both;
+  }
+
+  .plan-refine-hint svg {
+    width: 12px;
+    height: 12px;
+    color: var(--hh-text-muted);
+  }
+
+  /* Header: save (bookmark) button */
+  .chat-sheet-save {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--hh-text-secondary);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .chat-sheet-save:hover { background: var(--hh-bg-tertiary); }
+  .chat-sheet-save svg   { width: 17px; height: 17px; }
+
+  .chat-sheet-save.saved {
+    color: var(--hh-primary);
+  }
+
+  .chat-sheet-save.saved svg {
+    fill: var(--hh-primary);
+  }
+
+  /* Save toast — short confirmation when bookmark tapped */
+  .save-toast {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: var(--hh-text-primary);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+    z-index: 5;
+  }
+
+  .save-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Hide the save button until a plan has been generated */
+  .chat-sheet-save { display: none; }
+  .chat-sheet.plan-mode .chat-sheet-save { display: flex; }
+
+  /* Footer: free-text input + send */
+  .chat-input-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: var(--hh-bg-surface);
+    border-top: 1px solid var(--hh-border-light);
+    flex-shrink: 0;
+  }
+
+  .chat-input {
+    flex: 1;
+    appearance: none;
+    border: 1px solid var(--hh-border-default);
+    background: var(--hh-bg-page);
+    border-radius: 18px;
+    padding: 9px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--hh-text-primary);
+    line-height: 1.4;
+    resize: none;
+    min-height: 36px;
+    max-height: 120px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .chat-input::placeholder { color: var(--hh-text-muted); }
+
+  .chat-input:focus {
+    outline: none;
+    background: var(--hh-bg-surface);
+    border-color: var(--hh-primary-tint-2);
+  }
+
+  .chat-input:disabled {
+    background: var(--hh-bg-tertiary);
+    color: var(--hh-text-muted);
+    cursor: not-allowed;
+  }
+
+  .chat-send {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--hh-primary);
+    color: #fff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+
+  .chat-send:hover { background: var(--hh-primary-hover); }
+  .chat-send:active { transform: scale(0.94); }
+
+  .chat-send:disabled {
+    background: var(--hh-border-default);
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .chat-send svg { width: 16px; height: 16px; }
+
+  /* In plan-mode: hide the textarea input bar, show adjust bar instead */
+  .chat-sheet.plan-mode .chat-input-bar  { display: none; }
+  .chat-sheet.plan-mode .chat-adjust-bar { display: flex; }
+
+  /* ── Adjust bar (session setup pills) ── */
+  .chat-adjust-bar {
+    display: none; /* toggled by plan-mode class */
+    flex-direction: column;
+    gap: 9px;
+    padding: 12px 14px calc(14px + env(safe-area-inset-bottom));
+    background: var(--hh-bg-surface);
+    border-top: 1px solid var(--hh-border-light);
+    flex-shrink: 0;
+  }
+
+  .adjust-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--hh-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  .adjust-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .adjust-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 11px;
+    background: var(--hh-bg-page);
+    border: 1.5px solid var(--hh-border-default);
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--hh-text-secondary);
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+
+  .adjust-pill:hover {
+    background: var(--hh-primary-tint);
+    border-color: var(--hh-primary-tint-2);
+    color: var(--hh-primary);
+  }
+
+  .adjust-pill svg {
+    width: 11px;
+    height: 11px;
+    opacity: 0.55;
+  }
+
+  /* Flash animation when scrolling back to a chip row */
+  @keyframes chip-row-flash {
+    0%   { opacity: 1; }
+    25%  { opacity: 0.35; }
+    55%  { opacity: 1; }
+    75%  { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+
+  .chip-row.flash { animation: chip-row-flash 0.55s ease; }
+
+  /* Body scroll lock helper class (applied via JS) */
+  body.sheet-open { overflow: hidden; }
+
+  /* Subtle bottom-of-page divider */
+  .page-end-spacer { height: 8px; }
+
+  /* Status-bar safe spacing for fullscreen apps */
+  @supports (padding-top: env(safe-area-inset-top)) {
+    .top-header { padding-top: env(safe-area-inset-top); }
+  }
+</style>
+<!-- Data layer — must load before any inline scripts -->
+<script src="db.js"></script>
+<!-- Drill library bundle — 45 drills, used by the AI plan builder -->
+<script src="drill_library.js"></script>
+</head>
+<body>
+
+<!-- ─── Inline lucide-style icon library ─── -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-clipboard-list" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+    <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 7-8 13-8 13s-8-6-8-13a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-wand-2" viewBox="0 0 24 24"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-4"/><path d="M11 3H9"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+    <!-- Custom: goalie mask brand mark -->
+    <symbol id="i-mask" viewBox="0 0 24 24"><path d="M5 9a7 7 0 0 1 14 0v4a7 7 0 0 1-14 0Z"/><path d="M9 11h.01M15 11h.01M9 15h6"/></symbol>
+    <!-- Added for chat modal -->
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+    <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-grip-vertical" viewBox="0 0 24 24"><circle cx="9" cy="5" r="1" fill="currentColor"/><circle cx="9" cy="12" r="1" fill="currentColor"/><circle cx="9" cy="19" r="1" fill="currentColor"/><circle cx="15" cy="5" r="1" fill="currentColor"/><circle cx="15" cy="12" r="1" fill="currentColor"/><circle cx="15" cy="19" r="1" fill="currentColor"/></symbol>
+    <symbol id="i-refresh-cw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol>
+    <symbol id="i-trash-2" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></symbol>
+    <symbol id="i-plus-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></symbol>
+  </defs>
+</svg>
+
+<div class="app">
+
+  <!-- ─── TOP HEADER ─── -->
+  <header class="top-header">
+    <div class="top-header-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true" style="background:none;overflow:hidden;padding:0;">
+          <img src="icon.svg" width="32" height="32" alt="" style="display:block;border-radius:9px;">
+        </div>
+        <div class="brand-text">
+          <div class="brand-product">Goalie Coach</div>
+          <div class="brand-parent">Hockey Hub</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="icon-btn-wrap">
+          <button class="icon-btn" aria-label="Notifications">
+            <svg class="lucide"><use href="#i-bell"/></svg>
+            <span class="dot" aria-hidden="true"></span>
+          </button>
+        </div>
+        <button class="icon-btn" aria-label="Settings">
+          <svg class="lucide"><use href="#i-settings"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── GREETING ─── -->
+  <section class="greeting">
+    <div class="greeting-eyebrow">Sunday, May 10</div>
+    <h1 class="greeting-title">Good afternoon, Mitch.</h1>
+  </section>
+
+  <!-- ─── TODAY ─── -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head-left">
+        <span class="section-label">Today</span>
+        <span class="section-count">2 lessons</span>
+      </div>
+      <a class="section-link" href="booking.html">
+        Schedule
+        <svg class="lucide"><use href="#i-chevron-right"/></svg>
+      </a>
+    </div>
+
+    <!-- HERO: next-up lesson (4:00 PM) -->
+    <article class="lesson-card hero">
+      <div class="hero-eyebrow-row">
+        <span class="hero-eyebrow"><span class="pulse"></span>Next up · 4:00 PM</span>
+        <span class="hero-time-badge">in 2h 15m</span>
+      </div>
+      <div class="hero-body">
+        <div class="hero-time">4:00 PM</div>
+        <div class="hero-duration">60 min · Private</div>
+        <div class="hero-rink">
+          <svg class="lucide"><use href="#i-map-pin"/></svg>
+          Champions Skating Center · Cromwell
+        </div>
+        <div class="hero-goalies">
+          <div class="goalie-avatars">
+            <div class="hero-goalie-avatar">JR</div>
+          </div>
+          <div class="hero-goalie-text">
+            <div class="hero-goalie-names">Jake Reynolds</div>
+            <div class="hero-goalie-context">12U · Intermediate · 4th lesson</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-cta-row">
+        <button class="hero-cta" type="button">
+          <svg class="lucide"><use href="#i-user"/></svg>
+          Profile
+        </button>
+        <button class="hero-cta primary" type="button"
+          data-build-plan
+          data-session-id="session_jake_0512"
+          data-goalie-id="goalie_jake_reynolds"
+          data-goalie="Jake Reynolds"
+          data-time="4:00 PM"
+          data-count="1"
+          data-level="intermediate"
+          data-duration="60">
+          <svg class="lucide"><use href="#i-sparkles"/></svg>
+          Build plan
+        </button>
+      </div>
+    </article>
+
+    <!-- 5:00 PM lesson (2 goalies) -->
+    <article class="lesson-card">
+      <div class="lesson-card-body">
+        <div class="lesson-meta-row">
+          <div class="lesson-time">
+            <div class="lesson-time-block">
+              <span class="lesson-time-primary">5:15 PM</span>
+              <span class="lesson-time-duration">60 min · Semi-private</span>
+            </div>
+          </div>
+        </div>
+        <div class="lesson-info-row">
+          <svg class="lucide"><use href="#i-map-pin"/></svg>
+          Champions Skating Center · Cromwell
+        </div>
+        <div class="lesson-goalies">
+          <div class="goalie-avatars">
+            <div class="goalie-avatar tone-b">MK</div>
+            <div class="goalie-avatar tone-c">LP</div>
+          </div>
+          <div class="goalie-details">
+            <div class="goalie-names">Mason K. &amp; Lily P.</div>
+            <div class="goalie-context">10U · Beginner / Intermediate</div>
+          </div>
+        </div>
+      </div>
+      <div class="lesson-cta-row">
+        <button class="lesson-cta" type="button">
+          <svg class="lucide"><use href="#i-users"/></svg>
+          Profile
+        </button>
+        <button class="lesson-cta primary" type="button"
+          data-build-plan
+          data-session-id="session_mason_lily_0512"
+          data-goalie-id="goalie_mason_k"
+          data-goalie="Mason K. &amp; Lily P."
+          data-time="5:15 PM"
+          data-count="2"
+          data-level="beginner-intermediate"
+          data-duration="60">
+          <svg class="lucide"><use href="#i-sparkles"/></svg>
+          Build plan
+        </button>
+      </div>
+    </article>
+  </section>
+
+  <!-- ─── THIS WEEK ─── -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head-left">
+        <span class="section-label">This week</span>
+        <span class="section-count">3 lessons</span>
+      </div>
+      <a class="section-link" href="booking.html">
+        View all
+        <svg class="lucide"><use href="#i-chevron-right"/></svg>
+      </a>
+    </div>
+
+    <!-- Tue -->
+    <article class="lesson-card">
+      <div class="lesson-card-body">
+        <div class="lesson-meta-row">
+          <div class="lesson-time">
+            <div class="lesson-time-block">
+              <span class="lesson-time-primary">Tue · 6:30 PM</span>
+              <span class="lesson-time-duration">60 min · Private</span>
+            </div>
+          </div>
+        </div>
+        <div class="lesson-info-row">
+          <svg class="lucide"><use href="#i-map-pin"/></svg>
+          Northford Ice Pavilion · North Branford
+        </div>
+        <div class="lesson-goalies">
+          <div class="goalie-avatars">
+            <div class="goalie-avatar tone-a">AT</div>
+          </div>
+          <div class="goalie-details">
+            <div class="goalie-names">Aiden Torres</div>
+            <div class="goalie-context">14U · Advanced · 8th lesson</div>
+          </div>
+        </div>
+      </div>
+      <div class="lesson-cta-row">
+        <button class="lesson-cta" type="button">
+          <svg class="lucide"><use href="#i-user"/></svg>
+          Profile
+        </button>
+        <button class="lesson-cta primary" type="button"
+          data-build-plan
+          data-session-id="session_aiden_0519"
+          data-goalie-id="goalie_aiden_torres"
+          data-goalie="Aiden Torres"
+          data-time="Tue · 6:30 PM"
+          data-count="1"
+          data-level="advanced"
+          data-duration="60">
+          <svg class="lucide"><use href="#i-sparkles"/></svg>
+          Build plan
+        </button>
+      </div>
+    </article>
+
+    <!-- Thu -->
+    <article class="lesson-card">
+      <div class="lesson-card-body">
+        <div class="lesson-meta-row">
+          <div class="lesson-time">
+            <div class="lesson-time-block">
+              <span class="lesson-time-primary">Thu · 5:00 PM</span>
+              <span class="lesson-time-duration">60 min · Semi-private</span>
+            </div>
+          </div>
+        </div>
+        <div class="lesson-info-row">
+          <svg class="lucide"><use href="#i-map-pin"/></svg>
+          Wonderland of Ice · Bridgeport
+        </div>
+        <div class="lesson-goalies">
+          <div class="goalie-avatars">
+            <div class="goalie-avatar tone-d">EM</div>
+            <div class="goalie-avatar tone-a">SC</div>
+          </div>
+          <div class="goalie-details">
+            <div class="goalie-names">Eli M. &amp; Sam C.</div>
+            <div class="goalie-context">14U · Intermediate</div>
+          </div>
+        </div>
+      </div>
+      <div class="lesson-cta-row">
+        <button class="lesson-cta" type="button">
+          <svg class="lucide"><use href="#i-users"/></svg>
+          Profile
+        </button>
+        <button class="lesson-cta primary" type="button"
+          data-build-plan
+          data-session-id="session_eli_sam_0521"
+          data-goalie-id="goalie_eli_m"
+          data-goalie="Eli M. &amp; Sam C."
+          data-time="Thu · 5:00 PM"
+          data-count="2"
+          data-level="intermediate"
+          data-duration="60">
+          <svg class="lucide"><use href="#i-sparkles"/></svg>
+          Build plan
+        </button>
+      </div>
+    </article>
+  </section>
+
+  <!-- ─── RECENT LESSONS ─── -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head-left">
+        <span class="section-label">Recent lessons</span>
+      </div>
+      <a class="section-link" href="#">
+        All lessons
+        <svg class="lucide"><use href="#i-chevron-right"/></svg>
+      </a>
+    </div>
+
+    <!-- Recent lesson: Jake Reynolds, May 8 -->
+    <div class="plan-card" onclick="window.location.href='lesson_plan_preview_crease_positioning.html?goalie=Jake+Reynolds&goalieId=goalie_jake_reynolds&sessionId=session_jake_0508&level=intermediate&duration=60&goalies=1&shooters=1&screener=no&focus=crease_movement'">
+      <div class="goalie-avatar tone-a" style="width:40px;height:40px;font-size:12px;font-weight:700;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;">JR</div>
+      <div class="plan-body">
+        <div class="plan-goalie-row">
+          <div class="plan-goalie-name">Jake Reynolds</div>
+          <div class="plan-date">May 8</div>
+        </div>
+        <div class="plan-title">Crease Movement &amp; Positioning</div>
+        <div class="plan-meta">
+          <span>6 drills</span>
+          <span class="plan-meta-dot"></span>
+          <span>60 min</span>
+          <span class="plan-meta-dot"></span>
+          <span>Private</span>
+        </div>
+      </div>
+      <div class="plan-chevron"><svg class="lucide"><use href="#i-chevron-right"/></svg></div>
+    </div>
+
+    <!-- Recent lesson: Aiden Torres, May 6 -->
+    <div class="plan-card">
+      <div class="goalie-avatar tone-b" style="width:40px;height:40px;font-size:12px;font-weight:700;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;">AT</div>
+      <div class="plan-body">
+        <div class="plan-goalie-row">
+          <div class="plan-goalie-name">Aiden Torres</div>
+          <div class="plan-date">May 6</div>
+        </div>
+        <div class="plan-title">RVH &amp; Post Play · Compete</div>
+        <div class="plan-meta">
+          <span>5 drills</span>
+          <span class="plan-meta-dot"></span>
+          <span>60 min</span>
+          <span class="plan-meta-dot"></span>
+          <span>Private</span>
+        </div>
+      </div>
+      <div class="plan-chevron"><svg class="lucide"><use href="#i-chevron-right"/></svg></div>
+    </div>
+
+    <!-- Recent lesson: Mason K. & Lily P., May 4 -->
+    <div class="plan-card">
+      <div style="display:flex;flex-shrink:0;margin-right:-4px;">
+        <div class="goalie-avatar tone-c" style="width:40px;height:40px;font-size:11px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;">MK</div>
+        <div class="goalie-avatar tone-d" style="width:40px;height:40px;font-size:11px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-left:-12px;border:2px solid #fff;">LP</div>
+      </div>
+      <div class="plan-body">
+        <div class="plan-goalie-row">
+          <div class="plan-goalie-name">Mason K. &amp; Lily P.</div>
+          <div class="plan-date">May 4</div>
+        </div>
+        <div class="plan-title">Rebound Control · Beginner</div>
+        <div class="plan-meta">
+          <span>4 drills</span>
+          <span class="plan-meta-dot"></span>
+          <span>45 min</span>
+          <span class="plan-meta-dot"></span>
+          <span>Semi-private</span>
+        </div>
+      </div>
+      <div class="plan-chevron"><svg class="lucide"><use href="#i-chevron-right"/></svg></div>
+    </div>
+
+  </section>
+
+  <div class="page-end-spacer"></div>
+
+  <!-- ─── BOTTOM TAB BAR ─── -->
+  <nav class="tab-bar" aria-label="Primary">
+    <button class="tab active" type="button">
+      <svg class="lucide"><use href="#i-home"/></svg>
+      <span class="tab-label">Home</span>
+    </button>
+    <button class="tab" type="button" onclick="window.location.href='#plans'">
+      <svg class="lucide"><use href="#i-clipboard-list"/></svg>
+      <span class="tab-label">Plans</span>
+    </button>
+    <button class="tab" type="button" onclick="window.location.href='booking.html'">
+      <svg class="lucide"><use href="#i-calendar"/></svg>
+      <span class="tab-label">Schedule</span>
+    </button>
+  </nav>
+
+  <!-- ─── CHAT SHEET (AI lesson planner — rises from bottom) ─── -->
+  <div class="chat-sheet" id="chatSheet" role="dialog" aria-modal="true" aria-labelledby="chatSheetTitle" aria-hidden="true">
+    <div class="chat-sheet-backdrop" data-sheet-close></div>
+    <div class="chat-sheet-panel">
+      <div class="chat-sheet-handle" aria-hidden="true"></div>
+      <header class="chat-sheet-header">
+        <div class="chat-sheet-avatar">
+          <svg class="lucide"><use href="#i-sparkles"/></svg>
+        </div>
+        <div class="chat-sheet-title">
+          <div class="chat-sheet-title-name" id="chatSheetTitle">Build a lesson plan</div>
+          <div class="chat-sheet-title-sub" id="chatSheetSub">A few quick questions, then I'll draft it.</div>
+        </div>
+        <button class="chat-sheet-save" id="chatSheetSave" type="button" aria-label="Save plan">
+          <svg class="lucide"><use href="#i-bookmark"/></svg>
+        </button>
+        <button class="chat-sheet-close" type="button" aria-label="Close" data-sheet-close>
+          <svg class="lucide"><use href="#i-x"/></svg>
+        </button>
+      </header>
+      <div class="save-toast" id="saveToast" role="status" aria-live="polite">Plan saved</div>
+      <main class="chat-thread" id="chatThread" role="log" aria-live="polite"></main>
+      <footer class="chat-input-bar">
+        <textarea class="chat-input" id="chatInput" rows="1" placeholder="Tap an option above to start" disabled></textarea>
+        <button class="chat-send" id="chatSend" type="button" aria-label="Send" disabled>
+          <svg class="lucide"><use href="#i-arrow-up"/></svg>
+        </button>
+      </footer>
+      <!-- Replaces input bar in plan-mode -->
+      <div class="chat-adjust-bar" id="chatAdjustBar" aria-label="Session setup">
+        <div class="adjust-label">Change session setup</div>
+        <div class="adjust-pills" id="adjustPills" role="list"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ──────────────────────────────────────────────────────────────
+   Chat sheet — quick-tap intake → placeholder plan
+   ────────────────────────────────────────────────────────────── */
+(() => {
+  const sheet   = document.getElementById('chatSheet');
+  const thread  = document.getElementById('chatThread');
+  const subEl   = document.getElementById('chatSheetSub');
+  const input   = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('chatSend');
+
+  // Intake question definitions — order matters
+  const STEPS = [
+    {
+      id: 'goalies',
+      q: 'How many goalies?',
+      options: [
+        { value: 1, label: '1' },
+        { value: 2, label: '2' },
+        { value: 3, label: '3' },
+        { value: '4+', label: '4+' },
+      ],
+    },
+    {
+      id: 'shooters',
+      q: 'How many shooters?',
+      options: [
+        { value: 1, label: '1' },
+        { value: 2, label: '2' },
+        { value: 3, label: '3' },
+        { value: '4+', label: '4+' },
+      ],
+    },
+    {
+      id: 'level',
+      q: 'Goalie level?',
+      options: [
+        { value: 'beginner',     label: 'Beginner' },
+        { value: 'intermediate', label: 'Intermediate' },
+        { value: 'advanced',     label: 'Advanced' },
+      ],
+    },
+    {
+      id: 'duration',
+      q: 'Lesson length?',
+      options: [
+        { value: 30, label: '30 min' },
+        { value: 45, label: '45 min' },
+        { value: 60, label: '60 min' },
+        { value: 90, label: '90 min' },
+      ],
+    },
+    {
+      id: 'screener',
+      q: 'Screener available — a board or a player to screen in front of the goalie?',
+      options: [
+        { value: 'yes',     label: 'Yes' },
+        { value: 'no',      label: 'No' },
+        { value: 'skip',    label: 'Skip screens' },
+      ],
+    },
+    {
+      id: 'focus',
+      q: 'What should we focus on?',
+      options: [
+        { value: 'crease_movement',    label: 'Crease movement' },
+        { value: 'positioning_angles', label: 'Positioning & angles' },
+        { value: 'save_technique',     label: 'Save technique' },
+        { value: 'rebound_control',    label: 'Rebound control' },
+        { value: 'post_play',          label: 'RVH & post play' },
+        { value: 'compete',            label: 'Compete' },
+        { value: 'surprise_me',        label: 'Surprise me' },
+      ],
+    },
+  ];
+
+  // Session state for this intake
+  let state = { answers: {}, stepIdx: 0, context: null };
+
+  /* ── DOM helpers ───────────────────────────────────────── */
+  function el(tag, cls, html) {
+    const n = document.createElement(tag);
+    if (cls)  n.className = cls;
+    if (html != null) n.innerHTML = html;
+    return n;
+  }
+
+  function scrollToBottom() {
+    requestAnimationFrame(() => {
+      thread.scrollTop = thread.scrollHeight;
+    });
+  }
+
+  /* ── Renderers ─────────────────────────────────────────── */
+  function renderContextStrip(ctx) {
+    if (!ctx || !ctx.goalie) return;
+
+    const TONES = ['tone-a', 'tone-b', 'tone-c', 'tone-d'];
+    const names = ctx.goalie.split(/\s*&\s*/).map(n => n.trim()).filter(Boolean);
+
+    function initials(name) {
+      const p = name.split(/\s+/);
+      return p.length === 1 ? p[0].slice(0,2).toUpperCase() : (p[0][0] + p[p.length-1][0]).toUpperCase();
+    }
+    function tone(name) {
+      return TONES[((name || '').toUpperCase().charCodeAt(0) || 65) % 4];
+    }
+
+    const avatarsHtml = names.map(n =>
+      `<div class="ctx-avatar goalie-avatar ${tone(n)}">${initials(n)}</div>`
+    ).join('');
+
+    const strip = el('div', 'chat-context-strip');
+    strip.innerHTML = `
+      <div class="ctx-avatars">${avatarsHtml}</div>
+      <div class="chat-context-text">
+        <strong>${ctx.goalie}</strong>
+        <span> · ${ctx.time}</span>
+      </div>
+    `;
+    thread.appendChild(strip);
+  }
+
+  /* Intake question — label style (no bubble background) */
+  function renderAssistantMsg(text, asBubble = false) {
+    const wrap = el('div', asBubble ? 'chat-msg assistant has-bubble' : 'chat-msg assistant');
+    wrap.innerHTML = `
+      <div class="chat-msg-avatar"><svg class="lucide"><use href="#i-sparkles"/></svg></div>
+      <div class="chat-msg-bubble">${text}</div>
+    `;
+    thread.appendChild(wrap);
+    scrollToBottom();
+  }
+
+  /* User free-text replies (only used after plan is generated) */
+  function renderUserMsg(text) {
+    const wrap = el('div', 'chat-msg user');
+    wrap.innerHTML = `<div class="chat-msg-bubble">${text}</div>`;
+    thread.appendChild(wrap);
+    scrollToBottom();
+  }
+
+  function renderChips(step) {
+    const row = el('div', 'chip-row');
+    row.dataset.stepId = step.id;
+    step.options.forEach(opt => {
+      const btn = el('button', 'chip', opt.label);
+      btn.type = 'button';
+      btn.dataset.value = opt.value;
+      btn.addEventListener('click', () => onChipTap(step, opt, btn, row));
+      row.appendChild(btn);
+    });
+    thread.appendChild(row);
+    scrollToBottom();
+  }
+
+  function renderTyping() {
+    const wrap = el('div', 'chat-msg assistant has-bubble');
+    wrap.id = 'chatTyping';
+    wrap.innerHTML = `
+      <div class="chat-msg-avatar"><svg class="lucide"><use href="#i-sparkles"/></svg></div>
+      <div class="chat-msg-bubble"><span class="chat-typing"><span></span><span></span><span></span></span></div>
+    `;
+    thread.appendChild(wrap);
+    scrollToBottom();
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('chatTyping');
+    if (t) t.remove();
+  }
+
+  function cap(s) {
+    if (!s) return '';
+    return s[0].toUpperCase() + s.slice(1);
+  }
+
+  /* ────── Sample plan content (would come from Claude API in production) ──────
+     The build prompt's drill-library schema lets a server-side AI assemble these
+     from drills/*.json + assembly rules. For now we hardcode the 6-drill plan
+     used in lesson_plan_preview_crease_positioning.html so the UX flow is real. */
+  /* ── Edge Function ──────────────────────────────────────────────────── */
+  const EDGE_FUNCTION_URL = 'https://whawnvlctxrfzkyvivca.supabase.co/functions/v1/generate-plan';
+
+  async function callGeneratePlan(answers, ctx) {
+    const params = {
+      goalies:  Number(answers.goalies)  || 1,
+      shooters: Number(answers.shooters) || 0,
+      level:    answers.level            || 'intermediate',
+      duration: Number(answers.duration) || 45,
+      screener: answers.screener         || 'skip',
+      focus:    answers.focus            || 'surprise_me',
+      goalie:   ctx?.goalie              || undefined,
+    };
+    const drills = (window.filterDrills ? window.filterDrills(params) : window.DRILL_LIBRARY) || [];
+    if (!drills.length) throw new Error('No drills matched these session settings');
+
+    const resp = await fetch(EDGE_FUNCTION_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ params, drills }),
+    });
+
+    if (!resp.ok) {
+      let msg = `Server error (${resp.status})`;
+      try { const e = await resp.json(); if (e.error) msg = e.error; } catch {}
+      throw new Error(msg);
+    }
+
+    const data = await resp.json();
+    if (!data.plan) throw new Error('No plan returned from server');
+    return data.plan;
+  }
+
+  /* ── SAMPLE_PLAN fallback — used only for offline dev ─────────────── */
+  const SAMPLE_PLAN = {
+    title: 'Crease Movement & Positioning',
+    notes: {
+      focus: "Build clean crease movement habits — eyes first, hands second, push into the lean. Today's session is about looking like you're under control even when the play isn't.",
+      drills: "We'll warm up the skating with two t-push/post-recovery sets, sharpen tracking on the shot warmup, then build three skill drills around lateral release and post play.",
+    },
+    sections: [
+      {
+        phase: 'skating', name: 'Skating warm-up', time: '10 min',
+        drills: [
+          {
+            step: 'Step 1', name: 'Board-to-Board Movement Series',
+            phaseLabel: 'Skating warmup', duration: '5 min', difficulty: 'Beginner',
+            clip: 'drill-clips/diagonal-t-push-pivots.mp4',
+            cues: ['Eyes go first', 'Lean into the push', 'Lead with hands'],
+          },
+          {
+            step: 'Step 2', name: 'Post Entry & Exit — RVH to Powerslide',
+            phaseLabel: 'Skating warmup', duration: '5 min', difficulty: 'Intermediate',
+            clip: 'drill-clips/post-entry-exit-rvh-powerslide.mp4',
+            cues: ['Clean post entry — set the RVH before the bump', 'Sharp pivot off the RVH', 'Stay in butterfly through the powerslide'],
+          },
+        ],
+      },
+      {
+        phase: 'shot', name: 'Shot warm-up', time: '10 min',
+        drills: [
+          {
+            step: 'Step 3', name: 'Butterfly Shot Warmup — Tracking Series',
+            phaseLabel: 'Shot warmup', duration: '10 min', difficulty: 'Beginner', shots: '1 shot',
+            clip: 'drill-clips/butterfly-shot-warmup.mp4',
+            cues: ['Track the puck all the way in — see it into the save', 'Exaggerate the lean to the save side', 'Drive eyes and nose into the save'],
+          },
+        ],
+      },
+      {
+        phase: 'skill', name: 'Skill work', time: '30 min',
+        drills: [
+          {
+            step: 'Step 4', name: 'Overlap — T-Push and Go Call React',
+            phaseLabel: 'Skill work', duration: '10 min', difficulty: 'Intermediate', shots: '2 shots',
+            clip: 'drill-clips/overlap-t-push-go-call-react.mp4',
+            cues: ["Use the overlap to load momentum — don't just walk back to the post", 'Clean post touch before the t-push', 'Hard t-push to center top of crease — get to depth'],
+          },
+          {
+            step: 'Step 5', name: 'Go Call — Lateral Release and Net Attack',
+            phaseLabel: 'Skill work', duration: '10 min', difficulty: 'Intermediate', shots: '2 shots',
+            clip: 'drill-clips/go-call-lateral-drop-net-attack.mp4',
+            cues: ["Eyes find F1 before dropping — don't react blind to the call", 'Locate first, drop second — the head turn is the trigger', 'Stay connected through the lateral release'],
+          },
+          {
+            step: 'Step 6', name: 'Lateral Release — RVH Post Entry and Bump Out',
+            phaseLabel: 'Skill work', duration: '10 min', difficulty: 'Intermediate', shots: '2 shots',
+            clip: 'drill-clips/lateral-release-rvh-bump-out-slot.mp4',
+            cues: ['Lead with eyes through the lateral release', "Rotate push into RVH — set clean before the 'go' call", 'Eyes and hands lead out of the bump — not the pads'],
+          },
+        ],
+      },
+    ],
+  };
+
+  function renderInlinePlan(plan, answers, ctx) {
+    const totalDrills = plan.sections.reduce((n, s) => n + s.drills.length, 0);
+
+    // Build a flat list of all drills with their phase for preview dots
+    const allDrills = plan.sections.flatMap(s =>
+      s.drills.map(d => ({ ...d, phase: s.phase }))
+    );
+    const previewDrills = allDrills.slice(0, 3);
+    const remaining = totalDrills - previewDrills.length;
+
+    // Focus blurb — trim to one sentence so it fits nicely
+    const focusBlurb = plan.notes.focus.split(/[.!?]/)[0].trim();
+
+    // Build summary card
+    const card = el('div', 'plan-summary-card');
+    card.innerHTML = `
+      <div class="plan-summary-inner">
+        <div class="plan-summary-eyebrow">
+          <span class="plan-summary-check">
+            <svg class="lucide"><use href="#i-check"/></svg>
+          </span>
+          Plan ready · ${answers.duration} min
+        </div>
+        <div class="plan-summary-title">${plan.title}</div>
+        <div class="plan-summary-focus">${focusBlurb}.</div>
+        <div class="plan-summary-drills">
+          ${previewDrills.map(d => `
+            <div class="plan-summary-drill-row">
+              <span class="plan-summary-drill-dot phase-${d.phase}"></span>
+              <span>${d.name}</span>
+            </div>
+          `).join('')}
+          ${remaining > 0 ? `<div class="plan-summary-more">+${remaining} more drills</div>` : ''}
+        </div>
+        <div class="plan-summary-stats">
+          <span class="plan-summary-stat">${totalDrills} drills</span>
+          <span class="plan-summary-sep"></span>
+          <span class="plan-summary-stat">${answers.duration} min</span>
+          <span class="plan-summary-sep"></span>
+          <span class="plan-summary-stat">${cap(answers.level)}</span>
+          ${answers.screener === 'yes' ? `<span class="plan-summary-sep"></span><span class="plan-summary-stat">Screener</span>` : ''}
+        </div>
+      </div>
+      <button class="plan-summary-cta" type="button">
+        View &amp; Edit Lesson Plan
+        <svg class="lucide"><use href="#i-arrow-right"/></svg>
+      </button>
+    `;
+
+    // Wire the CTA — pass session params so the lesson plan page can filter swap options
+    card.querySelector('.plan-summary-cta').addEventListener('click', () => {
+      const p = new URLSearchParams({
+        shooters:  state.answers.shooters         ?? '',
+        goalies:   state.answers.goalies          ?? '',
+        screener:  state.answers.screener         ?? '',
+        level:     state.answers.level            ?? '',
+        focus:     state.answers.focus            ?? '',
+        duration:  state.answers.duration         ?? '',
+        goalie:    state.context?.goalie          ?? '',
+        goalieId:  state.context?.goalieId        ?? '',
+        sessionId: state.context?.sessionId       ?? '',
+      });
+      window.location.href = `lesson_plan_preview_crease_positioning.html?${p.toString()}`;
+    });
+
+    thread.appendChild(card);
+
+    // Follow-up nudge
+    const hint = el('div', 'plan-refine-hint');
+    hint.innerHTML = `<svg class="lucide"><use href="#i-pencil"/></svg>Want to swap a drill or change the focus? Just type below.`;
+    thread.appendChild(hint);
+
+    scrollToBottom();
+  }
+
+  /* ── Flow control ──────────────────────────────────────── */
+  function askStep(idx) {
+    const step = STEPS[idx];
+    if (!step) {
+      finishIntake();
+      return;
+    }
+    setTimeout(() => {
+      renderAssistantMsg(step.q);
+      setTimeout(() => renderChips(step), 140);
+    }, 220);
+  }
+
+  function onChipTap(step, opt, btnEl, rowEl) {
+    const wasAnswered    = !!state.answers[step.id];
+    const valueChanged   = state.answers[step.id] !== opt.value;
+
+    // Swap selection highlight
+    rowEl.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    btnEl.classList.add('selected');
+    rowEl.classList.add('answered');
+
+    state.answers[step.id] = opt.value;
+
+    if (!wasAnswered) {
+      // Fresh — advance to next step
+      state.stepIdx += 1;
+      askStep(state.stepIdx);
+    } else if (valueChanged && sheet.classList.contains('plan-mode')) {
+      // Changed an existing answer while viewing the plan — regenerate
+      regeneratePlan();
+    }
+  }
+
+  function finishIntake() {
+    setTimeout(async () => {
+      renderAssistantMsg("Building your plan…", true);
+      renderTyping();
+      try {
+        const plan = await callGeneratePlan(state.answers, state.context);
+        // Cache for lesson plan preview page to read
+        try { localStorage.setItem('hh_pending_plan', JSON.stringify(plan)); } catch {}
+        removeTyping();
+        renderInlinePlan(plan, state.answers, state.context);
+        switchToPlanMode();
+        enableFreeChat();
+      } catch (err) {
+        console.error('[finishIntake] Error:', err);
+        removeTyping();
+        renderAssistantMsg(
+          `Couldn't build the plan: ${err.message}. Check your connection and try again.`,
+          true
+        );
+      }
+    }, 200);
+  }
+
+  /* ── Adjust bar label map ──────────────────────────────── */
+  const PILL_LABELS = {
+    goalies:  v => `${v} ${v == 1 ? 'goalie' : 'goalies'}`,
+    shooters: v => `${v} ${v == 1 ? 'shooter' : 'shooters'}`,
+    level:    v => ({ beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced' }[v] || v),
+    duration: v => `${v} min`,
+    screener: v => ({ yes: 'Screener ✓', no: 'No screener', skip: 'Skip screens' }[v] || v),
+    focus:    v => ({
+      crease_movement: 'Crease movement', positioning_angles: 'Positioning & angles',
+      save_technique: 'Save technique', rebound_control: 'Rebound control',
+      post_play: 'RVH & post play', compete: 'Compete', surprise_me: 'Surprise me',
+    }[v] || v),
+  };
+
+  function renderAdjustPills() {
+    const container = document.getElementById('adjustPills');
+    container.innerHTML = '';
+    STEPS.forEach(step => {
+      const val = state.answers[step.id];
+      if (val == null) return;
+      const fmt = PILL_LABELS[step.id];
+      const label = fmt ? fmt(val) : String(val);
+      const pill = document.createElement('button');
+      pill.type = 'button';
+      pill.className = 'adjust-pill';
+      pill.innerHTML = `<span>${label}</span><svg class="lucide"><use href="#i-pencil"/></svg>`;
+      pill.setAttribute('aria-label', `Change: ${step.q}`);
+      pill.addEventListener('click', () => scrollToStep(step.id));
+      container.appendChild(pill);
+    });
+  }
+
+  function scrollToStep(stepId) {
+    const row = thread.querySelector(`[data-step-id="${stepId}"]`);
+    if (!row) return;
+    row.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    // Double rAF ensures the scroll settles before the flash plays
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      row.classList.remove('flash');
+      row.classList.add('flash');
+      row.addEventListener('animationend', () => row.classList.remove('flash'), { once: true });
+    }));
+  }
+
+  function regeneratePlan() {
+    // Remove old plan card + refine hint
+    thread.querySelectorAll('.plan-summary-card, .plan-refine-hint').forEach(n => n.remove());
+    renderAdjustPills();
+    renderAssistantMsg('Got it — rebuilding your plan…', true);
+    renderTyping();
+    callGeneratePlan(state.answers, state.context)
+      .then(plan => {
+        try { localStorage.setItem('hh_pending_plan', JSON.stringify(plan)); } catch {}
+        removeTyping();
+        renderInlinePlan(plan, state.answers, state.context);
+        scrollToBottom();
+      })
+      .catch(err => {
+        console.error('[regeneratePlan] Error:', err);
+        removeTyping();
+        renderAssistantMsg(`Couldn't rebuild the plan: ${err.message}`, true);
+      });
+  }
+
+  function switchToPlanMode() {
+    sheet.classList.add('plan-mode');
+    document.getElementById('chatSheetTitle').textContent = 'Lesson plan';
+    renderAdjustPills();
+  }
+
+  function enableFreeChat() {
+    input.disabled = false;
+    sendBtn.disabled = false;
+    input.placeholder = "Tweak the plan — e.g. swap drill 3, make it harder…";
+  }
+
+  /* ── Open / close ──────────────────────────────────────── */
+  function openSheet(context) {
+    // Reset state + thread + mode
+    state = { answers: {}, stepIdx: 0, context };
+    thread.innerHTML = '';
+    input.disabled = true;
+    sendBtn.disabled = true;
+    input.value = '';
+    input.placeholder = "Tap an option above to start";
+    sheet.classList.remove('plan-mode');
+    document.getElementById('chatSheetTitle').textContent = 'Build a lesson plan';
+    document.getElementById('chatSheetSave').classList.remove('saved');
+
+    // Header subtitle
+    if (context?.goalie) {
+      subEl.textContent = `For ${context.goalie} · ${context.time}`;
+    } else {
+      subEl.textContent = "A few quick questions, then I'll draft it.";
+    }
+
+    // Optional context strip + opening message
+    renderContextStrip(context);
+    setTimeout(() => {
+      // Strip trailing punctuation so names like "Lily P." don't produce ".."
+      const name = context?.goalie?.replace(/[.,;:]+$/, '');
+      const opener = name
+        ? `Building a plan for ${name} — a few quick questions:`
+        : `A few quick questions and I'll draft a session:`;
+      renderAssistantMsg(opener);
+      askStep(0);
+    }, 280);
+
+    // Show sheet
+    sheet.classList.add('open');
+    sheet.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('sheet-open');
+  }
+
+  function closeSheet() {
+    sheet.classList.remove('open');
+    sheet.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('sheet-open');
+  }
+
+  /* ── Helpers for saved-plan state ─────────────────────── */
+  function applySavedPlanState(btn) {
+    // Primary: check DB (session has a linked saved plan)
+    const sessionId = btn.dataset.sessionId;
+    let planPage = null;
+    if (sessionId && window.DB && DB.hasSavedPlan(sessionId)) {
+      planPage = 'lesson_plan_preview_crease_positioning.html';
+    }
+    // Legacy fallback: old localStorage key written before DB existed
+    if (!planPage) {
+      const legacyKey = 'savedPlan_' + (btn.dataset.goalie || 'default').replace(/[^a-zA-Z0-9]/g, '_');
+      planPage = localStorage.getItem(legacyKey);
+    }
+    if (!planPage) return;
+    btn.dataset.seePlan = planPage;
+    // Swap icon href
+    const useEl = btn.querySelector('use');
+    if (useEl) useEl.setAttribute('href', '#i-arrow-right');
+    // Swap button label text ("Build plan" → "See plan")
+    for (const node of btn.childNodes) {
+      if (node.nodeType === Node.TEXT_NODE && node.textContent.includes('Build')) {
+        node.textContent = node.textContent.replace('Build plan', 'See plan');
+        break;
+      }
+    }
+    btn.classList.add('see-plan-mode');
+  }
+
+  /* ── Wire up entry points ──────────────────────────────── */
+  // Auto-open sheet when returning from lesson plan page via "Rebuild"
+  (function checkRebuildParam() {
+    const rebuildId = new URLSearchParams(location.search).get('rebuild');
+    if (!rebuildId) return;
+    history.replaceState({}, '', 'index.html'); // clean the URL
+    // Wait a tick so all buttons are wired + saved-plan state applied
+    setTimeout(() => {
+      const btn = document.querySelector(`[data-session-id="${rebuildId}"][data-build-plan]`);
+      if (!btn) return;
+      const goalieId = btn.dataset.goalieId;
+      const dbGoalie = window.DB && goalieId ? DB.GoalieStore.getById(goalieId) : null;
+      openSheet({
+        sessionId: btn.dataset.sessionId || null,
+        goalieId:  goalieId || null,
+        goalie:    btn.dataset.goalie,
+        time:      btn.dataset.time,
+        count:     btn.dataset.count,
+        level:     dbGoalie?.level    || btn.dataset.level,
+        duration:  dbGoalie?.default_session_minutes || btn.dataset.duration,
+        shooters:  dbGoalie?.default_shooters || btn.dataset.count,
+      });
+    }, 150);
+  })();
+
+  document.querySelectorAll('[data-build-plan]').forEach(btn => {
+    // Apply saved-plan state before attaching click (so icon/text is already updated)
+    applySavedPlanState(btn);
+
+    btn.addEventListener('click', () => {
+      // If this goalie already has a saved plan → navigate directly to it
+      if (btn.dataset.seePlan) {
+        window.location.href = btn.dataset.seePlan;
+        return;
+      }
+
+      // Build context — prefer DB profile over hardcoded data attributes
+      const goalieId = btn.dataset.goalieId;
+      const dbGoalie = window.DB && goalieId ? DB.GoalieStore.getById(goalieId) : null;
+
+      openSheet({
+        sessionId: btn.dataset.sessionId || null,
+        goalieId:  goalieId || null,
+        goalie:    btn.dataset.goalie,
+        time:      btn.dataset.time,
+        count:     btn.dataset.count,
+        // DB profile wins over hardcoded attribute — so level/duration stay
+        // current even after the coach edits the goalie's profile
+        level:     dbGoalie?.level    || btn.dataset.level,
+        duration:  dbGoalie?.default_session_minutes || btn.dataset.duration,
+        shooters:  dbGoalie?.default_shooters || btn.dataset.count,
+      });
+    });
+  });
+
+  // Close on backdrop tap, close button, or Escape
+  sheet.querySelectorAll('[data-sheet-close]').forEach(el => {
+    el.addEventListener('click', closeSheet);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet();
+  });
+
+  // Save (bookmark) toggle + persist to DB
+  const saveBtn = document.getElementById('chatSheetSave');
+  const toast   = document.getElementById('saveToast');
+  saveBtn.addEventListener('click', () => {
+    const isSaved = saveBtn.classList.toggle('saved');
+    toast.textContent = isSaved ? 'Plan saved' : 'Removed from saved';
+    toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove('show'), 1600);
+
+    if (isSaved && window.DB) {
+      // Build a real Plan record from current state and commit it
+      const plan = DB.PlanStore.save({
+        session_id:         state.context?.sessionId || null,
+        goalie_ids:         state.context?.goalieId ? [state.context.goalieId] : [],
+        title:              'Crease Movement & Positioning', // TODO: from AI response
+        focus_areas:        state.answers.focus ? [state.answers.focus] : [],
+        duration_minutes:   Number(state.answers.duration) || 60,
+        level:              state.answers.level || 'intermediate',
+        shooter_count:      Number(state.answers.shooters) || 1,
+        screener_available: state.answers.screener === 'yes',
+        status:             'saved',
+        ai_brief:           '',
+        sections:           [],   // TODO: populated from AI response
+      });
+      // Link plan to session and record drill usage
+      DB.commitPlan(plan.id, state.context?.sessionId || null);
+      // Store the plan page reference so "See plan" works on reload
+      saveBtn.dataset.planId = plan.id;
+    }
+  });
+
+  // Send button — placeholder behavior for refinement turns
+  sendBtn.addEventListener('click', () => {
+    const text = input.value.trim();
+    if (!text) return;
+    renderUserMsg(text);
+    input.value = '';
+    renderTyping();
+    setTimeout(() => {
+      removeTyping();
+      renderAssistantMsg("Got it — I'll adjust that. (Wire to Claude API next.)", true);
+    }, 900);
+  });
+
+  // Enter to send (Shift+Enter for newline)
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey && !input.disabled) {
+      e.preventDefault();
+      sendBtn.click();
+    }
+  });
+
+  // Auto-grow textarea
+  input.addEventListener('input', () => {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+  });
+})();
+</script>
+
+</body>
+</html>

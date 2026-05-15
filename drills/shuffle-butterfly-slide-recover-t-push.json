@@ -1,0 +1,40 @@
+{
+  "id": "shuffle-butterfly-slide-recover-t-push",
+  "name": "Shuffle — Butterfly Slide, Recover, T-Push",
+  "description": "F1 is positioned just inside the top of the circle above the hash marks on one side. G starts at the top center of the crease, takes 2 shuffles toward F1, pivots and butterfly slides to the far face-off dot angle, then pivots, recovers to feet, and t-pushes back out to F1 for a shot. G follows and plays out the rebound. Links shuffle movement, a butterfly slide, and recovery into a single fluid sequence before challenging the shooter.",
+  "drill_category": ["warmup", "crease_movement", "save_technique"],
+  "session_slot": "warmup",
+  "duration_minutes": 5,
+  "difficulty": "beginner",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 1,
+  "ice_zone": ["hash_marks", "top_of_circles"],
+  "goalie_starting_position": "Top center of crease",
+  "movement_sequence": [
+    "start_top_center_crease",
+    "two_shuffles_toward_F1",
+    "pivot",
+    "butterfly_slide_to_far_faceoff_dot_angle",
+    "pivot",
+    "recover_to_feet",
+    "t_push_to_F1_angle",
+    "save_shot",
+    "play_rebound"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Stay tall through the shuffles",
+    "Sharp pivot before committing to the slide",
+    "Eyes find F1 through the slide — don't lose the puck",
+    "Clean recovery before the t-push, don't rush it",
+    "Hard t-push to depth — get to your angle",
+    "Follow the rebound out"
+  ],
+  "tags": ["shuffle", "butterfly_slide", "t_push", "crease_movement", "lateral_movement", "recovery", "warmup", "rebound"],
+  "variations": [],
+  "clip_file": "drill-clips/shuffle-butterfly-slide-recover-t-push.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "A progression from the tall shuffle t-push drill — same setup and finish, but now the goalie adds a butterfly slide and recovery in the middle of the sequence. The pivot into the slide must be sharp; a lazy pivot kills the slide angle. The recovery has to be complete before generating the t-push — goalies who try to push while still coming up off the ice lose power and depth. Run this after the simpler shuffle-t-push drill is clean."
+}

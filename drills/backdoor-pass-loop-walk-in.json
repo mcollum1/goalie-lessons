@@ -1,0 +1,39 @@
+{
+  "id": "backdoor-pass-loop-walk-in",
+  "name": "Backdoor Pass — Loop and Walk-In",
+  "description": "F1 starts at the top of the circle with puck 1 and passes to F2 backdoor for a shot. G reads F2's hand and pushes to make the save. F1 then loops down to the face-off dot to pick up puck 2 while F2 loops around the circle. F1 passes to F2 as F2 comes to the top of the circle and walks in for a shot. G gains ice on the second shot, challenges F2, and controls the rebound. A progression from the backdoor one-timer wrap-around drill — same backdoor read on shot 1, but shot 2 demands proactive ice gain and challenging a shooter walking in off a pass.",
+  "drill_category": ["crease_movement", "positioning_angles", "rebound_control"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 2,
+  "shooter_count_max": 2,
+  "shot_count": 2,
+  "ice_zone": ["in_tight", "hash_marks", "top_of_circles"],
+  "goalie_starting_position": "Center of crease, square to F1",
+  "movement_sequence": [
+    "track_pass_from_F1_to_F2_backdoor",
+    "read_F2_hand",
+    "push_to_backdoor_save",
+    "save_first_shot",
+    "gain_ice_and_track_players_resetting",
+    "track_F2_looping_to_top_of_circle",
+    "challenge_F2_walking_in",
+    "save_second_shot",
+    "control_rebound"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Read F2's hand early — know where to push before the pass arrives",
+    "Try to beat the pass — get set before F2 shoots",
+    "Gain ice between shots — don't sit back",
+    "Challenge F2 walking in — get to your depth before the shot",
+    "Control the rebound — don't give up a second chance"
+  ],
+  "tags": ["backdoor", "pivot", "tracking_vision", "telescoping", "walk_in", "rebound", "two_shot", "crease_movement", "positioning", "pass_and_shoot"],
+  "variations": [],
+  "clip_file": "drill-clips/backdoor-pass-loop-walk-in.mp4",
+  "clip_loop": false,
+  "has_animation": false,
+  "coach_notes": "The hand read on shot 1 is the same habit as the backdoor one-timer wrap-around drill — G needs to identify F2's hand before the pass arrives to know which side to push. Shot 2 is the key progression: the goalie has to actively gain ice as F2 loops around the circle rather than sitting back and waiting. A goalie who stays deep gives F2 too much net on the walk-in. Rebound control on shot 2 is emphasized because F1 is still active and can convert a loose puck."
+}

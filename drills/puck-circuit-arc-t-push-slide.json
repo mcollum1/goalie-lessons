@@ -1,0 +1,46 @@
+{
+  "id": "puck-circuit-arc-t-push-slide",
+  "name": "Puck Circuit — Arc T-Push Slide",
+  "description": "Intermediate skating circuit with 4 pucks evenly spaced along the arc of the crease. Goalie starts on P2, shuffles to P3, t-pushes to P1, butterfly slides to P4, then t-pushes back to P2.",
+  "drill_category": [
+    "skating"
+  ],
+  "session_slot": "warmup",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": [
+    "in_tight"
+  ],
+  "setup_required": "puck_setup",
+  "goalie_starting_position": "standing on P2 on crease arc",
+  "movement_sequence": [
+    "start_on_p2",
+    "shuffle_to_p3",
+    "t_push_to_p1",
+    "butterfly_slide_to_p4",
+    "t_push_to_p2"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Stay square on the shuffle — don't let your hips open early",
+    "Explode on the t-push to P1 — full extension before you glide",
+    "Load your edges before the butterfly slide — don't just fall into it",
+    "Second t-push back to P2 gets the same effort as the first — no coasting to finish"
+  ],
+  "tags": [
+    "shuffle",
+    "t_push",
+    "butterfly_slide",
+    "puck_circuit",
+    "edge_control",
+    "crease_movement"
+  ],
+  "variations": [],
+  "clip_file": "drill-clips/puck-circuit-arc-t-push-slide.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Four pucks evenly spaced on the crease arc. Shorter and cleaner than the other arc circuits — good for earlier in a session or as a warm-up circuit before progressing to the back-cut or forward-cut versions. The two t-pushes should both be full-extension explosions, not lazy glides. The butterfly slide to P4 is the transition between them and should be controlled and low. Run multiple reps and switch directions."
+}

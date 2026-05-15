@@ -1,0 +1,42 @@
+{
+  "id": "cross-ice-pass-read-circle-rebound",
+  "name": "Cross-Ice Pass Read — Circle & Rebound",
+  "description": "F1 starts at the top of the circle on one side, F2 at the dot on the other side. F1 passes cross-ice to F2. G makes a hard t-push across to square up to F2, who can stop and shoot or one-time it from the dot. G makes the save and tracks the puck out. F2 retrieves a puck from the corner and circles up around the top of the circle — G walks with F2 gaining depth. F2 can shoot or pass to F1, who can either stay high and shoot (G t-pushes across) or go backdoor (G gains momentum back and butterfly slides across). Players play out the rebound on the second shot.",
+  "drill_category": ["crease_movement", "tracking_vision", "save_technique"],
+  "session_slot": "skill_work",
+  "duration_minutes": 15,
+  "difficulty": "intermediate",
+  "shooter_count_min": 2,
+  "shooter_count_max": 2,
+  "shot_count": 2,
+  "ice_zone": ["hash_marks", "top_of_circles", "in_tight"],
+  "goalie_starting_position": "Square to F1 at top of circle",
+  "movement_sequence": [
+    "start_square_to_F1",
+    "t_push_across_to_F2_on_pass",
+    "square_up_to_F2",
+    "save_first_shot",
+    "track_puck_out",
+    "walk_with_F2_gaining_depth_as_they_circle",
+    "read_F1_position",
+    "IF_F1_stays_high: t_push_across_to_F1",
+    "IF_F1_goes_backdoor: gain_momentum_back_butterfly_slide",
+    "save_second_shot",
+    "play_rebound"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Get all the way square before the first shot",
+    "Track the puck out after the save",
+    "Walk with F2 on the circle — gain depth",
+    "Read F1 early — backdoor or staying high",
+    "Gain momentum back before the backdoor slide",
+    "Play the rebound on the second shot"
+  ],
+  "tags": ["pass_and_shoot", "lateral_movement", "t_push", "backdoor", "rebound", "game_read", "two_shot"],
+  "variations": [],
+  "clip_file": "drill-clips/cross-ice-pass-read-circle-rebound.mp4",
+  "clip_loop": false,
+  "has_animation": false,
+  "coach_notes": "The critical read is tracking F1's position while following F2 on the circle. Goalies tend to lock onto the puck carrier and lose F1 entirely. They need to peripheral-track F1 while maintaining depth on F2 — if F1 drifts backdoor the goalie must already be gaining momentum back before the pass is made, not after."
+}

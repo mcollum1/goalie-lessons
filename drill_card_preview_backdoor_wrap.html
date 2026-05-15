@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backdoor One-Timer — Wrap-Around Read</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #f2f2f7;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 32px 16px;
+    min-height: 100vh;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 375px;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+  }
+
+  .video-wrap {
+    position: relative;
+    background: #111;
+    width: 100%;
+  }
+
+  .video-wrap video {
+    width: 100%;
+    display: block;
+    max-height: 220px;
+    object-fit: cover;
+  }
+
+  .badge-session {
+    position: absolute;
+    bottom: 10px;
+    left: 12px;
+    background: rgba(23,160,100,0.88);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  .badge-shots {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    background: rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.85);
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+  }
+
+  .body {
+    padding: 16px;
+  }
+
+  .drill-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 5px;
+  }
+
+  .drill-desc {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+
+  .stats {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .stat {
+    flex: 1;
+    background: #f2f2f7;
+    border-radius: 10px;
+    padding: 9px 6px;
+    text-align: center;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 2px;
+  }
+
+  .stat-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111;
+  }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .chip {
+    background: #e8f0fb;
+    color: #1a4fa0;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 11px;
+    border-radius: 20px;
+  }
+
+  .chip-orange {
+    background: #fff0e0;
+    color: #b85c00;
+  }
+
+  .sequence {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 16px;
+  }
+
+  .seq-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: #222;
+    line-height: 1.45;
+    padding: 5px 0;
+    border-left: 2px solid #e0e0e0;
+    padding-left: 14px;
+    margin-left: 8px;
+    position: relative;
+  }
+
+  .seq-item::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #378ADD;
+    position: absolute;
+    left: -5px;
+    top: 8px;
+    flex-shrink: 0;
+  }
+
+  .seq-item.shot::before {
+    background: #e05c2a;
+  }
+
+  .seq-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    background: #378ADD;
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-right: 2px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .seq-label.shot {
+    background: #e05c2a;
+  }
+
+  .cues {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .cue {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    font-size: 13px;
+    color: #222;
+    line-height: 1.5;
+  }
+
+  .cue-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #378ADD;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .notes-box {
+    background: #f8f8f8;
+    border-radius: 10px;
+    padding: 11px 13px;
+    margin-bottom: 16px;
+  }
+
+  .notes-box p {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.55;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #ebebeb;
+    margin: 0 0 14px;
+  }
+
+  .requirement-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .req-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #f2f2f7;
+    border-radius: 20px;
+    padding: 5px 11px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #444;
+  }
+
+  .req-icon {
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="video-wrap">
+    <video controls playsinline loop>
+      <source src="drill-clips/backdoor-one-timer-wrap-around.mp4" type="video/mp4">
+    </video>
+    <span class="badge-session">Skill work</span>
+    <span class="badge-shots">2 shots</span>
+  </div>
+
+  <div class="body">
+
+    <p class="drill-name">Backdoor One-Timer — Wrap-Around Read</p>
+    <p class="drill-desc">F1 passes backdoor to F2 for a one-timer. F2 then goes behind the net, picks up a puck, and attempts a wrap-around. G pivots for shot 1 and reads the wrap on shot 2.</p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Duration</div>
+        <div class="stat-value">10 min</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Difficulty</div>
+        <div class="stat-value">Intermediate</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Shooters</div>
+        <div class="stat-value">2</div>
+      </div>
+    </div>
+
+    <div class="requirement-row">
+      <div class="req-pill"><span class="req-icon">🏒</span> 2 shooters</div>
+      <div class="req-pill"><span class="req-icon">🥅</span> Net required</div>
+    </div>
+
+    <hr class="divider">
+
+    <p class="section-title">Focus areas</p>
+    <div class="chips">
+      <span class="chip">Crease movement</span>
+      <span class="chip">Save technique</span>
+      <span class="chip">Positioning</span>
+      <span class="chip chip-orange">Backdoor</span>
+      <span class="chip chip-orange">Wrap-around</span>
+      <span class="chip chip-orange">Post play</span>
+    </div>
+
+    <hr class="divider">
+
+    <p class="section-title">Rep sequence</p>
+    <div class="sequence">
+      <div class="seq-item">F1 passes from face-off dot to F2 backdoor</div>
+      <div class="seq-item shot"><span class="seq-label shot">Shot 1</span> F2 one-timer — G pivots, eyes and hands to F2</div>
+      <div class="seq-item">F2 skates behind net, picks up puck</div>
+      <div class="seq-item">G sets post, head-checks to track F2</div>
+      <div class="seq-item shot"><span class="seq-label shot">Shot 2</span> F2 wrap-around — G reads side, makes save</div>
+      <div class="seq-item">Play rebound out</div>
+    </div>
+
+    <hr class="divider">
+
+    <p class="section-title">Coaching cues</p>
+    <div class="cues">
+      <div class="cue"><div class="cue-dot"></div><span>Pivot early to the backdoor — track the pass, not F2's skates</span></div>
+      <div class="cue"><div class="cue-dot"></div><span>Eyes and hands get to the one-timer before the shot</span></div>
+      <div class="cue"><div class="cue-dot"></div><span>Track F2 going behind the net immediately after shot 1</span></div>
+      <div class="cue"><div class="cue-dot"></div><span>Set post clean — don't drift before F2 commits to a side</span></div>
+      <div class="cue"><div class="cue-dot"></div><span>Stay patient on the post — read the wrap, don't guess</span></div>
+    </div>
+
+    <hr class="divider">
+
+    <p class="section-title">Coach notes</p>
+    <div class="notes-box">
+      <p>Goalies who guess early on the wrap get beaten short side every time. The head-check before the bump is the key habit — the goalie has to know where F2 is before committing to a side. Run after the pass-slot RVH drill is clean; the pivot demand on shot 1 is identical.</p>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

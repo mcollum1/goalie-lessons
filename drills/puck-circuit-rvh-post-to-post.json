@@ -1,0 +1,52 @@
+{
+  "id": "puck-circuit-rvh-post-to-post",
+  "name": "Puck Circuit — RVH Post to Post",
+  "description": "Intermediate skating circuit combining lateral movement with RVH post work. Three pucks are positioned at both face-off dots (P1 and P3) and center just outside the crease (P2). Goalie starts on P2, shuffles to P1, t-pushes to P3, enters RVH into the far post, transfers post to post in RVH, then hinges a t-push out from the post back to P2. Net required for post work. Drill switches sides.",
+  "drill_category": [
+    "skating",
+    "positioning_angles"
+  ],
+  "session_slot": "warmup",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": [
+    "in_tight",
+    "hash_marks"
+  ],
+  "setup_required": "net_required",
+  "goalie_starting_position": "standing on P2, center just outside crease",
+  "movement_sequence": [
+    "start_on_p2_center_outside_crease",
+    "shuffle_to_p1_face_off_dot",
+    "t_push_to_p3_far_face_off_dot",
+    "rvh_entry_into_far_post",
+    "post_to_post_transfer_in_rvh",
+    "hinge_t_push_out_from_post_to_p2"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Find the post with your skate blade before settling into RVH — don't assume you're there",
+    "Post to post in RVH is one fluid push — stay low through the full transfer",
+    "Hinge the t-push out from the post — use the post as your anchor to launch",
+    "If you miss the post on RVH entry, pause and find it deliberately before continuing"
+  ],
+  "tags": [
+    "shuffle",
+    "t_push",
+    "RVH",
+    "post_play",
+    "post_to_post",
+    "hinge",
+    "puck_circuit",
+    "crease_movement",
+    "edge_control"
+  ],
+  "variations": [],
+  "clip_file": "drill-clips/puck-circuit-rvh-post-to-post.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The RVH post entry and post-to-post transfer are the technical core of this circuit — the lateral puck movement is setup, not the point. If a goalie struggles to find the post in RVH, isolate that movement and have them practice entering RVH and locating the post repeatedly before adding the full circuit. The hinge t-push out from the post is a game-relevant movement, using the post as a launching point to push back out to challenge depth. Puck positions: P1 and P3 at the face-off dots, P2 at center just outside the crease."
+}

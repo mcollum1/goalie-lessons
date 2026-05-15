@@ -1,0 +1,71 @@
+{
+  "id": "butterfly-shot-warmup",
+  "name": "Butterfly Shot Warmup — Tracking Series",
+  "description": "G sits in butterfly in the crease. Shooter is just inside the top of the circles at center. Shooting at 70-80% for multiple reps. G focuses on tracking the puck all the way into the save, exaggerating the lean and driving eyes and nose into the save side. Run through all variations in sequence as a warmup block.",
+  "drill_category": ["warmup", "tracking_vision"],
+  "session_slot": "warmup",
+  "duration_minutes": 10,
+  "difficulty": "beginner",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 1,
+  "ice_zone": ["top_of_circles"],
+  "goalie_starting_position": "Butterfly in crease",
+  "movement_sequence": [
+    "set_butterfly",
+    "track_puck_to_save_side",
+    "exaggerate_lean_to_save_side",
+    "reset_butterfly"
+  ],
+  "save_types": ["glove_save", "blocker_save", "chest_save", "stick_save"],
+  "coaching_cues": [
+    "Track the puck all the way in — see it into the save",
+    "Exaggerate the lean to the save side",
+    "Drive eyes and nose into the save",
+    "Shooter at 70-80% — this is tracking work, not compete"
+  ],
+  "tags": ["tracking", "warmup", "butterfly", "save_technique", "glove_save", "blocker_save", "stick_save"],
+  "variations": [
+    {
+      "name": "V2 — Blocker Side",
+      "description": "Same setup, same shooter location. Several reps to the blocker side. G focuses on seeing the puck all the way off the blocker.",
+      "movement_sequence": [
+        "set_butterfly",
+        "track_puck_to_blocker",
+        "exaggerate_lean_to_blocker_side",
+        "reset_butterfly"
+      ],
+      "save_types": ["blocker_save"],
+      "clip_file": null,
+      "clip_loop": false
+    },
+    {
+      "name": "V3 — Chest",
+      "description": "Same setup. Several reps to the chest. G focuses on feeling the puck all the way in and seeing it into the body.",
+      "movement_sequence": [
+        "set_butterfly",
+        "track_puck_to_chest",
+        "reset_butterfly"
+      ],
+      "save_types": ["chest_save"],
+      "clip_file": null,
+      "clip_loop": false
+    },
+    {
+      "name": "V4 — Stick Saves",
+      "description": "Same setup. Reps to the lower corners on each side. G works stick saves, tracking the puck all the way onto the paddle.",
+      "movement_sequence": [
+        "set_butterfly",
+        "track_puck_to_stick_corner",
+        "reset_butterfly"
+      ],
+      "save_types": ["stick_save"],
+      "clip_file": null,
+      "clip_loop": false
+    }
+  ],
+  "clip_file": "drill-clips/butterfly-shot-warmup.mp4",
+  "clip_loop": false,
+  "has_animation": false,
+  "coach_notes": "This is a warmup, not a compete drill — shooter should stay at 70-80% so the goalie can focus entirely on tracking, not reacting to pace. The exaggerated lean and eye movement is the point; goalies tend to guess on shot location in games and this builds the habit of seeing the puck into the save. Run V1 through V4 in sequence before moving to skill work."
+}

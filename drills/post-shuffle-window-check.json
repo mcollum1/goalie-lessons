@@ -1,0 +1,49 @@
+{
+  "id": "post-shuffle-window-check",
+  "name": "Post Shuffle — Window Check",
+  "description": "G starts on the post and takes a short shuffle along the goal line, staying on a slight angle (roughly 30 degrees) rather than flat across the line. Checks their window over their shoulder as they go, then shuffles back to the post. Repeats for several reps on one side, then switches to the other post. Trains awareness of plays behind the net and clean entry and exit from the post.",
+  "drill_category": ["skating"],
+  "session_slot": "warmup",
+  "duration_minutes": 5,
+  "difficulty": "beginner",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": ["behind_net"],
+  "setup_required": "net_required",
+  "goalie_starting_position": "On post",
+  "movement_sequence": [
+    "shuffle_along_goal_line_on_angle",
+    "check_window_over_shoulder",
+    "shuffle_back_to_post",
+    "repeat_same_side",
+    "switch_to_opposite_post",
+    "repeat_other_side"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Stay on a 30 degree angle — never flat on the goal line",
+    "Check the window early — don't wait",
+    "Angle lets you pivot and push out quickly if needed",
+    "Quick shuffle back to post",
+    "Keep depth — don't creep out"
+  ],
+  "tags": ["shuffle", "post_play", "behind_net", "skating", "awareness", "positioning"],
+  "variations": [
+    {
+      "name": "V2 — Shuffle Off Post, Drop RVH",
+      "description": "Same starting position on the post, same 30 degree angle. G shuffles along the goal line and drops into RVH rather than returning to the post. Trains the transition from post position into a save-ready RVH for plays emerging from behind the net.",
+      "movement_sequence": [
+        "shuffle_along_goal_line_on_angle",
+        "drop_RVH"
+      ],
+      "difficulty": "intermediate",
+      "clip_file": "drill-clips/post-shuffle-rvh.mp4",
+      "clip_loop": false
+    }
+  ],
+  "clip_file": "drill-clips/post-shuffle-window-check.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "The 30 degree angle is critical — a goalie flat on the goal line has to take extra steps to pivot and challenge a shooter coming out from behind the net. The angle keeps them primed to push. The window check is the other key habit; goalies need to track the puck carrier continuously when play goes behind the net."
+}

@@ -1,0 +1,38 @@
+{
+  "id": "cross-circle-rim-walk-out-screen",
+  "name": "Cross-Circle Shot + Rim Walk-Out Screen",
+  "description": "F1 starts at the top of one circle, F2 starts at the top of the opposite circle. A screener sets up in front of the net. F1 passes cross-ice to F2, who shoots (shot 1). F2 then drives below the net. F1 shoots a second puck around the boards; F2 picks it up behind the net, walks out around to the near face-off dot, and shoots through the screen (shot 2). The screener can be a second goalie or any available player. Drill switches sides.",
+  "drill_category": ["save_technique", "tracking_vision", "positioning_angles"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 2,
+  "shooter_count_max": 2,
+  "shot_count": 2,
+  "ice_zone": ["top_of_circles", "behind_net", "hash_marks"],
+  "requires_screener": true,
+  "goalie_starting_position": "set at top of crease, tracking F1 at top of circle",
+  "movement_sequence": [
+    "track_f1_at_top_of_circle_read_cross_ice_pass",
+    "adjust_angle_to_f2_at_top_of_opposite_circle",
+    "make_save_on_f2_shot",
+    "track_f2_driving_below_net",
+    "track_f1_rimming_second_puck_around_boards",
+    "track_f2_walking_out_from_behind_net_to_face_off_dot",
+    "find_puck_through_screen_make_save_on_f2_dot_shot"
+  ],
+  "save_types": ["blocker_save", "glove_save", "pad_save", "tip_save"],
+  "coaching_cues": [
+    "Read the cross-ice pass early — your angle shift to F2 starts with F1's stick",
+    "After the first save, stay with F2 — track the drive behind the net immediately",
+    "Know where the rim is going; anticipate F2 walking out before they get there",
+    "Find the puck through the screen before F2 shoots — peek around, don't guess",
+    "React to the puck, not the screen's body — the screen will move, the puck tells you where to go"
+  ],
+  "tags": ["cross_ice_pass", "top_of_circles", "rim", "behind_net", "walk_out", "screen", "tip", "tracking", "two_puck"],
+  "variations": [],
+  "clip_file": "drill-clips/cross-circle-rim-walk-out-screen.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "This drill strings together three distinct tracking challenges: the cross-ice pass read, the behind-net drive, and the walk-out screen shot. The goalie can't stop tracking between shots — F2's drive behind the net happens immediately after shot 1. The screen shot from the dot is the critical moment; the most common error is the goalie losing the puck early in F2's walk-out and then guessing through the screen rather than finding the puck. The screener should stay static and passive — this is not a tip drill."
+}

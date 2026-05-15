@@ -1,0 +1,35 @@
+{
+  "id": "rebound-game",
+  "name": "Rebound Game",
+  "description": "End-of-session compete game requiring at least 3 shooters. Players form a semi-circle around the net and shoot from above the hash marks. If the goalie covers the puck or directs it to the boards, the puck is dead and the goalie earns a point. On a live rebound, shooters get one pass before they must shoot again. Play to 10 — first side to 10 points wins.",
+  "drill_category": ["compete", "rebound_control", "save_technique"],
+  "session_slot": "compete",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 3,
+  "shooter_count_max": 5,
+  "shot_count": 10,
+  "ice_zone": ["hash_marks", "top_of_circles"],
+  "goalie_starting_position": "set in crease, ready position",
+  "movement_sequence": [
+    "set_in_crease_track_shooter_in_semi_circle",
+    "make_save_on_shot_from_above_hash_marks",
+    "cover_or_direct_to_boards_for_dead_puck_point",
+    "control_rebound_to_deny_pass_and_shoot_opportunity",
+    "track_rebound_pass_and_make_second_save"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save", "desperation_save"],
+  "coaching_cues": [
+    "Cover or direct to the boards — every dead puck is a point for you",
+    "Know where your rebounds go; a soft rebound into the slot hands shooters their pass",
+    "Aim blocker and glove saves to the corners, not back to the slot",
+    "After a rebound, find the puck immediately — you have one pass before the next shot",
+    "Absorb when you can; when you can't, direct hard to the boards"
+  ],
+  "tags": ["rebound_control", "compete", "game_format", "semi_circle", "cover", "tracking", "multi_shooter"],
+  "variations": [],
+  "clip_file": "drill-clips/rebound-game.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Simple compete game that directly rewards the skill most goalies neglect — intentional rebound direction. The one-pass rule on rebounds keeps pressure high and punishes soft rebounds back to the slot without making the game chaotic. Shooters should spread around the semi-circle and move after passing to create different angles. Good energy game to end a session. Works best with 4–5 shooters for fast puck movement around the semi-circle."
+}

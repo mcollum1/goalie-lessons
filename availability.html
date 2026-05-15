@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book a Goalie Lesson – Coach Mitch</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --newington:    #0a7c87;
+      --champions:    #c73d00;
+      --blue:         #1d4ed8;
+      --blue-dark:    #1e3a8a;
+      --green:        #15803d;
+      --bg:           #f3f4f6;
+      --card:         #ffffff;
+      --text:         #111827;
+      --muted:        #6b7280;
+      --border:       #e5e7eb;
+      --radius:       18px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── PAGE WRAPPER ── */
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 16px 60px;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      text-align: center;
+      padding: 28px 0 18px;
+    }
+    .header-icon { font-size: 2rem; margin-bottom: 6px; }
+    .header h1  {
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      line-height: 1.2;
+    }
+    .header h1 span {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      padding: 0 0 16px;
+    }
+    .filter-btn {
+      padding: 7px 15px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .14s;
+    }
+    .filter-btn.active                          { background: var(--blue);      color: #fff; border-color: var(--blue);      }
+    .filter-btn[data-filter="newington"].active { background: var(--newington); color: #fff; border-color: var(--newington); }
+    .filter-btn[data-filter="champions"].active { background: var(--champions); color: #fff; border-color: var(--champions); }
+
+    /* ── BOOKING CARD (Calendly-style two-panel) ── */
+    .booking-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+      overflow: hidden;
+      display: flex;
+    }
+
+    /* ── LEFT: CALENDAR COLUMN ── */
+    .cal-col {
+      padding: 24px 20px;
+      width: 100%;           /* full-width on mobile; overridden by desktop flex rules */
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      overflow: hidden;      /* hard stop — nothing escapes into the right panel */
+    }
+
+    /* Calendar navigation */
+    .cal-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .month-label { font-size: 0.95rem; font-weight: 700; }
+    .nav-btn {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .12s;
+    }
+    .nav-btn:hover { background: var(--border); }
+
+    /* Day-of-week headers */
+    .cal-dow {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      margin-bottom: 4px;
+    }
+    .cal-dow span {
+      text-align: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      padding: 3px 0;
+    }
+
+    /* Calendar grid */
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      /* no flex:1 — let content determine height so cells don't stretch */
+    }
+    .cal-cell {
+      /* fixed height instead of aspect-ratio: 1, which caused overflow */
+      height: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      border-radius: 8px;
+      cursor: default;
+      -webkit-tap-highlight-color: transparent;
+      overflow: hidden;
+    }
+    .cal-cell.has-slots          { cursor: pointer; }
+    .cal-cell.has-slots:hover    { background: #f0f9ff; }
+    .cal-cell.has-slots:active   { background: #dbeafe; }
+    .cal-cell.past               { opacity: 0.25; pointer-events: none; }
+    .cal-cell.empty              { pointer-events: none; }
+
+    .cal-num {
+      font-size: 0.82rem;
+      font-weight: 500;
+      width: 28px; height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background .12s, color .12s;
+    }
+    .cal-cell.today    .cal-num { border: 2px solid var(--blue); color: var(--blue); font-weight: 700; }
+    .cal-cell.selected .cal-num { background: var(--blue); color: #fff; font-weight: 700; }
+
+    .dots { display: flex; gap: 3px; height: 5px; align-items: center; }
+    .dot  { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .dot-newington { background: var(--newington); }
+    .dot-champions { background: var(--champions); }
+
+    /* Legend (bottom of cal col) */
+    .cal-legend {
+      display: flex;
+      gap: 14px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .leg-item { display: flex; align-items: center; gap: 5px; font-size: 0.68rem; color: var(--muted); text-decoration: none; transition: color .12s; }
+    .leg-item:hover { color: var(--text); }
+    .leg-map  { font-size: 0.6rem; opacity: 0.6; }
+    .leg-dot  { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .ld-n { background: var(--newington); }
+    .ld-c { background: var(--champions); }
+
+    /* ── RIGHT: TIME COLUMN ── */
+    .time-col {
+      flex: 1;
+      min-width: 0;
+      border-left: 1px solid var(--border);
+      display: none;          /* hidden on mobile until date selected */
+      flex-direction: column;
+    }
+
+    /* Placeholder (desktop, no date selected) */
+    .time-placeholder {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--muted);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .ph-icon { font-size: 2.4rem; opacity: 0.4; }
+    .ph-text { font-size: 0.88rem; line-height: 1.6; }
+    .ph-hint { font-size: 0.72rem; color: #9ca3af; }
+
+    /* Time content (when date selected) */
+    .time-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .time-header {
+      padding: 20px 20px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .back-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .back-btn {
+      background: none;
+      border: none;
+      font-size: 0.82rem;
+      color: var(--blue);
+      cursor: pointer;
+      padding: 0;
+      font-weight: 600;
+      display: none;   /* shown on mobile only */
+    }
+    .time-date-label {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .time-date-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Slot list */
+    .slot-list {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .no-slots {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      padding: 24px 0;
+    }
+
+    /* Individual slot row */
+    .slot-row {
+      display: flex;
+      align-items: center;
+      padding: 15px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      gap: 14px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .slot-row.newington { border-left: 4px solid var(--newington); }
+    .slot-row.champions { border-left: 4px solid var(--champions); }
+    .slot-row:hover:not(.slot-full) {
+      border-color: #93c5fd;
+      box-shadow: 0 2px 10px rgba(29,78,216,0.09);
+    }
+    .slot-row.slot-full { opacity: 0.38; }
+
+    .slot-row-left { flex: 1; min-width: 0; }
+    .slot-time-range {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .slot-rink {
+      font-size: 0.72rem;
+      font-weight: 600;
+      margin-top: 4px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .slot-rink:hover { text-decoration: underline; }
+    .slot-rink.newington { color: var(--newington); }
+    .slot-rink.champions { color: var(--champions); }
+
+    .slot-row-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .cap-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+    .badge-open { background: #dcfce7; color: #15803d; }
+    .badge-last { background: #fef9c3; color: #854d0e; }
+    .badge-full { background: #fee2e2; color: #991b1b; }
+
+    .book-btn {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 22px;
+      padding: 9px 22px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .12s, transform .1s;
+    }
+    .book-btn:hover:not(:disabled) { background: var(--blue-dark); transform: translateY(-1px); }
+    .book-btn:active:not(:disabled) { transform: translateY(0); }
+    .book-btn:disabled { background: #d1d5db; color: #9ca3af; cursor: not-allowed; }
+
+    /* Verifying state on book button */
+    .book-btn.verifying { background: #4b6cb7; cursor: wait; }
+
+    /* ── INFO STRIP ── */
+    .info-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 0 0;
+      font-size: 0.72rem;
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+
+    /* ── MOBILE: date-selected state ── */
+    /* When a date is picked, swap cal col for time col on small screens */
+    @media (max-width: 639px) {
+      .booking-card.date-selected .cal-col  { display: none; }
+      .booking-card.date-selected .time-col {
+        display: flex;
+        border-left: none;
+        width: 100%;
+      }
+      .back-btn { display: inline !important; }
+    }
+
+    /* ── DESKTOP: always-split two-column layout ── */
+    @media (min-width: 640px) {
+      .cal-col  { flex: 0 0 295px; width: 295px; }
+      .time-col { display: flex; }
+    }
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateX(14px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ── PLACEHOLDER (right panel, no date selected) ── */
+    .time-placeholder {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--muted);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .ph-arrow { font-size: 1.4rem; opacity: 0.3; margin-bottom: 4px; }
+    .ph-text  { font-size: 0.88rem; line-height: 1.6; }
+    .ph-hint  { font-size: 0.7rem; color: #9ca3af; }
+
+    /* ── OVERLAY + BOOKING SHEET ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.48);
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      animation: bgIn .18s ease;
+    }
+    @keyframes bgIn { from { opacity:0; } to { opacity:1; } }
+    .overlay.hidden { display: none; }
+
+    .sheet {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card);
+      border-radius: 22px 22px 0 0;
+      padding: 16px 20px 44px;
+      animation: sheetUp .22s ease;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+    @keyframes sheetUp {
+      from { transform: translateY(40px); opacity:0; }
+      to   { transform: translateY(0);    opacity:1; }
+    }
+
+    .sheet-handle {
+      width: 36px; height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 0 auto 16px;
+    }
+    .sheet-hdr {
+      position: relative;
+      margin-bottom: 20px;
+      padding-right: 36px;
+    }
+    .sheet-title    { font-size: 1rem; font-weight: 800; line-height: 1.3; }
+    .sheet-subtitle { font-size: 0.78rem; color: var(--muted); margin-top: 3px; }
+    .close-sheet {
+      position: absolute;
+      top: 0; right: 0;
+      background: var(--bg);
+      border: none;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Booking form */
+    .booking-form { display: flex; flex-direction: column; gap: 13px; }
+    .field-grp { display: flex; flex-direction: column; gap: 5px; }
+    .field-label { font-size: 0.78rem; font-weight: 600; }
+    .field-input {
+      width: 100%;
+      padding: 11px 13px;
+      border-radius: 11px;
+      border: 1.5px solid var(--border);
+      font-size: 0.92rem;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      -webkit-appearance: none;
+      transition: border-color .12s, background .12s;
+    }
+    .field-input:focus { border-color: var(--blue); background: #fff; }
+    .field-input::placeholder { color: #b0b8c4; }
+
+    .agree-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #f0fdf4;
+      border: 1.5px solid #bbf7d0;
+      border-radius: 11px;
+      padding: 12px 13px;
+      cursor: pointer;
+    }
+    .agree-check {
+      margin-top: 2px;
+      flex-shrink: 0;
+      width: 16px; height: 16px;
+      accent-color: var(--blue);
+      cursor: pointer;
+    }
+    .agree-text {
+      font-size: 0.82rem;
+      color: #1a3a2a;
+      line-height: 1.5;
+    }
+    .agree-text a { color: var(--green); }
+    .submit-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+
+    .submit-btn {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .12s;
+    }
+    .submit-btn:hover { background: var(--blue-dark); }
+    .submit-note { font-size: 0.68rem; color: var(--muted); text-align: center; line-height: 1.45; }
+
+    /* Confirmation sheet */
+    .confirm-sheet { text-align: center; padding: 20px 24px 48px; }
+    .conf-icon  { font-size: 3rem; margin: 6px 0 10px; }
+    .conf-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 7px; }
+    .conf-body  { color: var(--muted); font-size: 0.86rem; margin-bottom: 24px; line-height: 1.55; }
+    .venmo-block { margin-bottom: 22px; }
+    .venmo-label { font-size: 0.76rem; color: var(--muted); margin-bottom: 8px; }
+    .venmo-btn {
+      display: inline-block;
+      background: #3d95ce;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 11px 28px;
+      border-radius: 28px;
+      text-decoration: none;
+    }
+    .done-btn {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 32px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text);
+      width: 100%;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="header">
+    <div class="header-icon">🥅</div>
+    <h1>Coach Mitch<span>Goalie Lessons · Connecticut</span></h1>
+  </header>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All Rinks</button>
+    <button class="filter-btn" data-filter="newington">Newington</button>
+    <button class="filter-btn" data-filter="champions">Champions</button>
+  </div>
+
+  <!-- ── MAIN BOOKING CARD ── -->
+  <div class="booking-card" id="booking-card">
+
+    <!-- LEFT: Calendar -->
+    <div class="cal-col" id="cal-col">
+      <div class="cal-nav">
+        <button id="prev-month" class="nav-btn">‹</button>
+        <span id="month-label" class="month-label"></span>
+        <button id="next-month" class="nav-btn">›</button>
+      </div>
+      <div class="cal-dow">
+        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span>
+        <span>Th</span><span>Fr</span><span>Sa</span>
+      </div>
+      <div id="cal-grid" class="cal-grid"></div>
+      <div class="cal-legend">
+        <a class="leg-item" href="https://maps.google.com/?q=300+Alumni+Rd,+Newington,+CT+06111" target="_blank">
+          <div class="leg-dot ld-n"></div>Newington Arena <span class="leg-map">↗</span>
+        </a>
+        <a class="leg-item" href="https://maps.google.com/?q=6+Progress+Dr,+Cromwell,+CT+06416" target="_blank">
+          <div class="leg-dot ld-c"></div>Champions Skating <span class="leg-map">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- RIGHT: Times -->
+    <div class="time-col" id="time-col">
+
+      <!-- Placeholder: shown on desktop before a date is selected -->
+      <div class="time-placeholder" id="time-placeholder">
+        <div class="ph-arrow">←</div>
+        <p class="ph-text">Select a date to<br>see available times</p>
+        <p class="ph-hint">$125 · 1 hour · max 2 goalies per slot</p>
+      </div>
+
+      <!-- Content (date selected) -->
+      <div class="time-content" id="time-content" style="display:none">
+        <div class="time-header">
+          <div class="back-row">
+            <button class="back-btn" id="back-btn">← Back</button>
+          </div>
+          <div class="time-date-label" id="time-date-label"></div>
+          <div class="time-date-sub" id="time-date-sub"></div>
+        </div>
+        <div class="slot-list" id="slot-list"></div>
+      </div>
+
+    </div>
+  </div><!-- /booking-card -->
+
+  <div class="info-strip">
+    <span>💰 $125 / session</span>
+    <span>·</span>
+    <span>⏱ 1 hour on ice</span>
+    <span>·</span>
+    <span>👥 Max 2 goalies / slot</span>
+  </div>
+
+</div><!-- /page -->
+
+<!-- ── BOOKING BOTTOM SHEET ── -->
+<div id="booking-overlay" class="overlay hidden">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hdr">
+      <div id="sheet-title" class="sheet-title"></div>
+      <div id="sheet-subtitle" class="sheet-subtitle"></div>
+      <button class="close-sheet" id="close-sheet">✕</button>
+    </div>
+    <form id="booking-form" class="booking-form" novalidate>
+      <div class="field-grp">
+        <label class="field-label" for="goalie-name">Goalie's name *</label>
+        <input class="field-input" type="text" id="goalie-name"
+               placeholder="e.g. Alex Smith" autocomplete="off" required/>
+      </div>
+      <div class="field-grp">
+        <label class="field-label" for="parent-name">Your name *</label>
+        <input class="field-input" type="text" id="parent-name"
+               placeholder="e.g. Jamie Smith" autocomplete="name" required/>
+      </div>
+      <div class="field-grp">
+        <label class="field-label" for="parent-phone">Your phone (optional)</label>
+        <input class="field-input" type="tel" id="parent-phone"
+               placeholder="(555) 867-5309" autocomplete="tel"/>
+      </div>
+      <div class="field-grp">
+        <label class="field-label" for="parent-email">Your email (optional)</label>
+        <input class="field-input" type="email" id="parent-email"
+               placeholder="jamie@example.com" autocomplete="email"/>
+      </div>
+      <label class="agree-label">
+        <input type="checkbox" id="agree-check" class="agree-check" required/>
+        <span class="agree-text">
+          I agree to pay Coach Mitch <strong>$125</strong> via Venmo
+          (<a href="https://venmo.com/u/Mitch-Collum" target="_blank">@Mitch-Collum</a>)
+          once the session is completed.
+        </span>
+      </label>
+      <button type="submit" class="submit-btn" id="submit-btn" disabled>📱 Text Coach Mitch to Book</button>
+      <p class="submit-note">Opens a pre-filled text to Coach Mitch — just hit Send to confirm your spot.</p>
+    </form>
+  </div>
+</div>
+
+<!-- ── CONFIRMATION SHEET ── -->
+<div id="confirm-overlay" class="overlay hidden">
+  <div class="sheet confirm-sheet">
+    <div class="sheet-handle"></div>
+    <div class="conf-icon">✅</div>
+    <h2 class="conf-title">Request sent!</h2>
+    <p class="conf-body">Coach Mitch will reply by text to confirm your lesson.<br>See you on the ice! 🏒</p>
+    <div class="venmo-block">
+      <p class="venmo-label">Pay after your session:</p>
+      <a class="venmo-btn" href="https://venmo.com/u/Mitch-Collum" target="_blank">
+        @Mitch-Collum on Venmo
+      </a>
+    </div>
+    <button class="done-btn" id="done-btn">Done</button>
+  </div>
+</div>
+
+<script>
+/* ─── CONFIG ─────────────────────────────────────────── */
+const CFG = { phone:"5857759198", venmo:"Mitch-Collum", price:125, maxPerSlot:2 };
+
+/* ─── GOOGLE CALENDAR SYNC ───────────────────────────── */
+// Once set up, the page will automatically pull sessions from your Google Calendar,
+// and verify a slot still exists before the booking sheet opens.
+//
+// Setup (one-time, ~10 min):
+//   1. In Google Calendar, open your sessions calendar's settings
+//      → "Access permissions" → check "Make available to public"
+//   2. Still in settings → "Integrate calendar" → copy the "Calendar ID"
+//   3. Go to console.cloud.google.com → APIs & Services → Credentials
+//      → Create an API Key → restrict it to "Google Calendar API" + your domain
+//   4. Paste both values below and flip ENABLED to true.
+//
+// Color conventions (match what you use in GCal):
+//   Peacock (teal, ID 7)   → Newington Arena
+//   Tangerine (orange, ID 6) → Champions Skating Center
+const GCAL = {
+  ENABLED:     true,
+  API_KEY:     "AIzaSyBoEoxdUuYLvLVqyallcmqcSq5rfNFBDfE",
+  CALENDAR_ID: "721f102eadb73ee43a9d593c80643347c806fccf57b0def9604515a8b2a73a7b@group.calendar.google.com",
+};
+
+/* ─── SESSION DATA ───────────────────────────────────── */
+// Sessions are loaded live from Google Calendar — this array is intentionally empty.
+// If GCal is unavailable, the page will show no slots rather than stale data.
+const SESSIONS = [];
+
+const RINK_NAMES = { newington:"Newington Arena", champions:"Champions Skating Center" };
+const MAPS = {
+  newington: "https://maps.google.com/?q=300+Alumni+Rd,+Newington,+CT+06111",
+  champions: "https://maps.google.com/?q=6+Progress+Dr,+Cromwell,+CT+06416",
+};
+
+/* ─── GCAL FUNCTIONS ─────────────────────────────────── */
+async function loadSessions() {
+  if (!GCAL.ENABLED || !GCAL.API_KEY || GCAL.API_KEY === "YOUR_API_KEY_HERE") return;
+  try {
+    const now      = new Date().toISOString();
+    const twoWeeks = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+    const base     = "https://www.googleapis.com/calendar/v3/calendars";
+    const url      = `${base}/${encodeURIComponent(GCAL.CALENDAR_ID)}/events`
+      + `?key=${GCAL.API_KEY}`
+      + `&timeMin=${encodeURIComponent(now)}&timeMax=${encodeURIComponent(twoWeeks)}`
+      + `&singleEvents=true&orderBy=startTime&maxResults=100`;
+
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error(`GCal API ${res.status}`);
+    const data = await res.json();
+
+    const fetched = [];
+    (data.items || []).forEach(ev => {
+      if (!ev.start?.dateTime) return;  // skip all-day events
+      // Determine rink from summary (more reliable than colorId)
+      const summary = (ev.summary || "").toLowerCase();
+      let rink = null;
+      if (summary.includes("newington")) rink = "newington";
+      else if (summary.includes("cromwell") || summary.includes("champions")) rink = "champions";
+      if (!rink) return;  // not one of our sessions
+      const start   = new Date(ev.start.dateTime);
+      const end     = new Date(ev.end.dateTime);
+      const dateStr = `${start.getFullYear()}-${pad(start.getMonth()+1)}-${pad(start.getDate())}`;
+      const time    = start.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",hour12:true});
+      const endTime = end.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",hour12:true});
+      // "Open Lesson" in title = available slot; anything else means Mitchell renamed it after confirming a booking
+      const isOpen  = (ev.summary || "").toLowerCase().startsWith("open lesson");
+      fetched.push({ date:dateStr, time, endTime, rink, eventId:ev.id, title:ev.summary||"", isOpen, spotsLeft: isOpen ? CFG.maxPerSlot : 1 });
+    });
+
+    if (fetched.length > 0) {
+      SESSIONS.length = 0;
+      fetched.forEach(s => SESSIONS.push(s));
+      console.log(`Loaded ${fetched.length} sessions from Google Calendar.`);
+    }
+  } catch(err) {
+    console.warn("Google Calendar fetch failed — using hardcoded sessions.", err);
+  }
+}
+
+/* Returns false if Mitchell deleted the GCal event (slot no longer available) */
+async function verifySlot(eventId) {
+  if (!GCAL.ENABLED || !eventId) return true;
+  try {
+    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(GCAL.CALENDAR_ID)}/events/${eventId}`
+      + `?key=${GCAL.API_KEY}`;
+    const res = await fetch(url);
+    return res.ok;   // 404 = event deleted by Mitchell
+  } catch {
+    return true;     // network error → optimistically allow booking
+  }
+}
+
+/* ─── STATE ──────────────────────────────────────────── */
+let S = { year:new Date().getFullYear(), month:new Date().getMonth(), selectedDate:null, filter:"all", pendingSlot:null };
+
+// Reads real booking counts from loaded SESSIONS (set by Mitchell renaming GCal events)
+function spotsLeft(d,t,r) {
+  const s = SESSIONS.find(s => s.date===d && s.time===t && s.rink===r);
+  return s ? (s.spotsLeft ?? CFG.maxPerSlot) : CFG.maxPerSlot;
+}
+function isFull(d,t,r) { return spotsLeft(d,t,r) <= 0; }
+
+/* ─── UTILS ──────────────────────────────────────────── */
+function pad(n) { return String(n).padStart(2,"0"); }
+function todayStr() {
+  const n=new Date();
+  return `${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`;
+}
+function toMin(t) {
+  const [hm,mer]=t.split(" ");
+  let [h,m]=hm.split(":").map(Number);
+  if(mer==="PM"&&h!==12) h+=12;
+  if(mer==="AM"&&h===12) h=0;
+  return h*60+m;
+}
+function fmtLong(ds) {
+  const [y,mo,d]=ds.split("-").map(Number);
+  return new Date(y,mo-1,d).toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
+}
+function fmtShort(ds) {
+  const [y,mo,d]=ds.split("-").map(Number);
+  return new Date(y,mo-1,d).toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
+}
+/* Adds minutes to a 12-hour time string: addMinutes("4:10 PM", 60) → "5:10 PM" */
+function addMinutes(timeStr, mins) {
+  const [hm, mer] = timeStr.split(" ");
+  let [h, m] = hm.split(":").map(Number);
+  if (mer === "PM" && h !== 12) h += 12;
+  if (mer === "AM" && h === 12) h = 0;
+  let total = h * 60 + m + mins;
+  let nh = Math.floor(total / 60) % 24;
+  const nm = String(total % 60).padStart(2, "0");
+  const newMer = nh >= 12 ? "PM" : "AM";
+  if (nh > 12) nh -= 12;
+  if (nh === 0) nh = 12;
+  return `${nh}:${nm} ${newMer}`;
+}
+
+/* Returns true only if the slot starts 24+ hours from right now */
+function isBookable(dateStr, timeStr) {
+  const [y,mo,d] = dateStr.split("-").map(Number);
+  const [hm,mer] = timeStr.split(" ");
+  let [h,m] = hm.split(":").map(Number);
+  if(mer==="PM"&&h!==12) h+=12;
+  if(mer==="AM"&&h===12) h=0;
+  const slotMs = new Date(y, mo-1, d, h, m).getTime();
+  return slotMs - Date.now() >= 24 * 60 * 60 * 1000;
+}
+
+/* Returns bookable slots for a date with smart day constraint applied (no rink filter yet).
+   Rules:
+   - 0 confirmed: show all open slots normally
+   - 1 confirmed: show that slot (1 spot left) + the single open slot immediately before
+     AND the single open slot immediately after at the same rink only
+   - 2+ confirmed: day is full — show only the confirmed slots, no new open slots
+     (Mitchell gives a maximum of 2 lessons per day) */
+function daySlots(date) {
+  let slots = SESSIONS
+    .filter(s => s.date===date && isBookable(s.date,s.time))
+    .sort((a,b) => toMin(a.time)-toMin(b.time));
+
+  const confirmed = slots.filter(s => !s.isOpen);
+
+  // Hard cap: 2 lessons per day max — no new open slots once 2 are confirmed
+  if (confirmed.length >= 2) return confirmed;
+
+  if (confirmed.length === 1) {
+    const cRink      = confirmed[0].rink;
+    const chainStart = toMin(confirmed[0].time);
+    const chainEnd   = toMin(confirmed[0].endTime || addMinutes(confirmed[0].time,60));
+
+    const openSame = slots.filter(s => s.isOpen && s.rink===cRink);
+    // First open slot that starts at or after chain end (next adjacent)
+    const nextSlot = openSame.find(s => toMin(s.time) >= chainEnd);
+    // Last open slot whose end is at or before chain start (prev adjacent)
+    const prevSlot = [...openSame].reverse().find(s => toMin(s.endTime || addMinutes(s.time,60)) <= chainStart);
+
+    const keep = new Set([confirmed[0].eventId]);
+    if (nextSlot) keep.add(nextSlot.eventId);
+    if (prevSlot) keep.add(prevSlot.eventId);
+    slots = slots.filter(s => keep.has(s.eventId));
+  }
+  return slots;
+}
+
+function filteredSlots(date) {
+  let slots = daySlots(date);
+  if (S.filter !== "all") slots = slots.filter(s => s.rink===S.filter);
+  return slots;
+}
+function isDesktop() { return window.innerWidth >= 640; }
+
+/* ─── CALENDAR ───────────────────────────────────────── */
+function renderCalendar() {
+  const months=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  document.getElementById("month-label").textContent=`${months[S.month]} ${S.year}`;
+
+  const today=todayStr();
+  const firstDow=new Date(S.year,S.month,1).getDay();
+  const dim=new Date(S.year,S.month+1,0).getDate();
+
+  // Build date → rinks set for this month (using smart day filtering so dots match slot list)
+  const rinkMap={};
+  const dim0=new Date(S.year,S.month+1,0).getDate();
+  for(let d=1;d<=dim0;d++){
+    const ds=`${S.year}-${pad(S.month+1)}-${pad(d)}`;
+    const visible = daySlots(ds);
+    if(visible.length>0){
+      rinkMap[ds]=new Set(visible.map(s=>s.rink));
+    }
+  }
+
+  const grid=document.getElementById("cal-grid");
+  grid.innerHTML="";
+
+  for(let i=0;i<firstDow;i++){
+    const e=document.createElement("div");
+    e.className="cal-cell empty";
+    grid.appendChild(e);
+  }
+
+  for(let d=1;d<=dim;d++){
+    const ds=`${S.year}-${pad(S.month+1)}-${pad(d)}`;
+    const cell=document.createElement("div");
+    cell.className="cal-cell";
+
+    const isPast    = ds<today;
+    const isToday   = ds===today;
+    const isSel     = ds===S.selectedDate;
+    const rinks     = rinkMap[ds];
+    const hasVis    = rinks&&(S.filter==="all"||rinks.has(S.filter));
+
+    if(isPast)  cell.classList.add("past");
+    if(isToday) cell.classList.add("today");
+    if(isSel)   cell.classList.add("selected");
+    if(hasVis)  cell.classList.add("has-slots");
+
+    const num=document.createElement("span");
+    num.className="cal-num";
+    num.textContent=d;
+    cell.appendChild(num);
+
+    if(rinks&&!isPast){
+      const dotsDiv=document.createElement("div");
+      dotsDiv.className="dots";
+      if(S.filter!=="champions"&&rinks.has("newington")){
+        const dot=document.createElement("span");
+        dot.className="dot dot-newington";
+        dotsDiv.appendChild(dot);
+      }
+      if(S.filter!=="newington"&&rinks.has("champions")){
+        const dot=document.createElement("span");
+        dot.className="dot dot-champions";
+        dotsDiv.appendChild(dot);
+      }
+      if(dotsDiv.children.length) cell.appendChild(dotsDiv);
+    }
+
+    if(!isPast&&hasVis) cell.addEventListener("click",()=>selectDate(ds));
+    grid.appendChild(cell);
+  }
+}
+
+/* ─── DATE SELECTION ─────────────────────────────────── */
+function selectDate(ds) {
+  S.selectedDate = ds;
+  renderCalendar();
+  showTimes(ds);
+
+  // On mobile, swap panels
+  if(!isDesktop()) {
+    document.getElementById("booking-card").classList.add("date-selected");
+  }
+}
+
+function showTimes(ds) {
+  const placeholder = document.getElementById("time-placeholder");
+  const content     = document.getElementById("time-content");
+  const slotList    = document.getElementById("slot-list");
+  const dateLabel   = document.getElementById("time-date-label");
+  const dateSub     = document.getElementById("time-date-sub");
+
+  if (placeholder) placeholder.style.display = "none";
+  content.style.display = "flex";
+
+  dateLabel.textContent = fmtLong(ds);
+
+  const slots = filteredSlots(ds);
+  const totalSlots = slots.length;
+  const openSlots = slots.filter(s => !isFull(s.date,s.time,s.rink)).length;
+  dateSub.textContent = totalSlots === 0
+    ? "No available sessions"
+    : `${openSlots} of ${totalSlots} slot${totalSlots>1?"s":""} available`;
+
+  slotList.innerHTML = "";
+
+  if(!slots.length) {
+    slotList.innerHTML = `<p class="no-slots">No sessions available${
+      S.filter!=="all"?" at this rink":""} on this day.</p>`;
+    return;
+  }
+
+  slots.forEach(s => {
+    const left = spotsLeft(s.date,s.time,s.rink);
+    const full = left <= 0;
+
+    const row = document.createElement("div");
+    row.className = `slot-row ${s.rink}${full?" slot-full":""}`;
+
+    const badgeText  = full?"Full": left===1?"1 spot left":`${left} spots`;
+    const badgeClass = full?"badge-full": left===1?"badge-last":"badge-open";
+
+    const endTime = s.endTime || addMinutes(s.time, 60);
+    row.innerHTML = `
+      <div class="slot-row-left">
+        <div class="slot-time-range">${s.time} – ${endTime}</div>
+        <a class="slot-rink ${s.rink}" href="${MAPS[s.rink]}" target="_blank"
+           onclick="event.stopPropagation()">${RINK_NAMES[s.rink]} <span style="font-size:0.6rem;opacity:0.7">↗</span></a>
+      </div>
+      <div class="slot-row-right">
+        <span class="cap-badge ${badgeClass}">${badgeText}</span>
+        <button class="book-btn"
+                data-date="${s.date}" data-time="${s.time}" data-rink="${s.rink}"
+                data-end-time="${endTime}" data-event-id="${s.eventId||''}"
+                ${full?"disabled":""}>
+          ${full?"Full":"Book"}
+        </button>
+      </div>`;
+
+    slotList.appendChild(row);
+  });
+
+  slotList.querySelectorAll(".book-btn:not(:disabled)").forEach(btn=>{
+    btn.addEventListener("click",()=>openBooking({
+      date:btn.dataset.date, time:btn.dataset.time, rink:btn.dataset.rink,
+      endTime:btn.dataset.endTime, eventId:btn.dataset.eventId
+    }));
+  });
+
+}
+
+/* ─── BACK (MOBILE) ──────────────────────────────────── */
+document.getElementById("back-btn").addEventListener("click", resetToCalendar);
+
+/* ─── BOOKING SHEET ──────────────────────────────────── */
+async function openBooking(slot) {
+  // If GCal sync is active, verify the event still exists before opening the booking form
+  if (GCAL.ENABLED && slot.eventId) {
+    const btn = document.querySelector(
+      `.book-btn[data-date="${slot.date}"][data-time="${slot.time}"][data-rink="${slot.rink}"]`
+    );
+    if (btn) { btn.classList.add("verifying"); btn.textContent = "Checking…"; btn.disabled = true; }
+    const ok = await verifySlot(slot.eventId);
+    if (btn) { btn.classList.remove("verifying"); btn.textContent = "Book"; btn.disabled = false; }
+    if (!ok) {
+      alert("Sorry — this slot was just removed from the schedule. Refreshing available times…");
+      await loadSessions();
+      renderCalendar();
+      if (S.selectedDate) showTimes(S.selectedDate);
+      return;
+    }
+  }
+
+  S.pendingSlot = slot;
+  const endTime = slot.endTime || addMinutes(slot.time, 60);
+  document.getElementById("sheet-title").textContent    = `${slot.time} – ${endTime} · ${fmtShort(slot.date)}`;
+  document.getElementById("sheet-subtitle").textContent = `${RINK_NAMES[slot.rink]} · $${CFG.price}/session`;
+  ["goalie-name","parent-name","parent-phone","parent-email"].forEach(id=>document.getElementById(id).value="");
+  const agreeCheck = document.getElementById("agree-check");
+  agreeCheck.checked = false;
+  document.getElementById("submit-btn").disabled = true;
+  document.getElementById("booking-overlay").classList.remove("hidden");
+  document.body.style.overflow="hidden";
+  setTimeout(()=>document.getElementById("goalie-name").focus(),280);
+}
+function closeBooking() {
+  document.getElementById("booking-overlay").classList.add("hidden");
+  document.body.style.overflow="";
+}
+function openConfirm() {
+  document.getElementById("booking-overlay").classList.add("hidden");
+  document.getElementById("confirm-overlay").classList.remove("hidden");
+}
+function closeConfirm() {
+  document.getElementById("confirm-overlay").classList.add("hidden");
+  document.body.style.overflow="";
+}
+
+/* ─── AGREEMENT CHECKBOX → enable/disable submit ────── */
+document.getElementById("agree-check").addEventListener("change", function() {
+  document.getElementById("submit-btn").disabled = !this.checked;
+});
+
+/* ─── FORM SUBMIT ────────────────────────────────────── */
+document.getElementById("booking-form").addEventListener("submit",async function(e){
+  e.preventDefault();
+  const goalie = document.getElementById("goalie-name").value.trim();
+  const parent = document.getElementById("parent-name").value.trim();
+  const phone  = document.getElementById("parent-phone").value.trim();
+  const email  = document.getElementById("parent-email").value.trim();
+
+  if(!goalie||!parent){ alert("Please fill in the goalie's name and your name."); return; }
+
+  const slot=S.pendingSlot;
+  if(!slot) return;
+
+  const endTime = slot.endTime || addMinutes(slot.time, 60);
+
+  const lines=[
+    `Hi Coach Mitch! Booking request:`,
+    `Goalie: ${goalie}`,
+    `Date: ${fmtLong(slot.date)}`,
+    `Time: ${slot.time} – ${endTime}`,
+    `Rink: ${RINK_NAMES[slot.rink]}`,
+  ];
+  if(phone)  lines.push(`Phone: ${phone}`);
+  if(email)  lines.push(`Email: ${email}`);
+  lines.push(`– ${parent}`);
+
+  // Include approve link when served over https (i.e. actually hosted)
+  if(window.location.protocol === "https:") {
+    const adminBase = new URL("admin.html", window.location.href).href.split("?")[0];
+    const params = new URLSearchParams({
+      goalie, parent, phone, email,
+      date: slot.date, time: slot.time, endTime,
+      rink: slot.rink, eid: slot.eventId || ""
+    }).toString();
+    const longUrl = `${adminBase}?${params}`;
+
+    // Try to shorten via is.gd; fall back to full URL if it fails
+    let approveUrl = longUrl;
+    try {
+      const resp = await fetch(`https://is.gd/create.php?format=json&url=${encodeURIComponent(longUrl)}`);
+      if (resp.ok) {
+        const json = await resp.json();
+        if (json.shorturl) approveUrl = json.shorturl;
+      }
+    } catch(e) { /* silently fall back */ }
+
+    lines.push(`\nApprove: ${approveUrl}`);
+  }
+
+  window.location.href=`sms:${CFG.phone}?body=${encodeURIComponent(lines.join("\n"))}`;
+
+  setTimeout(()=>{
+    renderCalendar();
+    if(S.selectedDate) showTimes(S.selectedDate);
+    openConfirm();
+  }, 700);
+});
+
+/* ─── FILTER ─────────────────────────────────────────── */
+document.querySelectorAll(".filter-btn").forEach(btn=>{
+  btn.addEventListener("click",function(){
+    document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+    this.classList.add("active");
+    S.filter=this.dataset.filter;
+    renderCalendar();
+    if(S.selectedDate) showTimes(S.selectedDate);
+  });
+});
+
+/* ─── MONTH NAV ──────────────────────────────────────── */
+function resetToCalendar() {
+  S.selectedDate = null;
+  document.getElementById("time-content").style.display = "none";
+  const ph = document.getElementById("time-placeholder");
+  if (ph) ph.style.display = "";
+  document.getElementById("booking-card").classList.remove("date-selected");
+  renderCalendar();
+}
+document.getElementById("prev-month").addEventListener("click",()=>{
+  if(S.month===0){S.month=11;S.year--;}else S.month--;
+  resetToCalendar();
+});
+document.getElementById("next-month").addEventListener("click",()=>{
+  if(S.month===11){S.month=0;S.year++;}else S.month++;
+  resetToCalendar();
+});
+
+/* ─── CLOSE BUTTONS ──────────────────────────────────── */
+document.getElementById("close-sheet").addEventListener("click",closeBooking);
+document.getElementById("booking-overlay").addEventListener("click",function(e){
+  if(e.target===this) closeBooking();
+});
+document.getElementById("done-btn").addEventListener("click",closeConfirm);
+document.getElementById("confirm-overlay").addEventListener("click",function(e){
+  if(e.target===this) closeConfirm();
+});
+
+/* ─── BOOT ───────────────────────────────────────────── */
+(async () => {
+  await loadSessions();   // no-op until GCAL.ENABLED = true
+  renderCalendar();
+})();
+</script>
+</body>
+</html>

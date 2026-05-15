@@ -1,0 +1,39 @@
+{
+  "id": "puck-circuit-t-push-butterfly-rotate",
+  "name": "Puck Circuit — T-Push, Butterfly Slide, Rotation, Powerslide",
+  "description": "Three pucks are set up in a circuit pattern. G starts on puck 3, t-pushes to puck 2, butterfly slides to puck 1, rotates forward in butterfly around puck 1, then powerslides back to puck 3 and recovers to feet. Run for multiple reps, then switch sides. Trains explosive t-push generation, butterfly slide technique, in-butterfly forward rotation, and powerslide in a continuous linked sequence.",
+  "drill_category": ["skating"],
+  "session_slot": "warmup",
+  "duration_minutes": 8,
+  "difficulty": "advanced",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": ["in_tight"],
+  "setup_required": "puck_setup",
+  "goalie_starting_position": "Puck 3",
+  "movement_sequence": [
+    "start_on_puck_3",
+    "t_push_to_puck_2",
+    "butterfly_slide_to_puck_1",
+    "rotate_forward_in_butterfly_around_puck_1",
+    "powerslide_to_puck_3",
+    "recover_to_feet",
+    "repeat",
+    "switch_sides_and_repeat"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Explosive t-push off puck 3 — generate speed early",
+    "Eyes up through the butterfly slide",
+    "Hips stay square through the rotation — don't open up",
+    "Drive the powerslide from butterfly — don't stand up to push",
+    "Full recovery to feet before the next rep"
+  ],
+  "tags": ["t_push", "butterfly_slide", "power_slide", "butterfly", "rotation", "lateral_movement", "edgework", "skating"],
+  "variations": [],
+  "clip_file": "drill-clips/puck-circuit-t-push-butterfly-rotate.mp4",
+  "clip_loop": false,
+  "has_animation": false,
+  "coach_notes": "Similar to the butterfly-powerslide puck circuit but starts with a t-push rather than a shuffle, putting more emphasis on explosive push generation and linking it directly into the butterfly slide. The rotation around puck 1 is still the hardest movement — watch for the goalie popping up to reposition instead of staying in butterfly. The powerslide back to puck 3 should cover real distance; if the goalie is standing up to generate it, the drill is being done wrong."
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Goalie Coach",
+  "short_name": "GoalieCoach",
+  "description": "Coach Mitch — private goalie lesson planner",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1c3150",
+  "theme_color": "#1c3150",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

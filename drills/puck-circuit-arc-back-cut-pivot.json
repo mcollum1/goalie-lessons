@@ -1,0 +1,50 @@
+{
+  "id": "puck-circuit-arc-back-cut-pivot",
+  "name": "Puck Circuit — Arc Back Cut Pivot",
+  "description": "Intermediate skating circuit with 4 pucks evenly spaced along the arc of the crease. Goalie starts on P3, butterfly slides to P1, cuts backward around P1 in butterfly, powerslides to P2, pivots and powerslides to P4, then t-pushes back to P3.",
+  "drill_category": [
+    "skating"
+  ],
+  "session_slot": "warmup",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": [
+    "in_tight"
+  ],
+  "setup_required": "puck_setup",
+  "goalie_starting_position": "standing on P3 on crease arc",
+  "movement_sequence": [
+    "start_on_p3",
+    "butterfly_slide_to_p1",
+    "backward_butterfly_cut_around_p1",
+    "powerslide_to_p2",
+    "pivot_and_powerslide_to_p4",
+    "t_push_to_p3"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Stay in butterfly through the backward cut — don't stand up to turn",
+    "The backward cut around P1 sets your angle for the powerslide to P2 — get it right before you push",
+    "Keep your chest up through the backward cut — don't collapse forward",
+    "Load your edges before the pivot — the pivot-powerslide to P4 is one fluid motion",
+    "Finish the t-push all the way back to P3 — complete every rep"
+  ],
+  "tags": [
+    "butterfly_slide",
+    "butterfly_pivot",
+    "power_slide",
+    "t_push",
+    "puck_circuit",
+    "edge_control",
+    "crease_movement",
+    "backward_cut"
+  ],
+  "variations": [],
+  "clip_file": "drill-clips/puck-circuit-arc-back-cut-pivot.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Four pucks evenly spaced on the crease arc. The backward butterfly cut around P1 is the technical centerpiece — the goalie stays in butterfly and rotates backward around the puck rather than standing up to turn. This trains efficient low movement without losing the butterfly base. The pivot-powerslide combination (P2→P4) is the most demanding transition and where form tends to break down first. Good intermediate progression before the forward-cut circuits. Run multiple reps and switch directions."
+}

@@ -1,0 +1,36 @@
+{
+  "id": "circle-walk-shot-net-drive",
+  "name": "Circle Walk Shot + Net Drive",
+  "description": "F1 starts on the goal line boards with puck 2 staged at that position. F2 starts at the hash marks on the same side. F1 makes a short pass to F2, who steps around the circle and shoots. The goalie tracks F2 through the arc and makes the first save, then follows the rebound. F1 continues around to the far circle while F2 picks up puck 2 from the goal line boards and drives the net — choosing to shoot short side, jam, or pass to F1 breaking across to the far post. Play the second puck out. Drill switches sides.",
+  "drill_category": ["save_technique", "crease_movement", "rebound_control", "tracking_vision"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 2,
+  "shooter_count_max": 2,
+  "shot_count": 2,
+  "ice_zone": ["hash_marks", "in_tight"],
+  "goalie_starting_position": "set at top of crease, angled to hash marks side",
+  "movement_sequence": [
+    "set_at_top_of_crease_facing_hash_marks",
+    "track_f2_walking_around_circle",
+    "make_save_on_circle_shot",
+    "follow_rebound_and_reset",
+    "read_f2_driving_net_with_second_puck",
+    "play_out_second_puck_jam_or_pass_to_f1"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save", "desperation_save"],
+  "coaching_cues": [
+    "Track F2's hips through the arc — don't let the circle pull you off angle",
+    "Stay alive after the first save; don't collapse expecting a whistle",
+    "Follow the rebound and reset your depth before the net drive",
+    "On the net drive, seal short side — know where F1 is cutting",
+    "Read F2's eyes for the pass option to F1 at the far post"
+  ],
+  "tags": ["circle_walk", "tracking", "rebound_control", "net_drive", "two_puck", "jam_play", "pass_and_shoot", "in_tight", "two_on_one_read"],
+  "variations": [],
+  "clip_file": "drill-clips/circle-walk-shot-net-drive.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "This drill chains two distinct goalie challenges: tracking a shooter through a wide arc, then immediately transitioning to a net-front read with a pass option. Common error is the goalie over-committing to the first save and losing their feet, leaving no time to reset for the net drive. Watch for goalies who collapse to the ice on puck 1 — they need to stay alive and mobile. The pass option to F1 cutting is a late read, so goalies should default to protecting short side and reacting to F1 if the pass comes."
+}

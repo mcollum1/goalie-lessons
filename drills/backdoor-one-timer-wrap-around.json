@@ -1,0 +1,39 @@
+{
+  "id": "backdoor-one-timer-wrap-around",
+  "name": "Backdoor One-Timer — Wrap-Around Read",
+  "description": "F1 starts at the face-off dot and passes to F2 backdoor for a one-timer. G pivots to the backdoor side, tracks the pass, and saves the first shot. After the one-timer, F2 skates behind the net, picks up a puck, and attempts a wrap-around. G tracks F2 going behind the net, sets post position, reads which side the wrap is coming to, and makes the save. Second puck is played out. A progression from the pass-to-slot RVH drill — similar pivot and behind-net tracking demands with a wrap-around finish instead of a bump-out.",
+  "drill_category": ["crease_movement", "save_technique", "positioning_angles"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 2,
+  "shooter_count_max": 2,
+  "shot_count": 2,
+  "ice_zone": ["hash_marks", "in_tight", "behind_net"],
+  "goalie_starting_position": "Center of crease, square to F1",
+  "movement_sequence": [
+    "track_pass_from_F1_to_F2_backdoor",
+    "pivot_to_backdoor_side",
+    "save_first_shot_one_timer",
+    "track_F2_moving_behind_net",
+    "set_post_position",
+    "read_wrap_around_side",
+    "save_wrap_around",
+    "play_rebound"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save", "RVH", "paddle_down"],
+  "coaching_cues": [
+    "Pivot early to the backdoor — track the pass, not F2's skates",
+    "Eyes and hands get to the one-timer before the shot",
+    "Track F2 going behind the net immediately after shot 1",
+    "Set post clean — don't drift before F2 commits to a side",
+    "Read the wrap early — stay patient on the post",
+    "Play the second puck all the way out"
+  ],
+  "tags": ["pivot", "backdoor", "one_timer", "wrap_around", "post_play", "behind_net", "tracking_vision", "two_shot", "crease_movement", "RVH", "paddle_down"],
+  "variations": [],
+  "clip_file": "drill-clips/backdoor-one-timer-wrap-around.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "A natural progression from the pass-slot-shot-rvh-bump-out drill — same pivot demand on shot 1, but the second rep is a wrap-around instead of a bump-out pass. The backdoor pivot is the same habit: eyes and hands arrive before the puck. On the wrap-around, patience on the post is key — the goalie needs to track F2 around the net and wait for the commitment to a side before moving. Goalies who guess early on the wrap get beaten to the short side. Run this after the RVH bump-out drill is clean."
+}

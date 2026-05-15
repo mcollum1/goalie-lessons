@@ -1,0 +1,54 @@
+{
+  "id": "puck-circuit-five-point-crease",
+  "name": "Puck Circuit — Five Point Crease",
+  "description": "Advanced skating circuit with 5 pucks arranged in the shape of the crease, one puck at each key point of the outline. Goalie starts on P2, t-pushes to P3, shuffles to P4, butterfly slides to P5, cuts around P5 in butterfly, powerslides to P1, cuts around P1 in butterfly, powerslides to P4, powerslides to P3, then recovers with a t-push back to P2.",
+  "drill_category": [
+    "skating"
+  ],
+  "session_slot": "warmup",
+  "duration_minutes": 10,
+  "difficulty": "advanced",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": [
+    "in_tight"
+  ],
+  "setup_required": "puck_setup",
+  "goalie_starting_position": "standing on P2",
+  "movement_sequence": [
+    "start_on_p2",
+    "t_push_to_p3",
+    "shuffle_to_p4",
+    "butterfly_slide_to_p5",
+    "cut_around_p5_in_butterfly",
+    "powerslide_to_p1",
+    "cut_around_p1_in_butterfly",
+    "powerslide_to_p4",
+    "powerslide_to_p3",
+    "recover_t_push_to_p2"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Use the puck as a pivot point on every butterfly cut — stay tight, don't drift past it",
+    "The butterfly slide to P5 should be low and controlled — load the edge before the cut",
+    "Stay explosive on each powerslide — no coasting between pucks",
+    "Back-to-back powerslides (P1→P4→P3) are the hardest sequence — keep your weight forward",
+    "Finish the recover t-push all the way back to P2 — don't short it"
+  ],
+  "tags": [
+    "t_push",
+    "shuffle",
+    "butterfly_slide",
+    "power_slide",
+    "c_cut",
+    "puck_circuit",
+    "crease_movement",
+    "edge_control"
+  ],
+  "variations": [],
+  "clip_file": "drill-clips/puck-circuit-five-point-crease.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Five pucks placed at key outline points of the crease shape — goalie uses the puck positions to train precise edge control and clean movement transitions around the crease footprint. The butterfly cuts around P5 and P1 are the technical focal points: the puck acts as a pivot marker and the cut must be tight. The two back-to-back powerslides (P1→P4→P3) are the most physically demanding sequence and where form tends to break down first. Run multiple reps and switch directions."
+}
