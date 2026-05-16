@@ -15,6 +15,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+  // Register service worker for offline support
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .catch(err => console.warn('[SW] Registration failed:', err));
+    });
+  }
+</script>
 
 <style>
   /* ─── Design tokens (HockeyHub + Goalie blend) ─── */
@@ -1953,80 +1962,13 @@
   </section>
 
   <!-- ─── RECENT LESSONS ─── -->
-  <section class="section">
+  <section class="section" id="recent-section" style="display:none;">
     <div class="section-head">
       <div class="section-head-left">
         <span class="section-label">Recent lessons</span>
       </div>
-      <a class="section-link" href="#">
-        All lessons
-        <svg class="lucide"><use href="#i-chevron-right"/></svg>
-      </a>
     </div>
-
-    <!-- Recent lesson: Jake Reynolds, May 8 -->
-    <div class="plan-card" onclick="window.location.href='lesson_plan_preview_crease_positioning.html?goalie=Jake+Reynolds&goalieId=goalie_jake_reynolds&sessionId=session_jake_0508&level=intermediate&duration=60&goalies=1&shooters=1&screener=no&focus=crease_movement'">
-      <div class="goalie-avatar tone-a" style="width:40px;height:40px;font-size:12px;font-weight:700;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;">JR</div>
-      <div class="plan-body">
-        <div class="plan-goalie-row">
-          <div class="plan-goalie-name">Jake Reynolds</div>
-          <div class="plan-date">May 8</div>
-        </div>
-        <div class="plan-title">Crease Movement &amp; Positioning</div>
-        <div class="plan-meta">
-          <span>6 drills</span>
-          <span class="plan-meta-dot"></span>
-          <span>60 min</span>
-          <span class="plan-meta-dot"></span>
-          <span>Private</span>
-        </div>
-      </div>
-      <div class="plan-chevron"><svg class="lucide"><use href="#i-chevron-right"/></svg></div>
-    </div>
-
-    <!-- Recent lesson: Aiden Torres, May 6 -->
-    <div class="plan-card">
-      <div class="goalie-avatar tone-b" style="width:40px;height:40px;font-size:12px;font-weight:700;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;">AT</div>
-      <div class="plan-body">
-        <div class="plan-goalie-row">
-          <div class="plan-goalie-name">Aiden Torres</div>
-          <div class="plan-date">May 6</div>
-        </div>
-        <div class="plan-title">RVH &amp; Post Play · Compete</div>
-        <div class="plan-meta">
-          <span>5 drills</span>
-          <span class="plan-meta-dot"></span>
-          <span>60 min</span>
-          <span class="plan-meta-dot"></span>
-          <span>Private</span>
-        </div>
-      </div>
-      <div class="plan-chevron"><svg class="lucide"><use href="#i-chevron-right"/></svg></div>
-    </div>
-
-    <!-- Recent lesson: Mason K. & Lily P., May 4 -->
-    <div class="plan-card">
-      <div style="display:flex;flex-shrink:0;margin-right:-4px;">
-        <div class="goalie-avatar tone-c" style="width:40px;height:40px;font-size:11px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;">MK</div>
-        <div class="goalie-avatar tone-d" style="width:40px;height:40px;font-size:11px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-left:-12px;border:2px solid #fff;">LP</div>
-      </div>
-      <div class="plan-body">
-        <div class="plan-goalie-row">
-          <div class="plan-goalie-name">Mason K. &amp; Lily P.</div>
-          <div class="plan-date">May 4</div>
-        </div>
-        <div class="plan-title">Rebound Control · Beginner</div>
-        <div class="plan-meta">
-          <span>4 drills</span>
-          <span class="plan-meta-dot"></span>
-          <span>45 min</span>
-          <span class="plan-meta-dot"></span>
-          <span>Semi-private</span>
-        </div>
-      </div>
-      <div class="plan-chevron"><svg class="lucide"><use href="#i-chevron-right"/></svg></div>
-    </div>
-
+    <div id="cal-recent"></div>
   </section>
 
   <div class="page-end-spacer"></div>
@@ -3043,12 +2985,61 @@
   }
 
   /* ── Render sections ───────────────────────────────────── */
-  function renderSections(allEvents) {
-    const todayEvents = allEvents.filter(e => e.start?.dateTime && isToday(e.start.dateTime));
-    const weekEvents  = allEvents.filter(e => e.start?.dateTime && !isToday(e.start.dateTime));
+  function isPast(iso) {
+    return new Date(iso) < new Date();
+  }
 
-    const todayEl   = document.getElementById('cal-today');
-    const weekEl    = document.getElementById('cal-week');
+  function formatShortDate(iso) {
+    const d    = new Date(iso);
+    const mons = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return `${mons[d.getMonth()]} ${d.getDate()}`;
+  }
+
+  function buildRecentCard(event, parsed) {
+    const goalies   = parsed.names.split(/\s*&\s*/).map(n => n.trim()).filter(Boolean);
+    const count     = goalies.length;
+    const dur       = minutesBetween(event.start.dateTime, event.end.dateTime);
+    const privLabel = count > 1 ? 'Semi-private' : 'Private';
+    const dateStr   = formatShortDate(event.start.dateTime);
+    const sid       = sessionId(event);
+
+    const avatarHtml = count === 1
+      ? `<div class="goalie-avatar ${tone(goalies[0])}" style="width:40px;height:40px;font-size:12px;font-weight:700;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;">${initials(goalies[0])}</div>`
+      : `<div style="display:flex;flex-shrink:0;">
+           <div class="goalie-avatar ${tone(goalies[0])}" style="width:40px;height:40px;font-size:11px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;">${initials(goalies[0])}</div>
+           <div class="goalie-avatar ${tone(goalies[1])}" style="width:40px;height:40px;font-size:11px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-left:-12px;border:2px solid var(--hh-surface);">${initials(goalies[1])}</div>
+         </div>`;
+
+    return `
+    <div class="plan-card" data-recent-sid="${sid}">
+      ${avatarHtml}
+      <div class="plan-body">
+        <div class="plan-goalie-row">
+          <div class="plan-goalie-name">${parsed.names}</div>
+          <div class="plan-date">${dateStr}</div>
+        </div>
+        <div class="plan-meta" style="margin-top:2px;">
+          <span>${dur} min</span>
+          <span class="plan-meta-dot"></span>
+          <span>${privLabel}</span>
+          ${parsed.rink ? `<span class="plan-meta-dot"></span><span>${parsed.rink.split('·')[0].trim()}</span>` : ''}
+        </div>
+      </div>
+      <div class="plan-chevron"><svg class="lucide"><use href="#i-chevron-right"/></svg></div>
+    </div>`;
+  }
+
+  function renderSections(allEvents) {
+    const now         = new Date();
+    const pastEvents  = allEvents.filter(e => isPast(e.end?.dateTime || e.start.dateTime)).reverse(); // newest first
+    const futureEvents = allEvents.filter(e => !isPast(e.end?.dateTime || e.start.dateTime));
+    const todayEvents = futureEvents.filter(e => isToday(e.start.dateTime));
+    const weekEvents  = futureEvents.filter(e => !isToday(e.start.dateTime));
+
+    const todayEl    = document.getElementById('cal-today');
+    const weekEl     = document.getElementById('cal-week');
+    const recentEl   = document.getElementById('cal-recent');
+    const recentSec  = document.getElementById('recent-section');
     const todayCount = document.getElementById('today-count');
     const weekCount  = document.getElementById('week-count');
 
@@ -3080,43 +3071,72 @@
       weekEl.innerHTML = html;
     }
 
+    // ── Recent lessons (past events, newest first, max 5) ──
+    const recentSlice = pastEvents.slice(0, 5);
+    if (recentSlice.length > 0 && recentEl && recentSec) {
+      recentSec.style.display = '';
+      let html = '';
+      recentSlice.forEach(e => {
+        const p = parseTitle(e.summary) || { names: e.summary, rink: '' };
+        html += buildRecentCard(e, p);
+      });
+      recentEl.innerHTML = html;
+    }
+
     wireNewCards();
   }
 
   /* ── API fetch ─────────────────────────────────────────── */
-  async function fetchEvents(accessToken) {
-    // Today at midnight → Sunday 23:59:59 of this week
-    const now       = new Date();
-    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const dayOfWeek  = now.getDay(); // 0=Sun
-    const daysToEnd  = 6 - dayOfWeek;
-    const endOfWeek  = new Date(startOfDay);
-    endOfWeek.setDate(endOfWeek.getDate() + daysToEnd + 1); // exclusive end
-
+  async function fetchCalendar(accessToken, calId, timeMin, timeMax) {
     const params = new URLSearchParams({
-      timeMin:      startOfDay.toISOString(),
-      timeMax:      endOfWeek.toISOString(),
+      timeMin:      timeMin.toISOString(),
+      timeMax:      timeMax.toISOString(),
       singleEvents: 'true',
       orderBy:      'startTime',
-      maxResults:   '25',
+      maxResults:   '50',
     });
-
     const resp = await fetch(
-      `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?${params}`,
+      `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calId)}/events?${params}`,
       { headers: { Authorization: `Bearer ${accessToken}` } }
     );
-
-    if (resp.status === 401) {
-      clearToken();
-      throw new Error('token_expired');
-    }
+    if (resp.status === 401) { clearToken(); throw new Error('token_expired'); }
     if (!resp.ok) throw new Error(`Calendar API error: ${resp.status}`);
-
     const data = await resp.json();
-    // Filter to only "Goalie Lesson" events
-    return (data.items || []).filter(e =>
-      e.start?.dateTime && (e.summary || '').toLowerCase().includes('goalie lesson')
-    );
+    return data.items || [];
+  }
+
+  function isGoalieLesson(e) {
+    return e.start?.dateTime && (e.summary || '').toLowerCase().includes('goalie lesson');
+  }
+
+  async function fetchEvents(accessToken) {
+    const now        = new Date();
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const past30     = new Date(startOfDay);
+    past30.setDate(past30.getDate() - 30);
+    const dayOfWeek  = now.getDay();
+    const endOfWeek  = new Date(startOfDay);
+    endOfWeek.setDate(endOfWeek.getDate() + (6 - dayOfWeek) + 1);
+
+    // Fetch primary + group calendar in parallel, both covering past 30d → end of week
+    const [primaryItems, groupItems] = await Promise.all([
+      fetchCalendar(accessToken, 'primary',     past30, endOfWeek),
+      fetchCalendar(accessToken, CALENDAR_ID,   past30, endOfWeek),
+    ]);
+
+    // Merge + deduplicate by iCalUID (same event can appear in both)
+    const seen = new Set();
+    const all  = [...primaryItems, ...groupItems].filter(e => {
+      if (!isGoalieLesson(e)) return false;
+      const key = e.iCalUID || e.id;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    // Sort ascending by start time
+    all.sort((a, b) => new Date(a.start.dateTime) - new Date(b.start.dateTime));
+    return all;
   }
 
   /* ── Connect button ────────────────────────────────────── */
