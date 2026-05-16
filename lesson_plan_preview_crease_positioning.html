@@ -1620,6 +1620,7 @@ function _sessionFilter(d) {
   if (SESSION.shooters !== null && d.shooter_count_min > SESSION.shooters) return false;
   if ((SESSION.screener === 'no' || SESSION.screener === 'skip') && d.requires_screener) return false;
   if (SESSION.level === 'beginner' && d.difficulty === 'advanced') return false;
+  if (d.requires_goalie_partner && (!SESSION.goalies || SESSION.goalies < 2)) return false;
   return true;
 }
 
