@@ -2804,8 +2804,9 @@
     input.style.height = Math.min(input.scrollHeight, 120) + 'px';
   });
 
-  // Expose openSheet globally so calendar-injected cards can trigger it
-  window._hhOpenSheet = openSheet;
+  // Expose openSheet and applySavedPlanState globally so calendar script can call them
+  window._hhOpenSheet           = openSheet;
+  window._hhApplySavedPlanState = applySavedPlanState;
 })();
 </script>
 
@@ -3053,8 +3054,10 @@
     // Apply saved-plan state + open sheet listener to any newly created cards
     document.querySelectorAll('[data-build-plan]:not([data-wired])').forEach(btn => {
       btn.dataset.wired = '1';
-      // applySavedPlanState handles both DB and legacy localStorage checks
-      applySavedPlanState(btn);
+      // applySavedPlanState is exposed globally from the chat-sheet IIFE
+      if (typeof window._hhApplySavedPlanState === 'function') {
+        window._hhApplySavedPlanState(btn);
+      }
       btn.addEventListener('click', () => {
         if (btn.dataset.seePlan) { window.location.href = btn.dataset.seePlan; return; }
         // openSheet is exposed globally from the other script block
