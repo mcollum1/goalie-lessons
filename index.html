@@ -3053,20 +3053,8 @@
     // Apply saved-plan state + open sheet listener to any newly created cards
     document.querySelectorAll('[data-build-plan]:not([data-wired])').forEach(btn => {
       btn.dataset.wired = '1';
-      const sessionId = btn.dataset.sessionId;
-      // Check for existing saved plan
-      if (sessionId && window.DB && DB.hasSavedPlan(sessionId)) {
-        const useEl = btn.querySelector('use');
-        if (useEl) useEl.setAttribute('href', '#i-arrow-right');
-        btn.dataset.seePlan = 'lesson_plan_preview_crease_positioning.html';
-        btn.classList.add('see-plan-mode');
-        for (const node of btn.childNodes) {
-          if (node.nodeType === Node.TEXT_NODE && node.textContent.includes('Build')) {
-            node.textContent = node.textContent.replace('Build plan', 'See plan');
-            break;
-          }
-        }
-      }
+      // applySavedPlanState handles both DB and legacy localStorage checks
+      applySavedPlanState(btn);
       btn.addEventListener('click', () => {
         if (btn.dataset.seePlan) { window.location.href = btn.dataset.seePlan; return; }
         // openSheet is exposed globally from the other script block

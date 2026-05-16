@@ -1213,7 +1213,7 @@
 <!-- Drill 1 -->
 <div class="drill-card" data-drill-id="1" data-drill-name="Board-to-Board Movement Series" data-drill-phase="skating">
   <div class="video-wrap">
-    <video controls autoplay muted playsinline loop>
+    <video controls muted playsinline loop>
       <source src="drill-clips/diagonal-t-push-pivots.mp4" type="video/mp4">
     </video>
     <span class="badge-step">1 of 6</span>
@@ -1249,7 +1249,7 @@
 <!-- Drill 2 -->
 <div class="drill-card" data-drill-id="2" data-drill-name="Post Entry & Exit — RVH to Powerslide" data-drill-phase="skating">
   <div class="video-wrap">
-    <video controls autoplay muted playsinline loop>
+    <video controls muted playsinline loop>
       <source src="drill-clips/post-entry-exit-rvh-powerslide.mp4" type="video/mp4">
     </video>
     <span class="badge-step">2 of 6</span>
@@ -1307,7 +1307,7 @@
 <!-- Drill 3 -->
 <div class="drill-card" data-drill-id="3" data-drill-name="Butterfly Shot Warmup — Tracking Series" data-drill-phase="shot">
   <div class="video-wrap">
-    <video controls autoplay muted playsinline loop>
+    <video controls muted playsinline loop>
       <source src="drill-clips/butterfly-shot-warmup.mp4" type="video/mp4">
     </video>
     <span class="badge-step">3 of 6</span>
@@ -1360,7 +1360,7 @@
 <!-- Drill 4 -->
 <div class="drill-card" data-drill-id="4" data-drill-name="Overlap — T-Push and Go Call React" data-drill-phase="skill">
   <div class="video-wrap">
-    <video controls autoplay muted playsinline loop>
+    <video controls muted playsinline loop>
       <source src="drill-clips/overlap-t-push-go-call-react.mp4" type="video/mp4">
     </video>
     <span class="badge-step">4 of 6</span>
@@ -1401,7 +1401,7 @@
 <!-- Drill 5 -->
 <div class="drill-card" data-drill-id="5" data-drill-name="Go Call — Lateral Release and Net Attack" data-drill-phase="skill">
   <div class="video-wrap">
-    <video controls autoplay muted playsinline loop>
+    <video controls muted playsinline loop>
       <source src="drill-clips/go-call-lateral-drop-net-attack.mp4" type="video/mp4">
     </video>
     <span class="badge-step">5 of 6</span>
@@ -1469,7 +1469,7 @@
 <!-- Drill 6 — Bonus -->
 <div class="drill-card bonus" data-drill-id="6" data-drill-name="Lateral Release — RVH Post Entry and Bump Out" data-drill-phase="skill">
   <div class="video-wrap">
-    <video controls autoplay muted playsinline loop>
+    <video controls muted playsinline loop>
       <source src="drill-clips/lateral-release-rvh-bump-out-slot.mp4" type="video/mp4">
     </video>
     <span class="badge-step">6 of 6</span>
@@ -1744,7 +1744,7 @@ function applySwapFromLibrary(drillId, drillName, phase) {
   const stepText    = stepBadge ? stepBadge.textContent : '';
   const clip        = drill ? (drill.clip_file || '') : '';
   const videoHtml   = clip
-    ? `<video controls autoplay muted playsinline loop><source src="${_escA(clip)}" type="video/mp4"></video>`
+    ? `<video controls muted playsinline loop><source src="${_escA(clip)}" type="video/mp4"></video>`
     : `<div style="height:120px;display:flex;align-items:center;justify-content:center;background:#111;color:rgba(255,255,255,0.3);font-size:13px;border-radius:12px 12px 0 0">No clip available</div>`;
   const videoWrap = swapTargetCard.querySelector('.video-wrap');
   if (videoWrap) {
@@ -1997,7 +1997,7 @@ function buildDrillCardHtml(planDrill, stepNum, totalDrills) {
   const cues       = planDrill.cues || (lib ? (lib.coaching_cues || []).slice(0, 3) : []);
 
   const videoHtml  = clip
-    ? `<video controls autoplay muted playsinline loop><source src="${_escA(clip)}" type="video/mp4"></video>`
+    ? `<video controls muted playsinline loop><source src="${_escA(clip)}" type="video/mp4"></video>`
     : `<div style="height:120px;display:flex;align-items:center;justify-content:center;background:#111;color:rgba(255,255,255,0.3);font-size:13px;border-radius:12px 12px 0 0">No clip available</div>`;
   const shotsHtml  = shots ? `<span class="badge-shots">${_escH(shots)}</span>` : '';
   const descHtml   = desc  ? `<p class="drill-desc">${_escH(desc)}</p>` : '';
@@ -2291,9 +2291,52 @@ async function buildPlan() {
 /* ─────────────────────────────────────────────────────────────
    Start Session — navigates to on-ice mode
    ───────────────────────────────────────────────────────────── */
+function serializeCurrentPlan() {
+  // Reads the current DOM drill cards and writes them back to hh_pending_plan
+  // so session.html always sees the coach's edited version, not the raw AI output.
+  const sectionOrder = [];
+  const sectionMap   = {};
+
+  document.querySelectorAll('.drill-card').forEach(card => {
+    // Skip cards that are mid-removal animation (maxHeight collapsing to 0)
+    if (card.style.maxHeight === '0px') return;
+
+    const phase = card.dataset.drillPhase || 'skill';
+    const meta  = PHASE_META[phase] || PHASE_META.skill;
+
+    if (!sectionMap[phase]) {
+      sectionMap[phase] = { phase, name: meta.label, time: '0 min', drills: [] };
+      sectionOrder.push(phase);
+    }
+
+    const dMin = parseInt(card.dataset.durationMin || '0', 10) || 0;
+    sectionMap[phase].drills.push({
+      drill_id: card.dataset.drillId   || '',
+      name:     card.dataset.drillName || 'Drill',
+      phase,
+      duration: dMin ? dMin + ' min' : '',
+    });
+    sectionMap[phase]._total = (sectionMap[phase]._total || 0) + dMin;
+  });
+
+  const plan = {
+    sections: sectionOrder.map(ph => {
+      const s = sectionMap[ph];
+      s.time = '~' + (s._total || 0) + ' min';
+      delete s._total;
+      return s;
+    }),
+  };
+
+  try { localStorage.setItem('hh_pending_plan', JSON.stringify(plan)); } catch {}
+}
+
 function startSession() {
   // If the coach made edits, save first before going on-ice
   if (isDirty) executeSave();
+
+  // Always sync DOM → localStorage so session.html sees the current edited plan
+  serializeCurrentPlan();
 
   const p = new URLSearchParams({
     goalie:    SESSION.goalie    || '',

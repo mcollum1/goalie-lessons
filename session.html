@@ -72,24 +72,27 @@
   }
 
   .btn-back {
-    width: 40px;
     height: 40px;
-    border-radius: 50%;
+    padding: 0 12px 0 8px;
+    border-radius: 20px;
     border: none;
     background: rgba(255,255,255,0.09);
     color: #fff;
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 4px;
     cursor: pointer;
     font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
     transition: background 0.15s ease;
     flex-shrink: 0;
+    white-space: nowrap;
   }
 
   .btn-back:hover  { background: rgba(255,255,255,0.15); }
   .btn-back:active { background: rgba(255,255,255,0.22); }
-  .btn-back svg    { width: 20px; height: 20px; }
+  .btn-back svg    { width: 18px; height: 18px; }
 
   .top-center {
     flex: 1;
@@ -579,6 +582,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
       </svg>
+      Plan
     </button>
     <div class="top-center">
       <div class="drill-counter" id="drillCounter">Drill 1 of …</div>
@@ -791,15 +795,13 @@ function init() {
 
   // Wire buttons
   document.getElementById('btnBack').addEventListener('click', () => {
-    if (confirm('End session and go back to the plan?')) {
-      window.location.href = 'lesson_plan_preview_crease_positioning.html?' + new URLSearchParams({
-        goalie:    SESSION.goalie,
-        sessionId: SESSION.sessionId,
-        focus:     SESSION.focus,
-        duration:  SESSION.duration,
-        level:     SESSION.level,
-      }).toString();
-    }
+    window.location.href = 'lesson_plan_preview_crease_positioning.html?' + new URLSearchParams({
+      goalie:    SESSION.goalie,
+      sessionId: SESSION.sessionId,
+      focus:     SESSION.focus,
+      duration:  SESSION.duration,
+      level:     SESSION.level,
+    }).toString();
   });
 
   document.getElementById('btnPrev').addEventListener('click', () => goTo(current - 1));
