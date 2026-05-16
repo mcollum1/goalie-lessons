@@ -212,8 +212,16 @@
   .video-wrap video {
     width: 100%;
     display: block;
-    max-height: 210px;
+    max-height: 220px;
     object-fit: cover;
+  }
+
+  @media (min-width: 768px) {
+    .video-wrap video { max-height: 380px; }
+  }
+
+  @media (min-width: 1024px) {
+    .video-wrap video { max-height: 440px; }
   }
 
   /* badge-section: TOP RIGHT */
@@ -1038,6 +1046,7 @@
     .plan-summary-card,
     .drill-card,
     .section-divider,
+    .total-bar,
     .add-drill-btn,
     .page-header,
     .start-session-bar,
@@ -1073,6 +1082,7 @@
     .plan-summary-card,
     .drill-card,
     .section-divider,
+    .total-bar,
     .add-drill-btn,
     .page-header,
     .start-session-bar,
@@ -1203,7 +1213,7 @@
 <!-- Drill 1 -->
 <div class="drill-card" data-drill-id="1" data-drill-name="Board-to-Board Movement Series" data-drill-phase="skating">
   <div class="video-wrap">
-    <video controls playsinline loop>
+    <video autoplay muted playsinline loop>
       <source src="drill-clips/diagonal-t-push-pivots.mp4" type="video/mp4">
     </video>
     <span class="badge-step">1 of 6</span>
@@ -1239,7 +1249,7 @@
 <!-- Drill 2 -->
 <div class="drill-card" data-drill-id="2" data-drill-name="Post Entry & Exit — RVH to Powerslide" data-drill-phase="skating">
   <div class="video-wrap">
-    <video controls playsinline loop>
+    <video autoplay muted playsinline loop>
       <source src="drill-clips/post-entry-exit-rvh-powerslide.mp4" type="video/mp4">
     </video>
     <span class="badge-step">2 of 6</span>
@@ -1297,7 +1307,7 @@
 <!-- Drill 3 -->
 <div class="drill-card" data-drill-id="3" data-drill-name="Butterfly Shot Warmup — Tracking Series" data-drill-phase="shot">
   <div class="video-wrap">
-    <video controls playsinline loop>
+    <video autoplay muted playsinline loop>
       <source src="drill-clips/butterfly-shot-warmup.mp4" type="video/mp4">
     </video>
     <span class="badge-step">3 of 6</span>
@@ -1350,7 +1360,7 @@
 <!-- Drill 4 -->
 <div class="drill-card" data-drill-id="4" data-drill-name="Overlap — T-Push and Go Call React" data-drill-phase="skill">
   <div class="video-wrap">
-    <video controls playsinline loop>
+    <video autoplay muted playsinline loop>
       <source src="drill-clips/overlap-t-push-go-call-react.mp4" type="video/mp4">
     </video>
     <span class="badge-step">4 of 6</span>
@@ -1391,7 +1401,7 @@
 <!-- Drill 5 -->
 <div class="drill-card" data-drill-id="5" data-drill-name="Go Call — Lateral Release and Net Attack" data-drill-phase="skill">
   <div class="video-wrap">
-    <video controls playsinline loop>
+    <video autoplay muted playsinline loop>
       <source src="drill-clips/go-call-lateral-drop-net-attack.mp4" type="video/mp4">
     </video>
     <span class="badge-step">5 of 6</span>
@@ -1459,7 +1469,7 @@
 <!-- Drill 6 — Bonus -->
 <div class="drill-card bonus" data-drill-id="6" data-drill-name="Lateral Release — RVH Post Entry and Bump Out" data-drill-phase="skill">
   <div class="video-wrap">
-    <video controls playsinline loop>
+    <video autoplay muted playsinline loop>
       <source src="drill-clips/lateral-release-rvh-bump-out-slot.mp4" type="video/mp4">
     </video>
     <span class="badge-step">6 of 6</span>
@@ -1734,7 +1744,7 @@ function applySwapFromLibrary(drillId, drillName, phase) {
   const stepText    = stepBadge ? stepBadge.textContent : '';
   const clip        = drill ? (drill.clip_file || '') : '';
   const videoHtml   = clip
-    ? `<video controls playsinline loop><source src="${_escA(clip)}" type="video/mp4"></video>`
+    ? `<video autoplay muted playsinline loop><source src="${_escA(clip)}" type="video/mp4"></video>`
     : `<div style="height:120px;display:flex;align-items:center;justify-content:center;background:#111;color:rgba(255,255,255,0.3);font-size:13px;border-radius:12px 12px 0 0">No clip available</div>`;
   const videoWrap = swapTargetCard.querySelector('.video-wrap');
   if (videoWrap) {
@@ -1987,7 +1997,7 @@ function buildDrillCardHtml(planDrill, stepNum, totalDrills) {
   const cues       = planDrill.cues || (lib ? (lib.coaching_cues || []).slice(0, 3) : []);
 
   const videoHtml  = clip
-    ? `<video controls playsinline loop><source src="${_escA(clip)}" type="video/mp4"></video>`
+    ? `<video autoplay muted playsinline loop><source src="${_escA(clip)}" type="video/mp4"></video>`
     : `<div style="height:120px;display:flex;align-items:center;justify-content:center;background:#111;color:rgba(255,255,255,0.3);font-size:13px;border-radius:12px 12px 0 0">No clip available</div>`;
   const shotsHtml  = shots ? `<span class="badge-shots">${_escH(shots)}</span>` : '';
   const descHtml   = desc  ? `<p class="drill-desc">${_escH(desc)}</p>` : '';
