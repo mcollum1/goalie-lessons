@@ -1037,7 +1037,7 @@
     .session-header,
     .plan-summary-card,
     .drill-card,
-    .section-header,
+    .section-divider,
     .add-drill-btn,
     .page-header,
     .start-session-bar,
@@ -1072,7 +1072,7 @@
     .session-header,
     .plan-summary-card,
     .drill-card,
-    .section-header,
+    .section-divider,
     .add-drill-btn,
     .page-header,
     .start-session-bar,
@@ -1620,7 +1620,7 @@ function removeDrill(btn) {
       card.style.maxHeight = '0';
       card.style.marginBottom = '0';
       card.style.overflow = 'hidden';
-      setTimeout(() => card.remove(), 320);
+      setTimeout(() => { card.remove(); recalcTotal(); }, 320);
     });
   });
 
@@ -1755,6 +1755,9 @@ function applySwapFromLibrary(drillId, drillName, phase) {
     if (statVals[0]) statVals[0].textContent = drill.duration_minutes + ' min';
     if (statVals[1]) { statVals[1].textContent = _cap(drill.difficulty); statVals[1].style.textTransform = 'capitalize'; }
 
+    // Keep data attribute in sync so recalcTotal() reads correctly
+    swapTargetCard.dataset.durationMin = drill.duration_minutes || 0;
+
     const cues = (drill.coaching_cues || []).slice(0, 3);
     const cuesEl = swapTargetCard.querySelector('.cues');
     if (cuesEl) {
@@ -1769,6 +1772,7 @@ function applySwapFromLibrary(drillId, drillName, phase) {
   swapTargetCard.style.boxShadow = '0 0 0 2.5px #378ADD';
   setTimeout(() => { swapTargetCard.style.boxShadow = ''; }, 600);
 
+  recalcTotal();
   closeSwapModal();
   markUnsaved();
 }
@@ -1912,12 +1916,34 @@ function pickDrill(drillId, drillName) {
   setTimeout(() => newCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
 
   closeDrillPicker();
+  recalcTotal();
   markUnsaved();
 }
 
 document.getElementById('drillPickerModal').addEventListener('click', function(e) {
   if (e.target === this) closeDrillPicker();
 });
+
+// Recalculate and display the session total duration
+function recalcTotal() {
+  let total = 0;
+  document.querySelectorAll('.drill-card').forEach(card => {
+    if (card.style.display === 'none' || card.style.maxHeight === '0px') return;
+    // data-duration-min is set on dynamically built cards
+    let min = parseInt(card.dataset.durationMin, 10);
+    // Fallback: parse from the first stat value containing a number (static cards)
+    if (isNaN(min) || min === 0) {
+      const statVals = card.querySelectorAll('.drill-stat-value');
+      for (const sv of statVals) {
+        const m = parseInt(sv.textContent);
+        if (!isNaN(m) && m > 0) { min = m; break; }
+      }
+    }
+    if (!isNaN(min) && min > 0) total += min;
+  });
+  const el = document.querySelector('.total-value');
+  if (el && total > 0) el.textContent = '~' + total + ' min';
+}
 
 // Mark plan as unsaved — resets Save button and flips Start Session to "Save & Start"
 function markUnsaved() {
@@ -1969,8 +1995,10 @@ function buildDrillCardHtml(planDrill, stepNum, totalDrills) {
     `<div class="cue"><div class="cue-dot dot-${meta.cls}"></div><span>${_escH(c)}</span></div>`
   ).join('');
 
+  const durationMin = parseInt(duration) || 0;
+
   return `
-<div class="drill-card" data-drill-id="${_escA(planDrill.drill_id)}" data-drill-name="${_escA(planDrill.name)}" data-drill-phase="${phase}">
+<div class="drill-card" data-drill-id="${_escA(planDrill.drill_id)}" data-drill-name="${_escA(planDrill.name)}" data-drill-phase="${phase}" data-duration-min="${durationMin}">
   <div class="video-wrap">
     ${videoHtml}
     <span class="badge-step">${stepNum} of ${totalDrills}</span>
