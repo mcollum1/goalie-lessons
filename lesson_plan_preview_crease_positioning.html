@@ -1549,6 +1549,9 @@ let isDirty = false;
 
 // Core save logic — shared by the Save button and Save & Start
 function executeSave() {
+  // Always serialize the current DOM plan so hh_pending_plan reflects edits
+  serializeCurrentPlan();
+
   saveBtn.classList.add('saved');
   saveBtn.innerHTML = `<svg viewBox="0 0 24 24"><use href="#lp-check"/></svg> Saved`;
 
@@ -1604,13 +1607,12 @@ function executeSave() {
   }
 }
 
-// Save button — saves then returns home
+// Save button — saves in place, stays on lesson plan page
 saveBtn.addEventListener('click', () => {
   executeSave();
   saveToast.classList.add('show');
   clearTimeout(saveToast._t);
   saveToast._t = setTimeout(() => saveToast.classList.remove('show'), 1800);
-  setTimeout(() => { window.location.href = 'index.html'; }, 1200);
 });
 
 // Remove a drill
