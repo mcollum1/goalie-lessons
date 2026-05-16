@@ -3204,13 +3204,63 @@
     }
   }
 
+  /* ── Silent re-auth ────────────────────────────────────── */
+  // Called when the stored token is missing or expired.
+  // Tries to get a fresh token silently (no popup) using GIS.
+  // Only falls back to the "Connect" button if GIS can't auto-renew.
+  function trySilentAuth() {
+    // Show a loading spinner while we attempt silent re-auth
+    const todayEl = document.getElementById('cal-today');
+    if (todayEl) todayEl.innerHTML = '<div class="cal-loading"><span class="cal-spinner"></span>Loading schedule…</div>';
+
+    function attemptSilent() {
+      if (!window.google?.accounts?.oauth2) {
+        showConnectState();
+        return;
+      }
+      // Re-use existing tokenClient if already created, otherwise init one
+      const client = tokenClient || google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope:     SCOPE,
+        callback:  async (resp) => {
+          if (resp.error) {
+            // Silent auth failed (user not signed in, or revoked access)
+            showConnectState();
+            return;
+          }
+          const token = saveToken(resp);
+          await loadAndRender(token);
+        },
+      });
+      // prompt: '' = use existing consent silently, no popup
+      client.requestAccessToken({ prompt: '' });
+    }
+
+    // GIS script is loaded async — poll briefly if not ready yet
+    if (window.google?.accounts?.oauth2) {
+      attemptSilent();
+    } else {
+      let waited = 0;
+      const poll = setInterval(() => {
+        waited += 150;
+        if (window.google?.accounts?.oauth2) {
+          clearInterval(poll);
+          attemptSilent();
+        } else if (waited >= 4000) {
+          clearInterval(poll);
+          showConnectState(); // GIS failed to load entirely
+        }
+      }, 150);
+    }
+  }
+
   /* ── Init ──────────────────────────────────────────────── */
   function init() {
     const token = loadToken();
     if (token) {
-      loadAndRender(token);
+      loadAndRender(token); // still valid
     } else {
-      showConnectState();
+      trySilentAuth();      // expired — try silent renewal before showing connect
     }
   }
 
