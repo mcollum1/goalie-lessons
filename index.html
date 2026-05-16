@@ -2221,8 +2221,25 @@
       focus:    answers.focus            || 'surprise_me',
       goalie:   ctx?.goalie              || undefined,
     };
-    const drills = (window.filterDrills ? window.filterDrills(params) : window.DRILL_LIBRARY) || [];
-    if (!drills.length) throw new Error('No drills matched these session settings');
+    const allDrills = (window.filterDrills ? window.filterDrills(params) : window.DRILL_LIBRARY) || [];
+    if (!allDrills.length) throw new Error('No drills matched these session settings');
+
+    // Shuffle within each session slot so the AI sees different candidates
+    // each call — prevents it always anchoring on the same "top" drills.
+    function shuffleSlot(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+    const bySlot = {};
+    allDrills.forEach(d => {
+      const slot = d.session_slot || 'other';
+      (bySlot[slot] = bySlot[slot] || []).push(d);
+    });
+    Object.values(bySlot).forEach(shuffleSlot);
+    const drills = Object.values(bySlot).flat();
 
     const resp = await fetch(EDGE_FUNCTION_URL, {
       method:  'POST',
