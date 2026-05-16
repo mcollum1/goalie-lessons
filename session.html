@@ -622,7 +622,8 @@
     <div class="completion-title">Session done.</div>
     <div class="completion-sub" id="completionSub">Great work. Go cool down.</div>
     <div class="completion-actions">
-      <button class="completion-btn primary" onclick="window.location.href='index.html'">Back to Home</button>
+      <button class="completion-btn primary" id="backToPlanBtn">← Back to Plan</button>
+      <button class="completion-btn ghost" onclick="dismissCompletion()">← Last drill</button>
       <button class="completion-btn ghost" onclick="restartSession()">Run it again</button>
     </div>
   </div>
@@ -711,7 +712,7 @@ function buildSlideHtml(drill, idx, total) {
   const difficulty = drill.difficulty || (lib ? lib.difficulty : '') || '';
 
   const videoHtml = clip
-    ? `<video id="drillVideo${idx}" autoplay muted loop playsinline webkit-playsinline>
+    ? `<video id="drillVideo${idx}" controls autoplay muted loop playsinline webkit-playsinline>
          <source src="${escA(clip)}" type="video/mp4">
        </video>
        <a class="video-download-btn" href="${escA(clip)}" download title="Download clip">
@@ -795,6 +796,16 @@ function init() {
 
   // Wire buttons
   document.getElementById('btnBack').addEventListener('click', () => {
+    window.location.href = 'lesson_plan_preview_crease_positioning.html?' + new URLSearchParams({
+      goalie:    SESSION.goalie,
+      sessionId: SESSION.sessionId,
+      focus:     SESSION.focus,
+      duration:  SESSION.duration,
+      level:     SESSION.level,
+    }).toString();
+  });
+
+  document.getElementById('backToPlanBtn').addEventListener('click', () => {
     window.location.href = 'lesson_plan_preview_crease_positioning.html?' + new URLSearchParams({
       goalie:    SESSION.goalie,
       sessionId: SESSION.sessionId,
@@ -958,6 +969,12 @@ function restartSession() {
   goTo(0, false);
   resetTimer();
   startTimer();
+}
+
+function dismissCompletion() {
+  // Hide the overlay and return to the last drill — no reload, works offline
+  document.getElementById('completionOverlay').classList.remove('visible');
+  document.getElementById('actionBar').style.display = '';
 }
 
 // ── Boot ──────────────────────────────────────────────────────
