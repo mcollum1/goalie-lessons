@@ -1126,7 +1126,7 @@
   </button>
 </header>
 
-<div class="save-toast" id="saveToast">Plan saved — heading home</div>
+<div class="save-toast" id="saveToast">Plan saved ✓</div>
 
 <!-- Swap drill modal -->
 <div class="swap-modal-backdrop" id="swapModal">
@@ -2134,14 +2134,24 @@ function renderDynamicPlan(plan) {
   }
 }
 
-// Rebuild plan — navigate back to index.html with the rebuild param
-// so the chat sheet auto-opens for this session
+// Rebuild plan — store session context then navigate home so the chat sheet auto-opens
 function rebuildPlan() {
-  if (SESSION.sessionId) {
-    window.location.href = 'index.html?rebuild=' + encodeURIComponent(SESSION.sessionId);
-  } else {
-    window.location.href = 'index.html';
-  }
+  // Persist the full session context so index.html can open the sheet directly
+  // without depending on a calendar card being in the DOM yet
+  try {
+    localStorage.setItem('hh_rebuild_context', JSON.stringify({
+      sessionId: SESSION.sessionId || null,
+      goalieId:  SESSION.goalieId  || null,
+      goalie:    SESSION.goalie    || '',
+      level:     SESSION.level     || 'intermediate',
+      duration:  SESSION.duration  || '60',
+      shooters:  SESSION.shooters  || '1',
+      goalies:   SESSION.goalies   || '1',
+      screener:  SESSION.screener  || 'no',
+      focus:     SESSION.focus     || '',
+    }));
+  } catch {}
+  window.location.href = 'index.html?rebuild=1';
 }
 
 document.getElementById('rebuildBtn').addEventListener('click', rebuildPlan);

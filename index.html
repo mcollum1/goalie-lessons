@@ -2685,26 +2685,34 @@
   /* ── Wire up entry points ──────────────────────────────── */
   // Auto-open sheet when returning from lesson plan page via "Rebuild"
   (function checkRebuildParam() {
-    const rebuildId = new URLSearchParams(location.search).get('rebuild');
-    if (!rebuildId) return;
+    const params = new URLSearchParams(location.search);
+    if (!params.get('rebuild')) return;
     history.replaceState({}, '', 'index.html'); // clean the URL
-    // Wait a tick so all buttons are wired + saved-plan state applied
-    setTimeout(() => {
-      const btn = document.querySelector(`[data-session-id="${rebuildId}"][data-build-plan]`);
-      if (!btn) return;
-      const goalieId = btn.dataset.goalieId;
-      const dbGoalie = window.DB && goalieId ? DB.GoalieStore.getById(goalieId) : null;
-      openSheet({
-        sessionId: btn.dataset.sessionId || null,
-        goalieId:  goalieId || null,
-        goalie:    btn.dataset.goalie,
-        time:      btn.dataset.time,
-        count:     btn.dataset.count,
-        level:     dbGoalie?.level    || btn.dataset.level,
-        duration:  dbGoalie?.default_session_minutes || btn.dataset.duration,
-        shooters:  dbGoalie?.default_shooters || btn.dataset.count,
-      });
-    }, 150);
+
+    // Read context stored by rebuildPlan() — no DOM button needed
+    let ctx = null;
+    try {
+      const raw = localStorage.getItem('hh_rebuild_context');
+      if (raw) { ctx = JSON.parse(raw); localStorage.removeItem('hh_rebuild_context'); }
+    } catch {}
+    if (!ctx) return;
+
+    // Poll until openSheet is ready (calendar loads async so sheet may not exist yet)
+    const tryOpen = (attempts) => {
+      if (typeof openSheet === 'function') {
+        openSheet({
+          sessionId: ctx.sessionId || null,
+          goalieId:  ctx.goalieId  || null,
+          goalie:    ctx.goalie    || '',
+          level:     ctx.level     || 'intermediate',
+          duration:  ctx.duration  || '60',
+          shooters:  ctx.shooters  || '1',
+        });
+      } else if (attempts > 0) {
+        setTimeout(() => tryOpen(attempts - 1), 100);
+      }
+    };
+    setTimeout(() => tryOpen(20), 100); // up to ~2 seconds of retries
   })();
 
   document.querySelectorAll('[data-build-plan]').forEach(btn => {
