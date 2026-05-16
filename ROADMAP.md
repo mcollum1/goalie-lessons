@@ -1,106 +1,110 @@
 # Goalie Coach App — Roadmap
 
-## Now — Drill Library Foundation
-Building the structured drill library that powers the app and AI lesson planning.
+## ✅ Done — Core App (May 2025)
 
 - [x] Define drill schema (id, name, description, drill_category, session_slot, coaching cues, variations, etc.)
-- [x] Define drill_category taxonomy
-- [x] Define session_slot values
-- [x] First drill saved: Pass & Wrap — Slide Series
-- [ ] Build out library to ~15 drills across all categories
-- [ ] Design final mobile drill card UI
+- [x] Define drill_category + session_slot taxonomy
+- [x] Build drill library to 45 drills across all phases
+- [x] AI lesson planning via Supabase Edge Function (claude-sonnet-4-6)
+- [x] Full E2E flow: home → chat sheet → AI-generated plan → save
+- [x] On-ice session mode (session.html) — drill carousel, swipe, per-drill timer, completion
+- [x] Start Session + Save + Rebuild buttons on lesson plan page
+- [x] Save & Start flow — auto-saves edits before going on-ice
+- [x] PWA manifest — installable to iPhone home screen
+- [x] Drill tag audit — all 45 drills verified and corrected
+- [x] Drill review tool (drill-review.html)
+- [x] Deployed to Cloudflare Pages (goalie-coach.pages.dev)
 
 ---
 
-## Next — AI Lesson Planning
-Coach describes the session goal, AI builds a 60-min plan from the library.
+## Now — Schedule Integration
 
-- [ ] AI reads drill_category, session_slot, difficulty, and duration to assemble a session
-- [ ] Session follows the standard progression: warmup → skill work → situational → compete
-- [ ] Coach inputs: focus area(s), player level, session length
-- [ ] AI outputs a sequenced plan with ~8–10 drills
-- [ ] Coach can review and approve the plan before use
-- [ ] Bonus slot rule: always surface a compete game as the bonus drill when shooter count allows (session_slot = "compete", shooter_count_min ≤ available shooters); fall back to a bonus skill drill only when no compete game is eligible
+Wiring real lesson data into the coach app home screen.
+
+### Phase 1 — Google Calendar (current sprint)
+- [x] Pull this week's lessons from Google Calendar into the home screen
+- [ ] Dynamic greeting date (today's actual date, not hardcoded)
+- [ ] "Today" section shows real calendar events as lesson cards
+- [ ] "This Week" section shows upcoming events
+- [ ] Token persisted in localStorage — no re-auth on every visit
+
+### Phase 2 — Move bookings into Supabase (next sprint)
+Replaces the SMS-based booking flow with a proper backend.
+- [ ] `bookings` table in Supabase — parent books → row created
+- [ ] Coach approves from within the coach app (not admin.html)
+- [ ] Google Calendar event created automatically on approval
+- [ ] Home screen lesson cards sourced from Supabase (not Calendar directly)
+
+### Phase 3 — Full automation (commercial prerequisite)
+- [ ] Stripe payment collected at booking time
+- [ ] Automated confirmation email via Resend (no manual "tap Send")
+- [ ] Automated reminder 24h before lesson
+- [ ] Cancellation + rescheduling flow
 
 ---
 
-## Next — On-Ice Mode & Offline
-Making the app usable at the rink with no wifi.
+## Now — Scheduling as a Product Feature (HockeyHub)
 
-- [ ] Build as a Progressive Web App (PWA) — installable to iPhone/iPad home screen
-- [ ] "Download session" — caches selected plan's drills + video clips for offline use (~80–120MB vs full library)
-- [ ] Lean on-ice card view — name, cues, movement sequence only (no video needed mid-drill)
-- [ ] Full card view with video for prep and review
-- [ ] Mark drill as done during a session
+Design notes for when this becomes a paid feature.
+
+- **Source of truth**: Supabase `bookings` table, not Google Calendar
+- **Calendar becomes an output**: written to automatically on booking/approval
+- **Multi-coach**: each coach has their own calendar ID + goalie roster in the DB
+- **Parent-facing**: parents book and pay through HockeyHub (not a separate availability page)
+- **Coach app home screen**: reads from Supabase, shows this week's real lessons
 
 ---
 
-## Later — Session Management
-Tools for planning, running, and reviewing sessions over time.
+## Next — Session Management
 
 - [ ] Saved session history — re-use a plan from a previous week
-- [ ] Swap a drill mid-session — replace one drill with another of the same category/slot
-- [ ] Session notes — coach can add notes after a session
-- [ ] Per-drill notes — coach can annotate a drill after using it (what worked, what didn't)
-- [ ] Goalie profiles — track which drills a specific goalie has worked on
+- [ ] Per-goalie drill history — track what each goalie has worked on
+- [ ] Session notes — coach adds notes after a session
+- [ ] Per-drill notes — what worked, what didn't
 
 ---
 
 ## Later — Content
-Expanding the library and adding richer media.
 
-- [ ] Replace YouTube-sourced clips with original filmed content before any commercial release
-- [ ] Animated diagrams for drills (ice surface overhead view)
-- [ ] Drill difficulty progressions — beginner → intermediate → advanced variants of core drills
+- [ ] Replace YouTube-sourced clips with original filmed content before commercial release
+- [ ] Animated ice-surface diagrams for each drill
+- [ ] Drill difficulty progressions — beginner → intermediate → advanced variants
 
 ---
 
 ## Later — AI Video Coaching
-In-app recording with AI evaluation against library film and goalie best practices.
 
-This is a two-part system: (1) a heuristics library that encodes what "correct" looks like for every key technique, and (2) a video pipeline that records the goalie, analyzes the clip, and returns structured coaching feedback.
+In-app recording with AI evaluation against library film and coaching heuristics.
 
-### Part 1 — Goalie Coaching Heuristics Library
-Before AI can evaluate anything, we need to define what it's evaluating against. This is a structured knowledge base built alongside the drill library.
-
-- [ ] Define heuristic schema: technique, checkpoint, correct_form, common_errors, what_to_look_for (body part / timing cues), severity (critical | major | minor)
-- [ ] Write heuristics for core techniques: butterfly drop, T-push, powerslide, RVH set, post entry/exit, overlap, lateral release, paddle down, VH/hybrid VH
-- [ ] Write heuristics for reading habits: head turn before slide, eyes-before-hands on pivot, locate-before-drop on verbal cue, head check in RVH, depth on T-push
-- [ ] Tag each heuristic to relevant drill_category values so the AI knows which ones apply to a given drill
-- [ ] Build a "what good looks like" reference clip set — short annotated clips from the library film showing each heuristic at its correct checkpoint
+### Part 1 — Heuristics Library
+- [ ] Define heuristic schema: technique, checkpoint, correct_form, common_errors, severity
+- [ ] Write heuristics for core techniques: butterfly drop, T-push, powerslide, RVH, overlap, lateral release, VH/hybrid VH
+- [ ] Write heuristics for reading habits: head turn, eyes-before-hands, locate-before-drop, depth on T-push
+- [ ] Tag heuristics to drill_category values
 
 ### Part 2 — In-App Recording
-Coach records the goalie during a drill directly from the app.
+- [ ] In-session camera UI attached to the active drill card
+- [ ] Coach trims clip to a single rep before submitting
+- [ ] Clips stored locally, synced to cloud on wifi
 
-- [ ] In-session recording mode — camera UI attached to the active drill card
-- [ ] Coach can trim the clip to a single rep before submitting for analysis
-- [ ] Clips stored locally on device first; sync to cloud on wifi
-- [ ] Recordings tagged to the drill, goalie profile, and session date automatically
-
-### Part 3 — AI Evaluation Engine
-AI analyzes the recording and returns structured coaching feedback.
-
-- [ ] Frame-by-frame pose extraction — identify key body landmarks (hips, head, hands, knees, skate edges) throughout the rep
-- [ ] Compare goalie's movement against the relevant drill heuristics: flag checkpoints where form deviates from correct
-- [ ] Compare against library reference clip for the same drill — side-by-side diff at key frames (e.g. "at point of save, goalie's hands were 6 inches behind the puck vs. reference")
-- [ ] Output a structured feedback report: technique flagged, what was observed, what correct looks like, severity
-- [ ] Prioritize feedback — surface the 1–2 most impactful corrections rather than everything at once
-- [ ] Coach can accept, dismiss, or add a note to each feedback item before sharing with the goalie
+### Part 3 — AI Evaluation
+- [ ] Pose extraction — key landmarks (hips, head, hands, knees, edges) throughout the rep
+- [ ] Compare against heuristics — flag checkpoints where form deviates
+- [ ] Side-by-side diff against reference clip at key frames
+- [ ] Output: structured feedback report, 1–2 priority corrections
 
 ### Part 4 — Goalie-Facing Feedback
-Turning the AI output into something useful for the goalie to watch and understand.
-
-- [ ] Annotated playback — goalie watches their clip with highlighted checkpoints overlaid (e.g. circle around hands at save, arrow on hip angle)
-- [ ] Side-by-side view — goalie's clip paired with the reference drill clip, synced to the same point in the rep
-- [ ] Written feedback card attached to the clip — same language as the coaching cues in the drill card
-- [ ] Feedback saved to goalie profile so progress can be tracked across sessions
+- [ ] Annotated playback with highlighted checkpoints overlaid
+- [ ] Side-by-side view with reference clip, synced to same point in rep
+- [ ] Written feedback card saved to goalie profile
 
 ---
 
-## Ideas / Backlog
-Captured but not yet prioritized.
+## Backlog / Ideas
 
 - Drill ratings / favorites for quick access
 - "Build your own" drill tool for coaches to add custom drills
 - Shareable session plans between coaches
-- Coaching voice layer for pre-session briefs — build a `coaching_voice.md` reference file from Jamie Phillips' on-ice language (vocabulary, correction framing, diagnostic sequence) and inject it as context when the AI generates briefs, so the language matches how he actually coaches
+- Coaching voice layer — inject Jamie Phillips' on-ice language into AI-generated session briefs
+- Offline mode — cache selected plan's drills + clips (~80–120MB) for no-wifi rinks
+- Cloudflare R2 migration for drill clips (when library grows beyond current repo size)

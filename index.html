@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
   /* ─── Design tokens (HockeyHub + Goalie blend) ─── */
@@ -1757,6 +1758,81 @@
   /* Subtle bottom-of-page divider */
   .page-end-spacer { height: 8px; }
 
+  /* ─── Calendar loading / empty / connect states ─── */
+  .cal-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 16px;
+    color: var(--hh-text-tertiary);
+    font-size: 14px;
+  }
+  .cal-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--hh-border);
+    border-top-color: var(--hh-primary);
+    border-radius: 50%;
+    animation: cal-spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes cal-spin { to { transform: rotate(360deg); } }
+
+  .cal-empty {
+    padding: 20px 16px;
+    color: var(--hh-text-tertiary);
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  .cal-connect-wrap {
+    padding: 16px;
+  }
+  .cal-connect-card {
+    background: var(--hh-surface);
+    border: 1px dashed var(--hh-border);
+    border-radius: 12px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+  .cal-connect-card p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--hh-text-secondary);
+    line-height: 1.5;
+  }
+  .cal-connect-btn {
+    margin-top: 4px;
+    padding: 10px 20px;
+    background: var(--hh-primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .cal-connect-btn:hover { background: var(--hh-primary-hover); }
+  .cal-connect-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--hh-primary-tint);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cal-connect-icon svg { width: 20px; height: 20px; color: var(--hh-primary); }
+
   /* Status-bar safe spacing for fullscreen apps */
   @supports (padding-top: env(safe-area-inset-top)) {
     .top-header { padding-top: env(safe-area-inset-top); }
@@ -1835,216 +1911,45 @@
 
   <!-- ─── GREETING ─── -->
   <section class="greeting">
-    <div class="greeting-eyebrow">Sunday, May 10</div>
-    <h1 class="greeting-title">Good afternoon, Mitch.</h1>
+    <div class="greeting-eyebrow" id="greeting-date">Loading…</div>
+    <h1 class="greeting-title" id="greeting-title">Good morning, Mitch.</h1>
   </section>
 
   <!-- ─── TODAY ─── -->
-  <section class="section">
+  <section class="section" id="today-section">
     <div class="section-head">
       <div class="section-head-left">
         <span class="section-label">Today</span>
-        <span class="section-count">2 lessons</span>
+        <span class="section-count" id="today-count"></span>
       </div>
       <a class="section-link" href="booking.html">
         Schedule
         <svg class="lucide"><use href="#i-chevron-right"/></svg>
       </a>
     </div>
-
-    <!-- HERO: next-up lesson (4:00 PM) -->
-    <article class="lesson-card hero">
-      <div class="hero-eyebrow-row">
-        <span class="hero-eyebrow"><span class="pulse"></span>Next up · 4:00 PM</span>
-        <span class="hero-time-badge">in 2h 15m</span>
+    <!-- Calendar-driven cards injected here -->
+    <div id="cal-today">
+      <div class="cal-loading">
+        <span class="cal-spinner"></span>
+        Loading schedule…
       </div>
-      <div class="hero-body">
-        <div class="hero-time">4:00 PM</div>
-        <div class="hero-duration">60 min · Private</div>
-        <div class="hero-rink">
-          <svg class="lucide"><use href="#i-map-pin"/></svg>
-          Champions Skating Center · Cromwell
-        </div>
-        <div class="hero-goalies">
-          <div class="goalie-avatars">
-            <div class="hero-goalie-avatar">JR</div>
-          </div>
-          <div class="hero-goalie-text">
-            <div class="hero-goalie-names">Jake Reynolds</div>
-            <div class="hero-goalie-context">12U · Intermediate · 4th lesson</div>
-          </div>
-        </div>
-      </div>
-      <div class="hero-cta-row">
-        <button class="hero-cta" type="button">
-          <svg class="lucide"><use href="#i-user"/></svg>
-          Profile
-        </button>
-        <button class="hero-cta primary" type="button"
-          data-build-plan
-          data-session-id="session_jake_0512"
-          data-goalie-id="goalie_jake_reynolds"
-          data-goalie="Jake Reynolds"
-          data-time="4:00 PM"
-          data-count="1"
-          data-level="intermediate"
-          data-duration="60">
-          <svg class="lucide"><use href="#i-sparkles"/></svg>
-          Build plan
-        </button>
-      </div>
-    </article>
-
-    <!-- 5:00 PM lesson (2 goalies) -->
-    <article class="lesson-card">
-      <div class="lesson-card-body">
-        <div class="lesson-meta-row">
-          <div class="lesson-time">
-            <div class="lesson-time-block">
-              <span class="lesson-time-primary">5:15 PM</span>
-              <span class="lesson-time-duration">60 min · Semi-private</span>
-            </div>
-          </div>
-        </div>
-        <div class="lesson-info-row">
-          <svg class="lucide"><use href="#i-map-pin"/></svg>
-          Champions Skating Center · Cromwell
-        </div>
-        <div class="lesson-goalies">
-          <div class="goalie-avatars">
-            <div class="goalie-avatar tone-b">MK</div>
-            <div class="goalie-avatar tone-c">LP</div>
-          </div>
-          <div class="goalie-details">
-            <div class="goalie-names">Mason K. &amp; Lily P.</div>
-            <div class="goalie-context">10U · Beginner / Intermediate</div>
-          </div>
-        </div>
-      </div>
-      <div class="lesson-cta-row">
-        <button class="lesson-cta" type="button">
-          <svg class="lucide"><use href="#i-users"/></svg>
-          Profile
-        </button>
-        <button class="lesson-cta primary" type="button"
-          data-build-plan
-          data-session-id="session_mason_lily_0512"
-          data-goalie-id="goalie_mason_k"
-          data-goalie="Mason K. &amp; Lily P."
-          data-time="5:15 PM"
-          data-count="2"
-          data-level="beginner-intermediate"
-          data-duration="60">
-          <svg class="lucide"><use href="#i-sparkles"/></svg>
-          Build plan
-        </button>
-      </div>
-    </article>
+    </div>
   </section>
 
   <!-- ─── THIS WEEK ─── -->
-  <section class="section">
+  <section class="section" id="week-section">
     <div class="section-head">
       <div class="section-head-left">
         <span class="section-label">This week</span>
-        <span class="section-count">3 lessons</span>
+        <span class="section-count" id="week-count"></span>
       </div>
       <a class="section-link" href="booking.html">
         View all
         <svg class="lucide"><use href="#i-chevron-right"/></svg>
       </a>
     </div>
-
-    <!-- Tue -->
-    <article class="lesson-card">
-      <div class="lesson-card-body">
-        <div class="lesson-meta-row">
-          <div class="lesson-time">
-            <div class="lesson-time-block">
-              <span class="lesson-time-primary">Tue · 6:30 PM</span>
-              <span class="lesson-time-duration">60 min · Private</span>
-            </div>
-          </div>
-        </div>
-        <div class="lesson-info-row">
-          <svg class="lucide"><use href="#i-map-pin"/></svg>
-          Northford Ice Pavilion · North Branford
-        </div>
-        <div class="lesson-goalies">
-          <div class="goalie-avatars">
-            <div class="goalie-avatar tone-a">AT</div>
-          </div>
-          <div class="goalie-details">
-            <div class="goalie-names">Aiden Torres</div>
-            <div class="goalie-context">14U · Advanced · 8th lesson</div>
-          </div>
-        </div>
-      </div>
-      <div class="lesson-cta-row">
-        <button class="lesson-cta" type="button">
-          <svg class="lucide"><use href="#i-user"/></svg>
-          Profile
-        </button>
-        <button class="lesson-cta primary" type="button"
-          data-build-plan
-          data-session-id="session_aiden_0519"
-          data-goalie-id="goalie_aiden_torres"
-          data-goalie="Aiden Torres"
-          data-time="Tue · 6:30 PM"
-          data-count="1"
-          data-level="advanced"
-          data-duration="60">
-          <svg class="lucide"><use href="#i-sparkles"/></svg>
-          Build plan
-        </button>
-      </div>
-    </article>
-
-    <!-- Thu -->
-    <article class="lesson-card">
-      <div class="lesson-card-body">
-        <div class="lesson-meta-row">
-          <div class="lesson-time">
-            <div class="lesson-time-block">
-              <span class="lesson-time-primary">Thu · 5:00 PM</span>
-              <span class="lesson-time-duration">60 min · Semi-private</span>
-            </div>
-          </div>
-        </div>
-        <div class="lesson-info-row">
-          <svg class="lucide"><use href="#i-map-pin"/></svg>
-          Wonderland of Ice · Bridgeport
-        </div>
-        <div class="lesson-goalies">
-          <div class="goalie-avatars">
-            <div class="goalie-avatar tone-d">EM</div>
-            <div class="goalie-avatar tone-a">SC</div>
-          </div>
-          <div class="goalie-details">
-            <div class="goalie-names">Eli M. &amp; Sam C.</div>
-            <div class="goalie-context">14U · Intermediate</div>
-          </div>
-        </div>
-      </div>
-      <div class="lesson-cta-row">
-        <button class="lesson-cta" type="button">
-          <svg class="lucide"><use href="#i-users"/></svg>
-          Profile
-        </button>
-        <button class="lesson-cta primary" type="button"
-          data-build-plan
-          data-session-id="session_eli_sam_0521"
-          data-goalie-id="goalie_eli_m"
-          data-goalie="Eli M. &amp; Sam C."
-          data-time="Thu · 5:00 PM"
-          data-count="2"
-          data-level="intermediate"
-          data-duration="60">
-          <svg class="lucide"><use href="#i-sparkles"/></svg>
-          Build plan
-        </button>
-      </div>
-    </article>
+    <!-- Calendar-driven cards injected here -->
+    <div id="cal-week"></div>
   </section>
 
   <!-- ─── RECENT LESSONS ─── -->
@@ -2857,6 +2762,444 @@
     input.style.height = 'auto';
     input.style.height = Math.min(input.scrollHeight, 120) + 'px';
   });
+
+  // Expose openSheet globally so calendar-injected cards can trigger it
+  window._hhOpenSheet = openSheet;
+})();
+</script>
+
+<!-- ─── GOOGLE CALENDAR INTEGRATION ─── -->
+<script>
+(() => {
+  /* ── Config ────────────────────────────────────────────── */
+  const CLIENT_ID   = '329026777999-v4hljil36dfe58e3bvpsibdet15a4oa1.apps.googleusercontent.com';
+  const CALENDAR_ID = '721f102eadb73ee43a9d593c80643347c806fccf57b0def9604515a8b2a73a7b@group.calendar.google.com';
+  const SCOPE       = 'https://www.googleapis.com/auth/calendar.readonly';
+  const TOKEN_KEY   = 'hh_gcal_token';
+  const TONES       = ['tone-a', 'tone-b', 'tone-c', 'tone-d'];
+
+  /* ── Rink lookup ───────────────────────────────────────── */
+  const RINK_MAP = {
+    'champions': 'Champions Skating Center · Cromwell',
+    'newington': 'Newington Arena · Newington',
+    'northford': 'Northford Ice Pavilion · North Branford',
+    'wonderland': 'Wonderland of Ice · Bridgeport',
+    'yale':      'Ingalls Rink · New Haven',
+  };
+  function expandRink(raw) {
+    if (!raw) return '';
+    const key = raw.trim().toLowerCase();
+    for (const [k, v] of Object.entries(RINK_MAP)) {
+      if (key.includes(k)) return v;
+    }
+    return raw.trim();
+  }
+
+  /* ── Dynamic greeting ──────────────────────────────────── */
+  function renderGreeting() {
+    const now  = new Date();
+    const h    = now.getHours();
+    const tod  = h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const mons = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const dateStr = `${days[now.getDay()]}, ${mons[now.getMonth()]} ${now.getDate()}`;
+    const dateEl  = document.getElementById('greeting-date');
+    const titleEl = document.getElementById('greeting-title');
+    if (dateEl)  dateEl.textContent  = dateStr;
+    if (titleEl) titleEl.textContent = `Good ${tod}, Mitch.`;
+  }
+  renderGreeting();
+
+  /* ── Token management ──────────────────────────────────── */
+  function saveToken(tokenResp) {
+    const exp = Date.now() + (tokenResp.expires_in - 60) * 1000;
+    try { localStorage.setItem(TOKEN_KEY, JSON.stringify({ token: tokenResp.access_token, exp })); } catch {}
+    return tokenResp.access_token;
+  }
+  function loadToken() {
+    try {
+      const raw = localStorage.getItem(TOKEN_KEY);
+      if (!raw) return null;
+      const { token, exp } = JSON.parse(raw);
+      return Date.now() < exp ? token : null;
+    } catch { return null; }
+  }
+  function clearToken() {
+    try { localStorage.removeItem(TOKEN_KEY); } catch {}
+  }
+
+  /* ── Helpers ───────────────────────────────────────────── */
+  function initials(name) {
+    const parts = name.trim().split(/\s+/);
+    return parts.length === 1
+      ? parts[0].slice(0, 2).toUpperCase()
+      : (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+  function tone(name) {
+    return TONES[((name || '').toUpperCase().charCodeAt(0) || 65) % 4];
+  }
+  function formatTime(iso) {
+    const d = new Date(iso);
+    const h = d.getHours(), m = d.getMinutes();
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const hr = h % 12 || 12;
+    return `${hr}:${m.toString().padStart(2, '0')} ${ampm}`;
+  }
+  function minutesBetween(startIso, endIso) {
+    return Math.round((new Date(endIso) - new Date(startIso)) / 60000);
+  }
+  function relativeTime(startIso) {
+    const diff = Math.round((new Date(startIso) - Date.now()) / 60000);
+    if (diff < 0)  return 'in progress';
+    if (diff < 60) return `in ${diff}m`;
+    const h = Math.floor(diff / 60), m = diff % 60;
+    return m > 0 ? `in ${h}h ${m}m` : `in ${h}h`;
+  }
+  function dayLabel(iso) {
+    const d   = new Date(iso);
+    const dow = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+    return dow;
+  }
+  function sessionId(event) {
+    // Stable ID from event id (first 8 chars) + date
+    const date = (event.start.dateTime || event.start.date || '').slice(0, 10).replace(/-/g, '');
+    return `cal_${(event.id || '').slice(0, 8)}_${date}`;
+  }
+  function isToday(iso) {
+    const d = new Date(iso);
+    const n = new Date();
+    return d.getFullYear() === n.getFullYear()
+        && d.getMonth()    === n.getMonth()
+        && d.getDate()     === n.getDate();
+  }
+
+  /* ── Title parser: "Goalie Lesson – {names} – {rink}" ─── */
+  function parseTitle(title) {
+    // Handles em-dash (–), en-dash (–), hyphen-minus (-)
+    const parts = title.split(/\s*[–—-]\s*/);
+    if (parts.length < 2) return null;   // not our format
+    const names   = parts[1]?.trim() || '';
+    const rinkRaw = parts[2]?.trim() || '';
+    return { names, rink: expandRink(rinkRaw) };
+  }
+
+  /* ── Card builders ─────────────────────────────────────── */
+  function buildHeroCard(event, parsed) {
+    const sid      = sessionId(event);
+    const timeStr  = formatTime(event.start.dateTime);
+    const dur      = minutesBetween(event.start.dateTime, event.end.dateTime);
+    const rel      = relativeTime(event.start.dateTime);
+    const goalies  = parsed.names.split(/\s*&\s*/).map(n => n.trim()).filter(Boolean);
+    const count    = goalies.length;
+    const privLabel = count > 1 ? 'Semi-private' : 'Private';
+    const isMulti  = count > 1;
+
+    const avatarsHtml = goalies.slice(0, 2).map(n =>
+      `<div class="hero-goalie-avatar">${initials(n)}</div>`
+    ).join('');
+
+    const nameDisplay = count > 2
+      ? goalies.slice(0, 2).map(n => n.split(' ')[0]).join(' & ') + ` +${count - 2}`
+      : parsed.names;
+
+    return `
+    <article class="lesson-card hero">
+      <div class="hero-eyebrow-row">
+        <span class="hero-eyebrow"><span class="pulse"></span>Next up · ${timeStr}</span>
+        <span class="hero-time-badge">${rel}</span>
+      </div>
+      <div class="hero-body">
+        <div class="hero-time">${timeStr}</div>
+        <div class="hero-duration">${dur} min · ${privLabel}</div>
+        <div class="hero-rink">
+          <svg class="lucide"><use href="#i-map-pin"/></svg>
+          ${parsed.rink || 'Location TBD'}
+        </div>
+        <div class="hero-goalies">
+          <div class="goalie-avatars">${avatarsHtml}</div>
+          <div class="hero-goalie-text">
+            <div class="hero-goalie-names">${nameDisplay}</div>
+            <div class="hero-goalie-context">${dur} min · ${privLabel}</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-cta-row">
+        <button class="hero-cta" type="button">
+          <svg class="lucide"><use href="${isMulti ? '#i-users' : '#i-user'}"/></svg>
+          Profile
+        </button>
+        <button class="hero-cta primary" type="button"
+          data-build-plan
+          data-session-id="${sid}"
+          data-goalie="${parsed.names.replace(/"/g, '&quot;')}"
+          data-time="${timeStr}"
+          data-count="${count}"
+          data-level="intermediate"
+          data-duration="${dur}">
+          <svg class="lucide"><use href="#i-sparkles"/></svg>
+          Build plan
+        </button>
+      </div>
+    </article>`;
+  }
+
+  function buildRegularCard(event, parsed, weekMode) {
+    const sid      = sessionId(event);
+    const timeStr  = formatTime(event.start.dateTime);
+    const dur      = minutesBetween(event.start.dateTime, event.end.dateTime);
+    const goalies  = parsed.names.split(/\s*&\s*/).map(n => n.trim()).filter(Boolean);
+    const count    = goalies.length;
+    const privLabel = count > 1 ? 'Semi-private' : 'Private';
+    const isMulti  = count > 1;
+
+    const timeLabel = weekMode ? `${dayLabel(event.start.dateTime)} · ${timeStr}` : timeStr;
+
+    const avatarsHtml = goalies.slice(0, 3).map((n, i) => {
+      const extra = i > 0 ? ` style="margin-left:-8px;border:2px solid var(--hh-surface)"` : '';
+      return `<div class="goalie-avatar ${tone(n)}"${extra}>${initials(n)}</div>`;
+    }).join('');
+
+    const nameDisplay = count > 3
+      ? goalies.slice(0, 2).map(n => n.split(' ')[0]).join(' & ') + ` +${count - 2}`
+      : parsed.names;
+
+    return `
+    <article class="lesson-card">
+      <div class="lesson-card-body">
+        <div class="lesson-meta-row">
+          <div class="lesson-time">
+            <div class="lesson-time-block">
+              <span class="lesson-time-primary">${timeLabel}</span>
+              <span class="lesson-time-duration">${dur} min · ${privLabel}</span>
+            </div>
+          </div>
+        </div>
+        <div class="lesson-info-row">
+          <svg class="lucide"><use href="#i-map-pin"/></svg>
+          ${parsed.rink || 'Location TBD'}
+        </div>
+        <div class="lesson-goalies">
+          <div class="goalie-avatars">${avatarsHtml}</div>
+          <div class="goalie-details">
+            <div class="goalie-names">${nameDisplay}</div>
+            <div class="goalie-context">${dur} min · ${privLabel}</div>
+          </div>
+        </div>
+      </div>
+      <div class="lesson-cta-row">
+        <button class="lesson-cta" type="button">
+          <svg class="lucide"><use href="${isMulti ? '#i-users' : '#i-user'}"/></svg>
+          Profile
+        </button>
+        <button class="lesson-cta primary" type="button"
+          data-build-plan
+          data-session-id="${sid}"
+          data-goalie="${parsed.names.replace(/"/g, '&quot;')}"
+          data-time="${timeLabel}"
+          data-count="${count}"
+          data-level="intermediate"
+          data-duration="${dur}">
+          <svg class="lucide"><use href="#i-sparkles"/></svg>
+          Build plan
+        </button>
+      </div>
+    </article>`;
+  }
+
+  function wireNewCards() {
+    // Apply saved-plan state + open sheet listener to any newly created cards
+    document.querySelectorAll('[data-build-plan]:not([data-wired])').forEach(btn => {
+      btn.dataset.wired = '1';
+      const sessionId = btn.dataset.sessionId;
+      // Check for existing saved plan
+      if (sessionId && window.DB && DB.hasSavedPlan(sessionId)) {
+        const useEl = btn.querySelector('use');
+        if (useEl) useEl.setAttribute('href', '#i-arrow-right');
+        btn.dataset.seePlan = 'lesson_plan_preview_crease_positioning.html';
+        btn.classList.add('see-plan-mode');
+        for (const node of btn.childNodes) {
+          if (node.nodeType === Node.TEXT_NODE && node.textContent.includes('Build')) {
+            node.textContent = node.textContent.replace('Build plan', 'See plan');
+            break;
+          }
+        }
+      }
+      btn.addEventListener('click', () => {
+        if (btn.dataset.seePlan) { window.location.href = btn.dataset.seePlan; return; }
+        // openSheet is exposed globally from the other script block
+        if (typeof window._hhOpenSheet === 'function') {
+          window._hhOpenSheet({
+            sessionId: btn.dataset.sessionId || null,
+            goalie:    btn.dataset.goalie,
+            time:      btn.dataset.time,
+            count:     btn.dataset.count,
+            level:     btn.dataset.level    || 'intermediate',
+            duration:  btn.dataset.duration || '60',
+            shooters:  btn.dataset.count    || '1',
+          });
+        }
+      });
+    });
+  }
+
+  /* ── Render sections ───────────────────────────────────── */
+  function renderSections(allEvents) {
+    const todayEvents = allEvents.filter(e => e.start?.dateTime && isToday(e.start.dateTime));
+    const weekEvents  = allEvents.filter(e => e.start?.dateTime && !isToday(e.start.dateTime));
+
+    const todayEl   = document.getElementById('cal-today');
+    const weekEl    = document.getElementById('cal-week');
+    const todayCount = document.getElementById('today-count');
+    const weekCount  = document.getElementById('week-count');
+
+    // ── Today ──
+    if (todayEvents.length === 0) {
+      todayEl.innerHTML = '<div class="cal-empty">No lessons today.</div>';
+      if (todayCount) todayCount.textContent = '';
+    } else {
+      if (todayCount) todayCount.textContent = `${todayEvents.length} lesson${todayEvents.length !== 1 ? 's' : ''}`;
+      let html = buildHeroCard(todayEvents[0], parseTitle(todayEvents[0].summary) || { names: todayEvents[0].summary, rink: '' });
+      for (let i = 1; i < todayEvents.length; i++) {
+        const p = parseTitle(todayEvents[i].summary) || { names: todayEvents[i].summary, rink: '' };
+        html += buildRegularCard(todayEvents[i], p, false);
+      }
+      todayEl.innerHTML = html;
+    }
+
+    // ── This week ──
+    if (weekEvents.length === 0) {
+      weekEl.innerHTML = '<div class="cal-empty">No more lessons this week.</div>';
+      if (weekCount) weekCount.textContent = '';
+    } else {
+      if (weekCount) weekCount.textContent = `${weekEvents.length} lesson${weekEvents.length !== 1 ? 's' : ''}`;
+      let html = '';
+      weekEvents.forEach(e => {
+        const p = parseTitle(e.summary) || { names: e.summary, rink: '' };
+        html += buildRegularCard(e, p, true);
+      });
+      weekEl.innerHTML = html;
+    }
+
+    wireNewCards();
+  }
+
+  /* ── API fetch ─────────────────────────────────────────── */
+  async function fetchEvents(accessToken) {
+    // Today at midnight → Sunday 23:59:59 of this week
+    const now       = new Date();
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dayOfWeek  = now.getDay(); // 0=Sun
+    const daysToEnd  = 6 - dayOfWeek;
+    const endOfWeek  = new Date(startOfDay);
+    endOfWeek.setDate(endOfWeek.getDate() + daysToEnd + 1); // exclusive end
+
+    const params = new URLSearchParams({
+      timeMin:      startOfDay.toISOString(),
+      timeMax:      endOfWeek.toISOString(),
+      singleEvents: 'true',
+      orderBy:      'startTime',
+      maxResults:   '25',
+    });
+
+    const resp = await fetch(
+      `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?${params}`,
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
+
+    if (resp.status === 401) {
+      clearToken();
+      throw new Error('token_expired');
+    }
+    if (!resp.ok) throw new Error(`Calendar API error: ${resp.status}`);
+
+    const data = await resp.json();
+    // Filter to only "Goalie Lesson" events
+    return (data.items || []).filter(e =>
+      e.start?.dateTime && (e.summary || '').toLowerCase().includes('goalie lesson')
+    );
+  }
+
+  /* ── Connect button ────────────────────────────────────── */
+  function showConnectState() {
+    const todayEl = document.getElementById('cal-today');
+    const weekEl  = document.getElementById('cal-week');
+    const html = `
+      <div class="cal-connect-wrap">
+        <div class="cal-connect-card">
+          <div class="cal-connect-icon">
+            <svg class="lucide"><use href="#i-calendar"/></svg>
+          </div>
+          <p>Connect your Google Calendar to see today's lessons here automatically.</p>
+          <button class="cal-connect-btn" id="calConnectBtn" type="button">
+            <svg class="lucide" style="width:16px;height:16px"><use href="#i-calendar"/></svg>
+            Connect Calendar
+          </button>
+        </div>
+      </div>`;
+    if (todayEl) todayEl.innerHTML = html;
+    if (weekEl)  weekEl.innerHTML  = '';
+
+    document.getElementById('calConnectBtn')?.addEventListener('click', requestAuth);
+  }
+
+  function showError(msg) {
+    const todayEl = document.getElementById('cal-today');
+    if (todayEl) todayEl.innerHTML = `<div class="cal-empty">Couldn't load calendar: ${msg}</div>`;
+  }
+
+  /* ── GIS OAuth ─────────────────────────────────────────── */
+  let tokenClient;
+
+  function requestAuth() {
+    if (!tokenClient) {
+      if (!window.google?.accounts?.oauth2) {
+        showError('Google Identity Services not loaded yet. Try refreshing.');
+        return;
+      }
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope:     SCOPE,
+        callback:  async (resp) => {
+          if (resp.error) { showError(resp.error); return; }
+          const token = saveToken(resp);
+          await loadAndRender(token);
+        },
+      });
+    }
+    tokenClient.requestAccessToken({ prompt: '' });
+  }
+
+  async function loadAndRender(accessToken) {
+    const todayEl = document.getElementById('cal-today');
+    if (todayEl) todayEl.innerHTML = '<div class="cal-loading"><span class="cal-spinner"></span>Loading schedule…</div>';
+    try {
+      const events = await fetchEvents(accessToken);
+      renderSections(events);
+    } catch (err) {
+      if (err.message === 'token_expired') {
+        showConnectState();
+      } else {
+        showError(err.message);
+      }
+    }
+  }
+
+  /* ── Init ──────────────────────────────────────────────── */
+  function init() {
+    const token = loadToken();
+    if (token) {
+      loadAndRender(token);
+    } else {
+      showConnectState();
+    }
+  }
+
+  // Wait for GIS script to load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
 </script>
 
