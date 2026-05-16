@@ -1767,6 +1767,81 @@
   /* Subtle bottom-of-page divider */
   .page-end-spacer { height: 8px; }
 
+  /* ─── Tablet / iPad responsive ─────────────────────────── */
+  @media (min-width: 768px) {
+    .app {
+      max-width: 960px;
+      padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+
+    /* Header */
+    .header { padding: 0 28px; height: 68px; }
+    .header-brand-name { font-size: 17px; }
+
+    /* Greeting */
+    .greeting { padding: 24px 28px 20px; }
+    .greeting-eyebrow { font-size: 15px; }
+    .greeting-title { font-size: 40px; }
+
+    /* Today + This Week sit side by side */
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 8px;
+      align-items: start;
+    }
+    .schedule-grid .section { padding: 0 20px 0; }
+    .schedule-grid .section:first-child { padding-left: 28px; }
+    .schedule-grid .section:last-child  { padding-right: 28px; }
+
+    /* Section */
+    .section { padding: 0 28px; }
+    .section-head { margin-bottom: 14px; }
+    .section-label { font-size: 13px; }
+
+    /* Hero card — slightly taller on tablet */
+    .hero-body { padding: 18px 20px 16px; }
+    .hero-time { font-size: 32px; }
+
+    /* Lesson cards — extra breathing room */
+    .lesson-card-body { padding: 16px 18px; }
+
+    /* Plan cards */
+    .plan-card { padding: 14px 16px; }
+
+    /* Recent lessons — 2-up grid */
+    #recent-section .section-head { padding: 0 28px; margin-bottom: 12px; }
+    #cal-recent {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 8px;
+      padding: 0 28px;
+    }
+    #cal-recent .plan-card { margin-bottom: 8px; border-radius: 12px; }
+
+    /* Tab bar */
+    .tab-bar { max-width: 960px; left: 50%; transform: translateX(-50%); }
+    .tab { font-size: 13px; gap: 6px; }
+
+    /* Chat sheet — max width on tablet */
+    .chat-sheet-panel { max-width: 520px; margin: 0 auto; border-radius: 24px 24px 0 0; }
+
+    /* Connect calendar card */
+    .cal-connect-card { max-width: 400px; margin: 0 auto; }
+  }
+
+  @media (min-width: 1024px) {
+    .app { max-width: 1100px; }
+    .tab-bar { max-width: 1100px; }
+    .greeting-title { font-size: 44px; }
+    .schedule-grid { gap: 0 16px; }
+    .schedule-grid .section:first-child { padding-left: 36px; }
+    .schedule-grid .section:last-child  { padding-right: 36px; }
+    .section { padding: 0 36px; }
+    #cal-recent { padding: 0 36px; }
+    #recent-section .section-head { padding: 0 36px; }
+  }
+
   /* ─── Calendar loading / empty / connect states ─── */
   .cal-loading {
     display: flex;
@@ -1924,6 +1999,9 @@
     <h1 class="greeting-title" id="greeting-title">Good morning, Mitch.</h1>
   </section>
 
+  <!-- ─── SCHEDULE GRID (Today + This Week side-by-side on tablet) ─── -->
+  <div class="schedule-grid">
+
   <!-- ─── TODAY ─── -->
   <section class="section" id="today-section">
     <div class="section-head">
@@ -1960,6 +2038,8 @@
     <!-- Calendar-driven cards injected here -->
     <div id="cal-week"></div>
   </section>
+
+  </div><!-- /schedule-grid -->
 
   <!-- ─── RECENT LESSONS ─── -->
   <section class="section" id="recent-section" style="display:none;">

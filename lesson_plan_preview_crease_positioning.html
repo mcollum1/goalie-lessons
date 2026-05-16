@@ -1028,6 +1028,59 @@
 
   /* Adjust body padding for sticky header */
   body { padding-top: 0; }
+
+  /* ─── Tablet / iPad responsive ─── */
+  @media (min-width: 768px) {
+    body { padding: 28px 32px 80px; }
+
+    /* Expand all the 390px-capped elements */
+    .session-header,
+    .plan-summary-card,
+    .drill-card,
+    .section-header,
+    .add-drill-row,
+    .page-header,
+    .start-session-bar,
+    .swap-modal,
+    .drill-picker-sheet { max-width: 720px; }
+
+    /* Header */
+    .page-header { padding: 0 24px; height: 60px; }
+    .ph-back, .ph-rebuild button, .ph-rebuild { font-size: 15px; }
+
+    /* Session header */
+    .session-header { padding: 24px 24px 20px; border-radius: 24px; }
+    .session-goalie-name { font-size: 22px; }
+
+    /* Drill cards — 2-column grid on tablet */
+    #planSections { max-width: 720px; margin: 0 auto; }
+    .drill-section { margin: 0 auto; }
+
+    /* Drill card */
+    .drill-card { border-radius: 16px; }
+    .drill-name { font-size: 17px; }
+
+    /* Start session bar */
+    .start-session-bar { max-width: 720px; left: 50%; transform: translateX(-50%); padding: 12px 24px; }
+    .start-session-btn { font-size: 17px; padding: 16px 24px; border-radius: 14px; }
+
+    /* Swap modal */
+    .swap-modal { border-radius: 20px 20px 0 0; }
+  }
+
+  @media (min-width: 1024px) {
+    .session-header,
+    .plan-summary-card,
+    .drill-card,
+    .section-header,
+    .add-drill-row,
+    .page-header,
+    .start-session-bar,
+    .swap-modal,
+    #planSections { max-width: 800px; }
+
+    .start-session-bar { max-width: 800px; }
+  }
 </style>
 
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">

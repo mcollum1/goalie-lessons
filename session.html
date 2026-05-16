@@ -508,6 +508,40 @@
   }
 
   .completion-btn.ghost:hover { background: rgba(255,255,255,0.14); }
+
+  /* ─── Tablet / iPad responsive ─── */
+  @media (min-width: 768px) {
+    .app { max-width: 680px; border-radius: 0; }
+
+    /* Header */
+    .session-header { padding: 0 24px; }
+    .session-title { font-size: 17px; }
+
+    /* Drill card — more breathing room */
+    .drill-card { padding: 24px 24px 28px; }
+    .drill-card-name { font-size: 22px; }
+    .drill-card-phase { font-size: 13px; }
+
+    /* Video */
+    .drill-video { max-height: 320px; }
+
+    /* Progress dots */
+    .progress-dots { gap: 8px; }
+
+    /* Swipe controls */
+    .swipe-controls { padding: 0 24px 20px; gap: 16px; }
+    .btn-prev, .btn-next { width: 52px; height: 52px; }
+    .btn-complete { height: 52px; font-size: 16px; border-radius: 14px; }
+
+    /* Timer */
+    .timer-display { font-size: 44px; }
+  }
+
+  @media (min-width: 1024px) {
+    .app { max-width: 760px; }
+    .drill-card-name { font-size: 24px; }
+    .drill-video { max-height: 360px; }
+  }
 </style>
 </head>
 <body>
