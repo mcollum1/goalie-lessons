@@ -3508,6 +3508,13 @@
 
   /* ── GIS OAuth ─────────────────────────────────────────── */
   let tokenClient;
+  let _pendingState = null; // CSRF nonce for the in-flight OAuth request
+
+  function _generateState() {
+    const arr = new Uint8Array(16);
+    crypto.getRandomValues(arr);
+    return Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
+  }
 
   function requestAuth() {
     if (!tokenClient) {
@@ -3520,12 +3527,19 @@
         scope:     SCOPE,
         callback:  async (resp) => {
           if (resp.error) { showError(resp.error); return; }
+          // Verify CSRF state matches what we sent
+          if (resp.state && resp.state !== _pendingState) {
+            showError('OAuth state mismatch — possible CSRF attempt. Please try again.');
+            return;
+          }
+          _pendingState = null;
           const token = saveToken(resp);
           await loadAndRender(token);
         },
       });
     }
-    tokenClient.requestAccessToken({ prompt: '' });
+    _pendingState = _generateState();
+    tokenClient.requestAccessToken({ prompt: 'consent', state: _pendingState });
   }
 
   async function loadAndRender(accessToken) {
@@ -3567,12 +3581,18 @@
             showConnectState();
             return;
           }
+          if (resp.state && resp.state !== _pendingState) {
+            showConnectState();
+            return;
+          }
+          _pendingState = null;
           const token = saveToken(resp);
           await loadAndRender(token);
         },
       });
       // prompt: '' = use existing consent silently, no popup
-      client.requestAccessToken({ prompt: '' });
+      _pendingState = _generateState();
+      client.requestAccessToken({ prompt: '', state: _pendingState });
     }
 
     // GIS script is loaded async — poll briefly if not ready yet
