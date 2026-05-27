@@ -1765,7 +1765,52 @@
   body.sheet-open { overflow: hidden; }
 
   /* Subtle bottom-of-page divider */
-  .page-end-spacer { height: 8px; }
+  .page-end-spacer { height: 24px; }
+
+  /* ─── App body / sidebar layout (desktop) ─── */
+  .app-body {
+    display: flex;
+    flex-direction: column; /* stacked on mobile — overridden below */
+  }
+
+  /* Sidebar — hidden on mobile/tablet, shown on desktop */
+  .sidebar {
+    display: none;
+  }
+
+  /* Main content — takes all space on mobile */
+  .main-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* ─── Day-group headers in Upcoming section ─── */
+  .day-group { margin-bottom: 4px; }
+
+  .day-group-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px 8px;
+    position: sticky;
+    top: 56px; /* below fixed header */
+    z-index: 5;
+    background: var(--hh-bg-page);
+  }
+
+  .day-group-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--hh-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .day-group-line {
+    flex: 1;
+    height: 1px;
+    background: var(--hh-border-light);
+  }
 
   /* ─── Tablet / iPad responsive ─────────────────────────── */
   @media (min-width: 768px) {
@@ -1783,7 +1828,7 @@
     .greeting-eyebrow { font-size: 15px; }
     .greeting-title { font-size: 40px; }
 
-    /* Today + This Week sit side by side */
+    /* Today + Upcoming sit side by side */
     .schedule-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1793,6 +1838,9 @@
     .schedule-grid .section { padding: 0 20px 0; }
     .schedule-grid .section:first-child { padding-left: 28px; }
     .schedule-grid .section:last-child  { padding-right: 28px; }
+
+    /* Day group headers inside the grid column */
+    .day-group-header { padding: 12px 0 8px; top: 68px; }
 
     /* Section */
     .section { padding: 0 28px; }
@@ -1830,16 +1878,101 @@
     .cal-connect-card { max-width: 400px; margin: 0 auto; }
   }
 
+  /* ─── Desktop responsive ─────────────────────────────────── */
   @media (min-width: 1024px) {
-    .app { max-width: 1100px; }
-    .tab-bar { max-width: 1100px; }
+    /* Full-width app, sidebar takes over from bottom tabs */
+    .app {
+      max-width: 1280px;
+      padding-bottom: 0; /* no tab bar on desktop */
+    }
+
+    /* Top header spans full width */
+    .top-header { padding-left: 0; padding-right: 0; }
+    .top-header-inner { padding: 0 28px; }
+
+    /* App body becomes a row: sidebar | main */
+    .app-body {
+      flex-direction: row;
+      min-height: calc(100vh - 56px); /* fill below header */
+    }
+
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      width: 220px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--hh-border-light);
+      padding: 20px 12px;
+      position: sticky;
+      top: 56px;
+      height: calc(100vh - 56px);
+      overflow-y: auto;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sidebar-tab {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: var(--hh-text-secondary);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      width: 100%;
+      text-align: left;
+    }
+    .sidebar-tab svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .sidebar-tab:hover { background: var(--hh-bg-tertiary); color: var(--hh-text-primary); }
+    .sidebar-tab.active { background: var(--hh-primary-tint); color: var(--hh-primary); font-weight: 600; }
+
+    /* Hide bottom tab bar on desktop */
+    .tab-bar { display: none; }
+
+    /* Main content */
+    .main-content { overflow-y: auto; }
+
+    /* Greeting */
+    .greeting { padding: 32px 36px 24px; }
     .greeting-title { font-size: 44px; }
-    .schedule-grid { gap: 0 16px; }
+
+    /* Today + Upcoming side by side, constrained width */
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 420px) 1fr;
+      gap: 0 24px;
+      align-items: start;
+      padding: 0;
+    }
+    .schedule-grid .section { padding: 0 20px; }
     .schedule-grid .section:first-child { padding-left: 36px; }
     .schedule-grid .section:last-child  { padding-right: 36px; }
+
+    /* Day group headers */
+    .day-group-header { padding: 12px 0 8px; top: 56px; }
+
+    /* Section */
     .section { padding: 0 36px; }
-    #cal-recent { padding: 0 36px; }
-    #recent-section .section-head { padding: 0 36px; }
+    .section-head { margin-bottom: 16px; }
+
+    /* Recent lessons */
+    #recent-section .section-head { padding: 0 36px; margin-bottom: 12px; }
+    #cal-recent { padding: 0 36px; grid-template-columns: repeat(3, 1fr); }
+
+    /* Chat sheet */
+    .chat-sheet-panel { max-width: 580px; margin: 0 auto; border-radius: 24px 24px 0 0; }
+    .cal-connect-card { max-width: 440px; margin: 0 auto; }
   }
 
   /* ─── Calendar loading / empty / connect states ─── */
@@ -2143,13 +2276,37 @@
     </div>
   </header>
 
+  <!-- ─── APP BODY (sidebar + main on desktop) ─── -->
+  <div class="app-body">
+
+  <!-- ─── SIDEBAR NAV (desktop only) ─── -->
+  <nav class="sidebar" aria-label="Primary">
+    <div class="sidebar-nav">
+      <button class="sidebar-tab active" type="button" aria-label="Home">
+        <svg class="lucide"><use href="#i-home"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="sidebar-tab" type="button" onclick="window.location.href='#plans'" aria-label="Plans">
+        <svg class="lucide"><use href="#i-clipboard-list"/></svg>
+        <span>Plans</span>
+      </button>
+      <button class="sidebar-tab" type="button" onclick="window.location.href='booking.html'" aria-label="Schedule">
+        <svg class="lucide"><use href="#i-calendar"/></svg>
+        <span>Schedule</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ─── MAIN CONTENT ─── -->
+  <main class="main-content">
+
   <!-- ─── GREETING ─── -->
   <section class="greeting">
     <div class="greeting-eyebrow" id="greeting-date">Loading…</div>
     <h1 class="greeting-title" id="greeting-title">Good morning, Mitch.</h1>
   </section>
 
-  <!-- ─── SCHEDULE GRID (Today + This Week side-by-side on tablet) ─── -->
+  <!-- ─── SCHEDULE GRID (Today + Upcoming side-by-side on tablet/desktop) ─── -->
   <div class="schedule-grid">
 
   <!-- ─── TODAY ─── -->
@@ -2173,11 +2330,11 @@
     </div>
   </section>
 
-  <!-- ─── THIS WEEK ─── -->
+  <!-- ─── UPCOMING ─── -->
   <section class="section" id="week-section">
     <div class="section-head">
       <div class="section-head-left">
-        <span class="section-label">This week</span>
+        <span class="section-label">Upcoming</span>
         <span class="section-count" id="week-count"></span>
       </div>
       <a class="section-link" href="booking.html">
@@ -2203,7 +2360,10 @@
 
   <div class="page-end-spacer"></div>
 
-  <!-- ─── BOTTOM TAB BAR ─── -->
+  </main><!-- /main-content -->
+  </div><!-- /app-body -->
+
+  <!-- ─── BOTTOM TAB BAR (mobile + tablet only) ─── -->
   <nav class="tab-bar" aria-label="Primary">
     <button class="tab active" type="button">
       <svg class="lucide"><use href="#i-home"/></svg>
@@ -3396,16 +3556,44 @@
       todayEl.innerHTML = html;
     }
 
-    // ── This week ──
+    // ── Upcoming (grouped by date) ──
     if (weekEvents.length === 0) {
-      weekEl.innerHTML = '<div class="cal-empty">No more lessons this week.</div>';
+      weekEl.innerHTML = '<div class="cal-empty">No upcoming lessons.</div>';
       if (weekCount) weekCount.textContent = '';
     } else {
       if (weekCount) weekCount.textContent = `${weekEvents.length} lesson${weekEvents.length !== 1 ? 's' : ''}`;
-      let html = '';
+
+      // Group events by calendar date (YYYY-MM-DD key)
+      const groups = new Map();
       weekEvents.forEach(e => {
-        const p = parseTitle(e.summary) || { names: e.summary, rink: '' };
-        html += buildRegularCard(e, p, true);
+        const dt  = new Date(e.start.dateTime);
+        const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+        if (!groups.has(key)) groups.set(key, { dt, events: [] });
+        groups.get(key).events.push(e);
+      });
+
+      // Format day label: "Sat · May 31" or "Today" / "Tomorrow"
+      const todayStr    = new Date().toDateString();
+      const tomorrowStr = new Date(Date.now() + 86400000).toDateString();
+      function dayLabel(dt) {
+        if (dt.toDateString() === todayStr)    return 'Today';
+        if (dt.toDateString() === tomorrowStr) return 'Tomorrow';
+        return dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+                 .replace(',', ' ·');
+      }
+
+      let html = '';
+      groups.forEach(({ dt, events }) => {
+        html += `<div class="day-group">
+          <div class="day-group-header">
+            <span class="day-group-label">${dayLabel(dt)}</span>
+            <span class="day-group-line"></span>
+          </div>`;
+        events.forEach(e => {
+          const p = parseTitle(e.summary) || { names: e.summary, rink: '' };
+          html += buildRegularCard(e, p, false);
+        });
+        html += '</div>';
       });
       weekEl.innerHTML = html;
     }
@@ -3453,14 +3641,13 @@
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const past30     = new Date(startOfDay);
     past30.setDate(past30.getDate() - 30);
-    const dayOfWeek  = now.getDay();
-    const endOfWeek  = new Date(startOfDay);
-    endOfWeek.setDate(endOfWeek.getDate() + (6 - dayOfWeek) + 1);
+    const ahead30    = new Date(startOfDay);
+    ahead30.setDate(ahead30.getDate() + 30);
 
-    // Fetch primary + group calendar in parallel, both covering past 30d → end of week
+    // Fetch primary + group calendar in parallel, covering past 30d → 30d ahead
     const [primaryItems, groupItems] = await Promise.all([
-      fetchCalendar(accessToken, 'primary',     past30, endOfWeek),
-      fetchCalendar(accessToken, CALENDAR_ID,   past30, endOfWeek),
+      fetchCalendar(accessToken, 'primary',     past30, ahead30),
+      fetchCalendar(accessToken, CALENDAR_ID,   past30, ahead30),
     ]);
 
     // Merge + deduplicate by iCalUID (same event can appear in both)
