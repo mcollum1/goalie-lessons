@@ -249,11 +249,10 @@
   }
 
   .section-label {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 600;
-    color: var(--hh-text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
+    color: var(--hh-text-secondary);
+    letter-spacing: -0.01em;
   }
 
   .section-count {
@@ -1767,6 +1766,11 @@
   /* Subtle bottom-of-page divider */
   .page-end-spacer { height: 24px; }
 
+  /* On mobile/tablet, hide Upcoming section while calendar is loading */
+  @media (max-width: 767px) {
+    body.cal-loading #week-section { display: none; }
+  }
+
   /* ─── App body / sidebar layout (desktop) ─── */
   .app-body {
     display: flex;
@@ -1886,9 +1890,15 @@
       padding-bottom: 0; /* no tab bar on desktop */
     }
 
-    /* Top header spans full width */
+    /* Top header — logo aligns with sidebar, actions align with content */
     .top-header { padding-left: 0; padding-right: 0; }
-    .top-header-inner { padding: 0 28px; }
+    .top-header-inner {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      padding: 0;
+    }
+    .brand { padding: 0 12px 0 16px; }
+    .header-actions { padding-right: 24px; }
 
     /* App body becomes a row: sidebar | main */
     .app-body {
@@ -1937,20 +1947,63 @@
     .sidebar-tab:hover { background: var(--hh-bg-tertiary); color: var(--hh-text-primary); }
     .sidebar-tab.active { background: var(--hh-primary-tint); color: var(--hh-primary); font-weight: 600; }
 
+    /* Sidebar footer — coach profile block */
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--hh-border-light);
+    }
+    .sidebar-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: default;
+    }
+    .sidebar-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--gc-navy);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: 0.02em;
+    }
+    .sidebar-profile-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--hh-text-primary);
+      line-height: 1.2;
+    }
+    .sidebar-profile-role {
+      font-size: 11px;
+      color: var(--hh-text-tertiary);
+      line-height: 1.3;
+    }
+
     /* Hide bottom tab bar on desktop */
     .tab-bar { display: none; }
 
-    /* Main content */
-    .main-content { overflow-y: auto; }
+    /* Main content — constrained width, centered */
+    .main-content {
+      overflow-y: auto;
+      max-width: 920px;
+    }
 
     /* Greeting */
     .greeting { padding: 32px 36px 24px; }
     .greeting-title { font-size: 44px; }
 
-    /* Today + Upcoming side by side, constrained width */
+    /* Today + Upcoming — equal columns, comfortably wide */
     .schedule-grid {
       display: grid;
-      grid-template-columns: minmax(280px, 420px) 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 0 24px;
       align-items: start;
       padding: 0;
@@ -2208,7 +2261,7 @@
 <!-- Drill library bundle — 45 drills, used by the AI plan builder -->
 <script src="drill_library.js"></script>
 </head>
-<body>
+<body class="cal-loading">
 
 <!-- ─── Inline lucide-style icon library ─── -->
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
@@ -2294,6 +2347,15 @@
         <svg class="lucide"><use href="#i-calendar"/></svg>
         <span>Schedule</span>
       </button>
+    </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-profile">
+        <div class="sidebar-avatar">MC</div>
+        <div>
+          <div class="sidebar-profile-name">Mitch</div>
+          <div class="sidebar-profile-role">Head Coach</div>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -3529,6 +3591,7 @@
   }
 
   function renderSections(allEvents) {
+    document.body.classList.remove('cal-loading');
     const now         = new Date();
     const pastEvents  = allEvents.filter(e => isPast(e.end?.dateTime || e.start.dateTime)).reverse(); // newest first
     const futureEvents = allEvents.filter(e => !isPast(e.end?.dateTime || e.start.dateTime));
@@ -3667,6 +3730,7 @@
 
   /* ── Connect button ────────────────────────────────────── */
   function showConnectState() {
+    document.body.classList.remove('cal-loading');
     const todayEl = document.getElementById('cal-today');
     const weekEl  = document.getElementById('cal-week');
     const html = `
