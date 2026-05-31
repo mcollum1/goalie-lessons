@@ -720,7 +720,7 @@ async function loadSessions() {
   if (!GCAL.ENABLED || !GCAL.API_KEY || GCAL.API_KEY === "YOUR_API_KEY_HERE") return;
   try {
     const now      = new Date().toISOString();
-    const twoWeeks = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+    const twoWeeks = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
     const base     = "https://www.googleapis.com/calendar/v3/calendars";
     const url      = `${base}/${encodeURIComponent(GCAL.CALENDAR_ID)}/events`
       + `?key=${GCAL.API_KEY}`

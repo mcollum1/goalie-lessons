@@ -28,7 +28,7 @@ const SERVICE_ACCOUNT_FILE  = path.join(__dirname, 'service-account.json');
 const MANAGED_EVENTS_FILE   = path.join(__dirname, 'managed-events.json');
 const DELETED_EVENTS_FILE   = path.join(__dirname, 'deleted-events.json');
 
-const DAYS_AHEAD = 30;
+const DAYS_AHEAD = 14;
 
 const RINKS = [
   {
