@@ -2257,6 +2257,7 @@
   }
 </style>
 <!-- Data layer — must load before any inline scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="db.js"></script>
 <!-- Drill library bundle — 45 drills, used by the AI plan builder -->
 <script src="drill_library.js"></script>
@@ -2781,6 +2782,8 @@
 
     const data = await resp.json();
     if (!data.plan) throw new Error('No plan returned from server');
+    // Embed goalie context so the plan page can look up notes without needing URL params
+    if (ctx?.goalieId) data.plan.goalieId = ctx.goalieId;
     return data.plan;
   }
 

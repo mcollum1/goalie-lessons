@@ -1091,6 +1091,82 @@
 
     .start-session-bar { max-width: 800px; }
   }
+
+  /* ── Session focus card ── */
+  .focus-card {
+    width: 100%;
+    max-width: 390px;
+    background: #fffbeb;
+    border: 1.5px solid #fde68a;
+    border-radius: 16px;
+    padding: 14px 16px 15px;
+    margin-bottom: 14px;
+  }
+
+  .focus-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 11px;
+  }
+
+  .focus-card-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: #fef3c7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .focus-card-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #92400e;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  .focus-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .focus-bullet {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    font-size: 13.5px;
+    color: #78350f;
+    line-height: 1.45;
+  }
+
+  .focus-bullet-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #f59e0b;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .focus-raw-notes {
+    font-size: 12.5px;
+    color: #92400e;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+
+  @media (min-width: 768px) {
+    .focus-card { max-width: 720px; }
+  }
+  @media (min-width: 1024px) {
+    .focus-card { max-width: 800px; }
+  }
 </style>
 
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
@@ -1105,6 +1181,7 @@
     <symbol id="lp-plus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
   </defs>
 </svg>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="db.js"></script>
 <script src="drill_library.js"></script>
 </head>
@@ -1986,6 +2063,28 @@ const PHASE_META = {
   compete: { cls: 'skill', icon: '🏆', label: 'Compete / Bonus'   },
 };
 
+function buildFocusCardHtml(bullets, rawNotes) {
+  let body = '';
+  if (bullets && bullets.length) {
+    body = `<div class="focus-bullets">${bullets.map(b =>
+      `<div class="focus-bullet"><div class="focus-bullet-dot"></div><span>${_escH(b)}</span></div>`
+    ).join('')}</div>`;
+  } else if (rawNotes) {
+    // Show first 3 note blocks (most recent observations are at the top)
+    const blocks = rawNotes.split(/\n\n+/).slice(0, 3);
+    body = `<div class="focus-raw-notes">${_escH(blocks.join('\n\n'))}</div>`;
+  }
+  if (!body) return '';
+  return `
+<div class="focus-card">
+  <div class="focus-card-header">
+    <div class="focus-card-icon">🎯</div>
+    <div class="focus-card-title">Focus for this session</div>
+  </div>
+  ${body}
+</div>`;
+}
+
 function buildDrillCardHtml(planDrill, stepNum, totalDrills) {
   const lib   = (window.DRILL_LIBRARY || []).find(d => d.id === planDrill.drill_id);
   const phase = planDrill.phase || 'skill';
@@ -2088,7 +2187,16 @@ function renderDynamicPlan(plan) {
   );
   const totalDrills = allDrills.length;
 
+  // ── Focus card (prepended before drill 1) ──────────────────────────
   let html = '';
+  const goalieId    = SESSION.goalieId || plan.goalieId || null;
+  const dbGoalie    = (window.DB && goalieId) ? DB.GoalieStore.getById(goalieId) : null;
+  const rawNotes    = dbGoalie ? (dbGoalie.notes || '').trim() : '';
+  const focusBullets = Array.isArray(plan.session_focus) && plan.session_focus.length ? plan.session_focus : null;
+  if (focusBullets || rawNotes) {
+    html += buildFocusCardHtml(focusBullets, rawNotes);
+  }
+
   let stepNum = 1;
 
   for (const section of plan.sections) {
@@ -2356,6 +2464,7 @@ function startSession() {
     focus:     SESSION.focus     || '',
     duration:  SESSION.duration  || '',
     level:     SESSION.level     || '',
+    goalieId:  SESSION.goalieId  || '',
   });
   window.location.href = 'session.html?' + p.toString();
 }

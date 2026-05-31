@@ -537,6 +537,205 @@
 
   .completion-btn.ghost:hover { background: rgba(255,255,255,0.14); }
 
+  /* ── Record button (floats in video-block) ── */
+  .record-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(220,38,38,0.88);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    z-index: 10;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .record-btn:hover  { background: rgba(220,38,38,1); }
+  .record-btn:active { transform: scale(0.92); }
+  .record-btn svg    { width: 17px; height: 17px; }
+  .record-btn.recording { background: rgba(220,38,38,1); }
+
+  .rec-indicator {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,0,0,0.62);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #fff;
+    pointer-events: none;
+    z-index: 11;
+  }
+  .rec-indicator.visible { display: flex; }
+  .rec-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #ef4444;
+    animation: rec-blink 1s ease infinite;
+  }
+  @keyframes rec-blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+
+  /* ── Recording playback panel ── */
+  .rec-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.82);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .rec-overlay.visible { opacity: 1; pointer-events: auto; }
+
+  .rec-panel {
+    background: #0c1a30;
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .rec-panel-hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    flex-shrink: 0;
+  }
+  .rec-panel-hdr-text { flex: 1; }
+  .rec-panel-title   { font-size: 15px; font-weight: 700; color: #fff; }
+  .rec-panel-sub     { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 1px; }
+
+  .rec-close {
+    width: 32px; height: 32px; border-radius: 50%; border: none;
+    background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .rec-close svg { width: 15px; height: 15px; }
+
+  .rec-video-wrap { background: #000; width: 100%; flex-shrink: 0; }
+  .rec-video-wrap video { width: 100%; max-height: 280px; display: block; object-fit: contain; }
+
+  .rec-controls { padding: 12px 16px 4px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+
+  .rec-scrub-row { display: flex; align-items: center; gap: 10px; }
+  .rec-scrub {
+    flex: 1; height: 4px; -webkit-appearance: none;
+    background: rgba(255,255,255,0.15); border-radius: 4px; cursor: pointer; outline: none;
+  }
+  .rec-scrub::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px;
+    border-radius: 50%; background: #fff; margin-top: -5px;
+  }
+  .rec-time { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.4); min-width: 36px; font-variant-numeric: tabular-nums; }
+
+  .rec-btn-row { display: flex; align-items: center; gap: 9px; }
+  .rec-play {
+    width: 42px; height: 42px; border-radius: 50%; border: none;
+    background: rgba(255,255,255,0.11); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; transition: background 0.12s;
+  }
+  .rec-play:hover { background: rgba(255,255,255,0.2); }
+  .rec-play svg   { width: 18px; height: 18px; }
+
+  .rec-speeds { display: flex; gap: 6px; }
+  .rec-spd {
+    padding: 6px 11px; border-radius: 20px;
+    border: 1.5px solid rgba(255,255,255,0.14);
+    background: transparent; color: rgba(255,255,255,0.55);
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    font-family: inherit; transition: all 0.12s;
+  }
+  .rec-spd.on { background: rgba(255,255,255,0.13); color: #fff; border-color: rgba(255,255,255,0.3); }
+
+  .rec-action-row { display: flex; gap: 8px; padding: 0 16px 14px; flex-shrink: 0; }
+  .rec-save {
+    flex: 1; padding: 12px; border-radius: 12px; border: none;
+    background: #17a064; color: #fff; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: inherit; transition: background 0.12s;
+  }
+  .rec-save:hover { background: #14915a; }
+  .rec-annotate {
+    padding: 12px 14px; border-radius: 12px;
+    border: 1.5px solid rgba(255,255,255,0.14);
+    background: transparent; color: rgba(255,255,255,0.72);
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    font-family: inherit; white-space: nowrap; transition: background 0.12s;
+  }
+  .rec-annotate:hover { background: rgba(255,255,255,0.07); }
+
+  .rec-ann-list {
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 10px 16px 14px;
+    display: flex; flex-direction: column; gap: 7px;
+    max-height: 130px; overflow-y: auto;
+  }
+  .rec-ann-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.6); line-height: 1.4; }
+  .rec-ann-ts   { font-weight: 700; color: #18a6c8; white-space: nowrap; min-width: 38px; }
+
+  /* ── Session note (completion overlay) ── */
+  .sn-area {
+    width: 100%; max-width: 300px;
+    display: flex; flex-direction: column; gap: 8px; margin-top: 4px;
+  }
+  .sn-label {
+    font-size: 10px; font-weight: 700;
+    color: rgba(255,255,255,0.32);
+    text-transform: uppercase; letter-spacing: 0.08em; text-align: left;
+  }
+  .sn-input {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    border-radius: 12px; color: #fff;
+    font-size: 13px; font-family: inherit; line-height: 1.45;
+    padding: 10px 12px; resize: none; outline: none; min-height: 68px;
+  }
+  .sn-input::placeholder { color: rgba(255,255,255,0.28); }
+  .sn-input:focus { border-color: rgba(255,255,255,0.26); }
+  .sn-save {
+    width: 100%; padding: 11px; border-radius: 11px; border: none;
+    background: rgba(255,255,255,0.09); color: rgba(255,255,255,0.75);
+    font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit;
+    transition: background 0.12s;
+  }
+  .sn-save:hover { background: rgba(255,255,255,0.15); }
+  .sn-save.saved { background: rgba(23,160,100,0.22); color: #4ade80; }
+  .export-ann-btn {
+    width: 100%; padding: 10px; border-radius: 11px;
+    border: 1.5px solid rgba(255,255,255,0.09);
+    background: transparent; color: rgba(255,255,255,0.38);
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: background 0.12s;
+    display: none;
+  }
+  .export-ann-btn.visible { display: block; }
+  .export-ann-btn:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.6); }
+
   /* ─── Tablet / iPad responsive ─── */
   @media (min-width: 768px) {
     .app { max-width: 680px; border-radius: 0; }
@@ -621,6 +820,15 @@
     </div>
     <div class="completion-title">Session done.</div>
     <div class="completion-sub" id="completionSub">Great work. Go cool down.</div>
+
+    <!-- Post-session note -->
+    <div class="sn-area" id="sessionNoteArea">
+      <div class="sn-label">Session note</div>
+      <textarea class="sn-input" id="sessionNoteInput" rows="3" placeholder="What did you observe? What to work on next…"></textarea>
+      <button class="sn-save" id="sessionNoteSaveBtn" type="button">Save note</button>
+      <button class="export-ann-btn" id="exportAnnBtn" type="button">Export clip annotations</button>
+    </div>
+
     <div class="completion-actions">
       <button class="completion-btn primary" id="backToPlanBtn">← Back to Plan</button>
       <button class="completion-btn ghost" onclick="dismissCompletion()">← Last drill</button>
@@ -628,8 +836,49 @@
     </div>
   </div>
 
+  <!-- Recording playback overlay -->
+  <div class="rec-overlay" id="recOverlay">
+    <div class="rec-panel">
+      <div class="rec-panel-hdr">
+        <div class="rec-panel-hdr-text">
+          <div class="rec-panel-title">Clip review</div>
+          <div class="rec-panel-sub" id="recPanelDrill">—</div>
+        </div>
+        <button class="rec-close" id="recCloseBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="rec-video-wrap">
+        <video id="recVideo" playsinline></video>
+      </div>
+      <div class="rec-controls">
+        <div class="rec-scrub-row">
+          <input class="rec-scrub" id="recScrub" type="range" min="0" max="100" value="0" step="0.1">
+          <div class="rec-time" id="recTime">0:00</div>
+        </div>
+        <div class="rec-btn-row">
+          <button class="rec-play" id="recPlayBtn" type="button">
+            <svg id="recPlayIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </button>
+          <div class="rec-speeds">
+            <button class="rec-spd on" data-rate="1" type="button">1×</button>
+            <button class="rec-spd" data-rate="0.5" type="button">0.5×</button>
+            <button class="rec-spd" data-rate="0.25" type="button">0.25×</button>
+          </div>
+        </div>
+      </div>
+      <div class="rec-action-row">
+        <button class="rec-save" id="recSaveBtn" type="button">Save to Camera Roll</button>
+        <button class="rec-annotate" id="recAnnotateBtn" type="button">+ Note</button>
+      </div>
+      <div class="rec-ann-list" id="recAnnList" style="display:none"></div>
+    </div>
+  </div>
+
 </div><!-- /app -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="db.js"></script>
 <script src="drill_library.js"></script>
 <script>
 /* ─────────────────────────────────────────────────────────────
@@ -644,6 +893,7 @@ const SESSION = {
   focus:     _sp.get('focus')     || '',
   duration:  _sp.get('duration')  || '',
   level:     _sp.get('level')     || '',
+  goalieId:  _sp.get('goalieId')  || '',
 };
 
 // ── Phase colors ──────────────────────────────────────────────
@@ -740,7 +990,13 @@ function buildSlideHtml(drill, idx, total) {
 
   return `
 <div class="slide slide-right" id="slide-${idx}" data-index="${idx}">
-  <div class="video-block">${videoHtml}</div>
+  <div class="video-block" style="position:relative">
+    ${videoHtml}
+    <div class="rec-indicator" id="recInd${idx}"><div class="rec-dot"></div><span id="recIndTime${idx}">0:00</span></div>
+    <button class="record-btn" id="recBtn${idx}" type="button" title="Record clip" onclick="toggleRecording(${idx})">
+      <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    </button>
+  </div>
   <div class="drill-info">
     <div>
       <span class="phase-pill" style="background:${color}22;color:${color}">
@@ -978,12 +1234,225 @@ function dismissCompletion() {
 }
 
 // ── Boot ──────────────────────────────────────────────────────
-// Wait for DRILL_LIBRARY to be ready (loaded by drill_library.js above)
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
 }
+
+// ── Session note (Feature 1) ──────────────────────────────────
+
+document.getElementById('sessionNoteSaveBtn').addEventListener('click', () => {
+  const input = document.getElementById('sessionNoteInput');
+  const btn   = document.getElementById('sessionNoteSaveBtn');
+  const note  = (input.value || '').trim();
+  if (!note) return;
+
+  const goalieId = SESSION.goalieId;
+  const saved = goalieId && window.DB ? window.DB.addSessionNote(goalieId, note) : false;
+
+  btn.classList.add('saved');
+  if (saved) {
+    input.value = '';
+    btn.textContent = 'Saved ✓';
+  } else {
+    // No DB / no goalieId — copy to clipboard so the note isn't lost
+    if (navigator.clipboard) navigator.clipboard.writeText(note).catch(() => {});
+    btn.textContent = 'Copied to clipboard';
+  }
+  setTimeout(() => { btn.textContent = 'Save note'; btn.classList.remove('saved'); }, 2500);
+});
+
+// ── Video recording (Feature 3) ───────────────────────────────
+
+let _recorder    = null;
+let _recChunks   = [];
+let _recDrillIdx = null;
+let _recTimerInt = null;
+let _recSecs     = 0;
+const _annotations = []; // { drillName, timecode, note }
+
+function _fmtSecs(s) {
+  return Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+}
+
+async function toggleRecording(drillIdx) {
+  if (_recorder && _recorder.state === 'recording') {
+    _stopRecording();
+  } else {
+    await _startRecording(drillIdx);
+  }
+}
+
+async function _startRecording(drillIdx) {
+  if (_recorder && _recorder.state === 'recording') _stopRecording();
+
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: true,
+    });
+  } catch {
+    alert('Camera access denied. Grant camera permission in Settings and try again.');
+    return;
+  }
+
+  _recChunks   = [];
+  _recDrillIdx = drillIdx;
+  _recSecs     = 0;
+
+  const mime = ['video/webm;codecs=vp9,opus', 'video/webm', ''].find(t => !t || MediaRecorder.isTypeSupported(t));
+  _recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : {});
+  _recorder.ondataavailable = e => { if (e.data && e.data.size > 0) _recChunks.push(e.data); };
+  _recorder.onstop = _onRecordingStop;
+  _recorder.start(100);
+
+  const btn = document.getElementById('recBtn' + drillIdx);
+  const ind = document.getElementById('recInd' + drillIdx);
+  if (btn) { btn.classList.add('recording'); btn.title = 'Stop recording'; }
+  if (ind) ind.classList.add('visible');
+
+  _recTimerInt = setInterval(() => {
+    _recSecs++;
+    const el = document.getElementById('recIndTime' + drillIdx);
+    if (el) el.textContent = _fmtSecs(_recSecs);
+  }, 1000);
+}
+
+function _stopRecording() {
+  if (!_recorder) return;
+  _recorder.stream.getTracks().forEach(t => t.stop());
+  _recorder.stop();
+  clearInterval(_recTimerInt);
+  const btn = document.getElementById('recBtn' + _recDrillIdx);
+  const ind = document.getElementById('recInd' + _recDrillIdx);
+  if (btn) { btn.classList.remove('recording'); btn.title = 'Record clip'; }
+  if (ind) ind.classList.remove('visible');
+}
+
+function _onRecordingStop() {
+  const blob      = new Blob(_recChunks, { type: _recorder.mimeType || 'video/webm' });
+  const drill     = drills[_recDrillIdx];
+  const drillName = drill ? (drill.name || 'Drill ' + (_recDrillIdx + 1)) : 'Recording';
+  _openPlayback(URL.createObjectURL(blob), blob, drillName);
+  _recorder = null;
+}
+
+// ── Playback panel ────────────────────────────────────────────
+
+let _curBlob      = null;
+let _curAnnDrill  = '';
+
+function _openPlayback(url, blob, drillName) {
+  _curBlob     = blob;
+  _curAnnDrill = drillName;
+
+  const video  = document.getElementById('recVideo');
+  const scrub  = document.getElementById('recScrub');
+  const timeEl = document.getElementById('recTime');
+
+  document.getElementById('recPanelDrill').textContent = drillName;
+  video.src = url;
+
+  video.ontimeupdate = () => {
+    if (!video.duration) return;
+    scrub.value = (video.currentTime / video.duration) * 100;
+    timeEl.textContent = _fmtSecs(video.currentTime);
+  };
+  video.onended = () => _setPlayIcon(false);
+
+  scrub.oninput = () => { if (video.duration) video.currentTime = (scrub.value / 100) * video.duration; };
+
+  document.getElementById('recPlayBtn').onclick = () => {
+    if (video.paused) { video.play(); _setPlayIcon(true); }
+    else              { video.pause(); _setPlayIcon(false); }
+  };
+
+  document.querySelectorAll('.rec-spd').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.rec-spd').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      video.playbackRate = parseFloat(btn.dataset.rate);
+    };
+  });
+
+  document.getElementById('recSaveBtn').onclick = () => {
+    const ext  = blob.type.includes('mp4') ? 'mp4' : 'webm';
+    const name = `clip-${drillName.replace(/\s+/g, '-').toLowerCase()}.${ext}`;
+    const file = new File([blob], name, { type: blob.type });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file], title: drillName }).catch(() => _dlBlob(blob, name));
+    } else {
+      _dlBlob(blob, name);
+    }
+  };
+
+  document.getElementById('recAnnotateBtn').onclick = () => {
+    video.pause();
+    _setPlayIcon(false);
+    const tc   = video.currentTime || 0;
+    const note = prompt(`Coaching note at ${_fmtSecs(tc)} — what do you see?`);
+    if (!note || !note.trim()) return;
+    _annotations.push({ drillName, timecode: tc, note: note.trim() });
+    _renderAnn();
+    document.getElementById('exportAnnBtn').classList.add('visible');
+  };
+
+  _renderAnn();
+  document.getElementById('recOverlay').classList.add('visible');
+  video.play().catch(() => {});
+  _setPlayIcon(true);
+}
+
+function _setPlayIcon(playing) {
+  document.getElementById('recPlayIcon').innerHTML = playing
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<polygon points="5 3 19 12 5 21 5 3"/>';
+}
+
+function _renderAnn() {
+  const list = document.getElementById('recAnnList');
+  const ann  = _annotations.filter(a => a.drillName === _curAnnDrill);
+  if (!ann.length) { list.style.display = 'none'; return; }
+  list.style.display = 'flex';
+  list.innerHTML = ann.sort((a, b) => a.timecode - b.timecode).map(a =>
+    `<div class="rec-ann-item"><span class="rec-ann-ts">${_fmtSecs(a.timecode)}</span><span>${escH(a.note)}</span></div>`
+  ).join('');
+}
+
+function _dlBlob(blob, name) {
+  const a  = document.createElement('a');
+  a.href   = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+}
+
+document.getElementById('recCloseBtn').addEventListener('click', () => {
+  const video = document.getElementById('recVideo');
+  video.pause();
+  video.src = '';
+  document.getElementById('recOverlay').classList.remove('visible');
+  _curBlob = null;
+});
+
+document.getElementById('exportAnnBtn').addEventListener('click', () => {
+  if (!_annotations.length) return;
+  const lines = _annotations
+    .sort((a, b) => a.timecode - b.timecode)
+    .map(a => `[${a.drillName}] ${_fmtSecs(a.timecode)} — ${a.note}`);
+  const text = 'Session clip annotations:\n' + lines.join('\n');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('exportAnnBtn');
+      const orig = btn.textContent;
+      btn.textContent = 'Copied ✓';
+      setTimeout(() => { btn.textContent = orig; }, 2200);
+    }).catch(() => alert(text));
+  } else {
+    alert(text);
+  }
+});
 </script>
 </body>
 </html>
