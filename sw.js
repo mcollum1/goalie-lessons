@@ -6,7 +6,7 @@
      • Google API calls → Network-only (always live)
    ───────────────────────────────────────────────────────────── */
 
-const CACHE_VERSION  = 'hh-goalie-v2';
+const CACHE_VERSION  = 'hh-goalie-v3';
 const CLIP_CACHE     = 'hh-clips-v1';
 
 // Files to pre-cache on install — the full app shell
