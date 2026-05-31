@@ -747,7 +747,15 @@ async function loadSessions() {
       const endTime = end.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",hour12:true});
       // "Open Lesson" in title = available slot; anything else means Mitchell renamed it after confirming a booking
       const isOpen  = (ev.summary || "").toLowerCase().startsWith("open lesson");
-      fetched.push({ date:dateStr, time, endTime, rink, eventId:ev.id, title:ev.summary||"", isOpen, spotsLeft: isOpen ? CFG.maxPerSlot : 1 });
+      // Count goalies already booked from title: "Goalie Lesson – Name1 & Name2 – Rink" → 2 booked → 0 left
+      function goaliesInTitle(s) {
+        if (!s || !/^Goalie Lesson\s*[–—\-]/i.test(s)) return 0;
+        const parts = s.split(/\s*[–—]\s*|\s*-\s*/);
+        if (parts.length < 2) return 1;
+        return parts[1].trim().split(/\s*&\s*/).filter(Boolean).length;
+      }
+      const spotsLeft = isOpen ? CFG.maxPerSlot : Math.max(0, CFG.maxPerSlot - goaliesInTitle(ev.summary));
+      fetched.push({ date:dateStr, time, endTime, rink, eventId:ev.id, title:ev.summary||"", isOpen, spotsLeft });
     });
 
     if (fetched.length > 0) {
