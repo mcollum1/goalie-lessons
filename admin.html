@@ -325,6 +325,63 @@ function declineEmailUrl() {
 }
 
 /* ─── CALENDAR API ─────────────────────────────────── */
+
+/**
+ * Fetch the current state of a calendar event.
+ * Returns the event object (at minimum { summary }) or null on failure.
+ */
+async function getCalendarEvent(eventId) {
+  const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events/${encodeURIComponent(eventId)}`;
+  const res = await fetch(url, {
+    headers: { "Authorization": `Bearer ${accessToken}` },
+  });
+  if (!res.ok) return null;
+  return res.json();
+}
+
+/**
+ * Given the current event summary (may already have one goalie),
+ * return the correct merged title for the new booking.
+ *
+ * Examples:
+ *   "Open Lesson – Newington"          → "Goalie Lesson – Fischer – Newington"
+ *   "Goalie Lesson – Fischer – Newington" → "Goalie Lesson – Fischer & Ryan – Newington"
+ *   "Goalie Lesson – Fischer & Ryan – Newington" → unchanged (Ryan already in it)
+ */
+function buildMergedTitle(existingSummary) {
+  const short = B.rink === "newington" ? "Newington" : "Champions";
+  const newGoalie = B.goalie;
+  const fallback = `Goalie Lesson – ${newGoalie} – ${short}`;
+
+  if (!existingSummary) return fallback;
+
+  // Check if the event is already a "Goalie Lesson" event
+  const lessonPattern = /^Goalie Lesson\s*[–—\-]/i;
+  if (!lessonPattern.test(existingSummary)) return fallback;
+
+  // Split on em-dash / en-dash / hyphen (with optional surrounding spaces)
+  const parts = existingSummary.split(/\s*[–—]\s*|\s*-\s*/);
+  // Expected: ["Goalie Lesson", "<names>", "<rink>"]
+  if (parts.length < 2) return fallback;
+
+  const existingNames = parts[1].trim();
+  const existingRink  = parts[2] ? parts[2].trim() : short;
+
+  // Guard: don't add the same goalie twice
+  const alreadyIn = existingNames
+    .split(/\s*&\s*/)
+    .map(n => n.trim().toLowerCase())
+    .includes(newGoalie.trim().toLowerCase());
+
+  if (alreadyIn) {
+    // This booking was already merged; keep existing title intact
+    return existingSummary;
+  }
+
+  const mergedNames = `${existingNames} & ${newGoalie}`;
+  return `Goalie Lesson – ${mergedNames} – ${existingRink}`;
+}
+
 async function patchCalendarEvent(eventId, newTitle) {
   const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events/${encodeURIComponent(eventId)}`;
   const res = await fetch(url, {
@@ -383,7 +440,10 @@ async function doApproval(btn, statusEl) {
     approvalStep = "updating-cal";
     setBtn(btn, "loading", `<span class="spinner"></span> Updating calendar…`);
     try {
-      await patchCalendarEvent(B.eid, suggestedTitle());
+      // Fetch the current event so we can merge goalie names instead of overwriting
+      const currentEvent = await getCalendarEvent(B.eid);
+      const title = buildMergedTitle(currentEvent?.summary);
+      await patchCalendarEvent(B.eid, title);
     } catch (err) {
       setBtn(btn, "", "🏒 Approve Lesson");
       showStatus("error", "Calendar update failed", `${err.message}. Try signing out of Google and trying again, or update the event title manually.`);
