@@ -895,7 +895,7 @@ function renderCalendar() {
   const dim0=new Date(S.year,S.month+1,0).getDate();
   for(let d=1;d<=dim0;d++){
     const ds=`${S.year}-${pad(S.month+1)}-${pad(d)}`;
-    const visible = daySlots(ds);
+    const visible = daySlots(ds).filter(s => !isFull(s.date, s.time, s.rink));
     if(visible.length>0){
       rinkMap[ds]=new Set(visible.map(s=>s.rink));
     }
