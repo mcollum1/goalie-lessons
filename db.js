@@ -473,6 +473,25 @@
     seed();
   }
 
+  /* ── Patch team field onto existing goalies that predate seed v1 (safe, non-destructive) ── */
+  const TEAM_DEFAULTS = {
+    goalie_jake_reynolds: 'Newington High JV',
+    goalie_mason_k:       'Champions 12U',
+    goalie_lily_p:        'Champions 12U',
+    goalie_aiden_torres:  'Newington 14U',
+    goalie_eli_m:         'Champions 14U',
+    goalie_sam_c:         'Champions 14U',
+  };
+  (function patchTeams() {
+    const all = GoalieStore.getAll();
+    const patched = all.filter(g => g.team === undefined || g.team === null);
+    patched.forEach(g => {
+      const defaultTeam = TEAM_DEFAULTS[g.id] || '';
+      GoalieStore.update(g.id, { team: defaultTeam });
+    });
+    if (patched.length) console.log('[DB] Patched team field on', patched.length, 'goalie(s)');
+  })();
+
 
   /* ─────────────────────────────────────────────────────────────────────
      PUBLIC API
