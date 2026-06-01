@@ -290,17 +290,24 @@
     border-radius: 14px;
     border: 1px solid var(--hh-border-light);
     box-shadow: 0 1px 2px rgba(14,27,46,0.06);
-    margin-bottom: 12px;
-    padding: 15px 17px;
+    margin-bottom: 10px;
+    padding: 14px 16px 12px;
     display: flex;
     flex-direction: column;
-    gap: 13px;
+    gap: 12px;
+  }
+
+  /* Hover lift for interactivity */
+  .lesson-card:hover {
+    box-shadow: 0 2px 8px rgba(14,27,46,0.08);
+    transform: translateY(-1px);
+    transition: box-shadow 0.18s ease, transform 0.18s ease;
   }
 
   .lesson-card-body {
     padding: 0;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 14px;
   }
 
@@ -370,21 +377,22 @@
   }
 
   .goalie-avatar {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: #EDE7DB;
     border: none;
-    box-shadow: inset 0 0 0 1.5px var(--hh-border-light), 0 0 0 2.5px #FFFFFF;
+    box-shadow: inset 0 0 0 1px rgba(14,27,46,0.08), 0 0 0 2px #FFFFFF;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: var(--font-display);
-    font-size: 14px;
+    font-size: 12.5px;
     font-weight: 700;
     color: var(--gc-navy);
-    margin-left: -13px;
+    margin-left: -11px;
     flex-shrink: 0;
+    letter-spacing: 0.01em;
   }
 
   .goalie-avatar:first-child { margin-left: 0; }
@@ -422,34 +430,37 @@
   /* ─── Lesson card action buttons (design-faithful) ─── */
   .lesson-cta-row {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     background: transparent;
     border-top: none;
+    padding-top: 11px;
+    margin-top: 1px;
+    border-top: 1px solid rgba(14,27,46,0.05);
   }
 
   .lesson-cta {
     flex: 1;
-    height: 40px;
+    height: 38px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 7px;
     padding: 0 14px;
     background: #FFFFFF;
-    border: 1px solid var(--hh-border-default);
-    border-radius: 10px;
+    border: 1px solid rgba(14,27,46,0.14);
+    border-radius: 9px;
     font-family: inherit;
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 600;
     color: var(--gc-navy);
     cursor: pointer;
     white-space: nowrap;
-    box-shadow: 0 1px 2px rgba(14,27,46,0.06);
-    transition: background 0.15s ease, transform 0.05s ease;
+    box-shadow: 0 1px 1px rgba(14,27,46,0.04);
+    transition: background 0.14s ease, border-color 0.14s ease, transform 0.05s ease;
   }
-  .lesson-cta:hover { background: #F6F4F0; }
+  .lesson-cta:hover { background: #FAFAF7; border-color: rgba(14,27,46,0.20); }
   .lesson-cta:active { transform: translateY(1px); }
-  .lesson-cta svg { width: 16px; height: 16px; stroke-width: 1.9; }
+  .lesson-cta svg { width: 15px; height: 15px; stroke-width: 1.9; }
 
   /* Primary CTA — solid action blue with bolt */
   .lesson-cta.primary {
@@ -1877,13 +1888,13 @@
   }
 
   /* ─── Day-group headers in Upcoming section ─── */
-  .day-group { margin-bottom: 4px; }
+  .day-group { margin-bottom: 6px; }
 
   .day-group-header {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 16px 20px 8px;
+    padding: 14px 0 10px;
     position: sticky;
     top: 56px; /* below fixed header */
     z-index: 5;
@@ -2090,19 +2101,23 @@
     }
 
     /* main-col spans its cells, right-rail is the second column */
-    .main-col { min-width: 0; }
+    .main-col { min-width: 0; max-width: 560px; }
 
     /* Greeting */
-    .greeting { padding: 32px 36px 24px; }
-    .greeting-title { font-size: 44px; }
+    .greeting { padding: 28px 32px 20px; }
+    .greeting-title { font-size: 38px; }
 
     /* On desktop, schedule-grid is single column inside main-col */
     .schedule-grid {
       display: block;
       padding: 0;
     }
-    .schedule-grid .section { padding: 0 36px; }
-    .schedule-grid .section + .section { margin-top: 28px; }
+    .schedule-grid .section { padding: 0 32px; }
+    .schedule-grid .section + .section { margin-top: 24px; }
+
+    /* Cards constrained for proper content density */
+    .lesson-card { max-width: 480px; }
+    .lesson-card.hero { max-width: 500px; }
 
     /* Day group headers */
     .day-group-header { padding: 12px 0 8px; top: 56px; }
@@ -2352,40 +2367,41 @@
   /* Left time column — bordered separator, mono labels */
   .lc-time {
     flex-shrink: 0;
-    min-width: 64px;
-    padding-right: 14px;
+    min-width: 68px;
+    padding-right: 16px;
     border-right: 1px solid var(--hh-border-light);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 6px;
+    gap: 5px;
   }
-  /* Time + small AM/PM inline */
+  /* Time + small AM/PM inline — proper visual spacing */
   .lc-time-top {
     display: flex;
     align-items: baseline;
-    gap: 3px;
+    gap: 5px;
     font-family: var(--font-mono);
   }
   .lc-time-val {
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 500;
     color: var(--hh-text-primary);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
     line-height: 1;
   }
   .lc-time-period {
     font-size: 11px;
+    font-weight: 500;
     color: var(--hh-text-tertiary);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
   }
   .lc-time-dur {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 10.5px;
     color: var(--hh-text-tertiary);
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.06em;
   }
 
   /* Right info column — avatars + name + rink */
@@ -2394,7 +2410,7 @@
     min-width: 0;
     display: flex;
     align-items: center;
-    gap: 11px;
+    gap: 12px;
   }
   .lc-identity-text {
     flex: 1;
@@ -2410,10 +2426,11 @@
     flex: 1;
     min-width: 0;
     font-family: var(--font-body);
-    font-size: 16px;
+    font-size: 15.5px;
     font-weight: 600;
     color: var(--hh-text-primary);
     line-height: 1.2;
+    letter-spacing: -0.005em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2424,8 +2441,8 @@
     color: var(--hh-text-secondary);
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin-top: 5px;
+    gap: 5px;
+    margin-top: 4px;
     letter-spacing: 0.01em;
     min-width: 0;
   }
@@ -2438,29 +2455,29 @@
   }
   .lc-rink svg { width: 13px; height: 13px; flex-shrink: 0; stroke: var(--hh-text-tertiary); stroke-width: 1.7; }
 
-  /* Count badge (1 / 2 goalies pill) */
+  /* Count badge (1 / 2 goalies pill) — sits next to name */
   .count-badge {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    height: 22px;
-    padding: 0 8px 0 7px;
-    border-radius: 6px;
+    height: 20px;
+    padding: 0 7px 0 6px;
+    border-radius: 5px;
     font-family: var(--font-mono);
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: 500;
     flex-shrink: 0;
     white-space: nowrap;
     background: #F1EEE6;
     color: #27425F;
-    box-shadow: inset 0 0 0 1px var(--hh-border-light);
+    box-shadow: inset 0 0 0 1px rgba(14,27,46,0.08);
   }
   .count-badge.multi {
     background: #E9F2FB;
     color: #2F6FB0;
     box-shadow: inset 0 0 0 1px #CADEF2;
   }
-  .count-badge svg { width: 13px; height: 13px; stroke-width: 1.8; }
+  .count-badge svg { width: 12px; height: 12px; stroke-width: 1.8; flex-shrink: 0; }
   .count-badge.multi svg { stroke: #2F6FB0; }
 
   /* ─── Day Rail ─── */
