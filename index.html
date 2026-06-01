@@ -13,9 +13,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=DM+Mono:wght@400;500&display=swap">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
   // Register service worker for offline support
@@ -28,31 +27,8 @@
 </script>
 
 <style>
-  /* ─── Design tokens (HockeyHub + Goalie blend) ─── */
+  /* ─── Page-local tokens (global tokens live in tokens.css) ─── */
   :root {
-    --font-display: 'Archivo', 'Inter', sans-serif;
-    --font-mono:    'DM Mono', ui-monospace, 'IBM Plex Mono', monospace;
-    --font-body:    'Inter', -apple-system, sans-serif;
-
-    --hh-primary:        #1F62AC;
-    --hh-primary-hover:  #17518F;
-    --hh-primary-tint:   #E9F1FA;
-    --hh-primary-tint-2: #c3d9f2;
-
-    --hh-text-primary:   #13243B;
-    --hh-text-secondary: #5C6A7D;
-    --hh-text-tertiary:  #8B96A6;
-    --hh-text-muted:     #A8B3C0;
-
-    --hh-border-light:   rgba(14,27,46,0.10);
-    --hh-border-default: rgba(14,27,46,0.18);
-
-    --hh-bg-page:        #F8F7F4;
-    --hh-bg-surface:     #ffffff;
-    --hh-bg-tertiary:    #F1F0ED;
-
-    --hh-shadow-xs:  0 1px 2px rgba(14,27,46,0.06);
-    --hh-shadow-md:  0 6px 24px -8px rgba(14,27,46,0.16), 0 1px 2px rgba(14,27,46,0.05);
 
     /* Brand navy — goalie identity */
     --gc-navy:           #1c3150;
@@ -231,11 +207,10 @@
   }
 
   .greeting-title {
-    font-family: var(--font-display);
-    font-size: 24px;
-    font-weight: 800;
+    font-size: 28px;
+    font-weight: 700;
     color: var(--hh-text-primary);
-    line-height: 1.2;
+    line-height: 1.15;
     letter-spacing: -0.02em;
   }
 
@@ -259,11 +234,11 @@
   }
 
   .section-label {
-    font-family: var(--font-mono);
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 600;
-    color: var(--hh-text-secondary);
-    letter-spacing: 0.12em;
+    color: var(--hh-text-tertiary);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
   }
 
   .section-count {
@@ -544,12 +519,11 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    font-weight: 500;
+    font-size: 11px;
+    font-weight: 600;
     color: var(--gc-navy);
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.08em;
   }
 
   .hero-eyebrow .pulse {
@@ -568,14 +542,13 @@
   }
 
   .hero-countdown {
-    font-family: var(--font-mono);
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 600;
     color: #2F6FB0;
     background: #E9F2FB;
     border-radius: 20px;
     padding: 3px 10px;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
     white-space: nowrap;
     box-shadow: inset 0 0 0 1px #CADEF2;
   }
@@ -596,26 +569,27 @@
   }
 
   .hero-time {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 42px;
+    font-weight: 700;
+    font-size: 40px;
     color: #0E1B2E;
-    letter-spacing: -0.02em;
-    line-height: 0.9;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
   }
 
   .hero-time-period {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 18px;
+    font-weight: 500;
+    font-size: 16px;
     color: var(--hh-text-secondary);
+    letter-spacing: 0;
   }
 
   .hero-time-dur {
-    font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: 600;
     color: var(--hh-text-tertiary);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     margin-left: 2px;
   }
 
@@ -632,23 +606,22 @@
   .hero-avatars .goalie-avatar:first-child { margin-left: 0; }
 
   .hero-goalie-names {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 21px;
+    font-weight: 600;
+    font-size: 18px;
     color: var(--hh-text-primary);
     letter-spacing: -0.01em;
-    line-height: 1.1;
+    line-height: 1.2;
   }
 
   .hero-rink {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-family: var(--font-mono);
-    font-size: 12px;
+    gap: 5px;
+    font-size: 12.5px;
+    font-weight: 400;
     color: var(--hh-text-secondary);
-    margin-top: 4px;
-    letter-spacing: 0.02em;
+    margin-top: 5px;
+    letter-spacing: 0;
   }
   .hero-rink svg { width: 13px; height: 13px; stroke: var(--hh-text-tertiary); stroke-width: 1.7; }
 
@@ -693,9 +666,8 @@
   .recent-body { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 4px; }
 
   .recent-name {
-    font-family: var(--font-display);
-    font-size: 16px;
-    font-weight: 800;
+    font-size: 14px;
+    font-weight: 600;
     color: var(--hh-text-primary);
     line-height: 1.2;
     letter-spacing: -0.01em;
@@ -705,12 +677,10 @@
   }
 
   .recent-meta-line {
-    font-family: var(--font-mono);
     font-size: 11.5px;
-    font-weight: 500;
+    font-weight: 400;
     color: var(--hh-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -1954,12 +1924,11 @@
   }
 
   .day-group-label {
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    font-weight: 500;
-    color: var(--hh-text-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--hh-text-tertiary);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.07em;
   }
 
   .day-group-line {
@@ -2430,25 +2399,24 @@
     font-family: var(--font-mono);
   }
   .lc-time-val {
-    font-size: 19px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 600;
     color: var(--hh-text-primary);
     letter-spacing: -0.02em;
     line-height: 1;
+    font-variant-numeric: tabular-nums;
   }
   .lc-time-period {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 500;
     color: var(--hh-text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.02em;
   }
   .lc-time-dur {
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    color: var(--hh-text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--hh-text-muted);
+    letter-spacing: 0.02em;
   }
 
   /* Right info column — avatars + name + rink */
@@ -2472,25 +2440,24 @@
   .lc-names {
     flex: 1;
     min-width: 0;
-    font-family: var(--font-body);
-    font-size: 15.5px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--hh-text-primary);
     line-height: 1.2;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .lc-rink {
-    font-family: var(--font-mono);
-    font-size: 11.5px;
+    font-size: 12px;
+    font-weight: 400;
     color: var(--hh-text-secondary);
     display: flex;
     align-items: center;
     gap: 5px;
-    margin-top: 4px;
-    letter-spacing: 0.01em;
+    margin-top: 3px;
+    letter-spacing: 0;
     min-width: 0;
   }
   .lc-rink-text {
@@ -2502,12 +2469,11 @@
   }
   .lc-rink svg { width: 13px; height: 13px; flex-shrink: 0; stroke: var(--hh-text-tertiary); stroke-width: 1.7; }
   .lc-team {
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    color: var(--hh-primary);
-    letter-spacing: 0.02em;
-    margin-top: 3px;
+    font-size: 11px;
     font-weight: 500;
+    color: var(--hh-text-tertiary);
+    letter-spacing: 0;
+    margin-top: 2px;
   }
 
   /* Count badge (1 / 2 goalies pill) — sits next to name */

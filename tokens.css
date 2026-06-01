@@ -1,0 +1,291 @@
+/* ═══════════════════════════════════════════════════════
+   tokens.css — Goalie Coach shared design system
+   Loaded on every page. Only define here, never in-page.
+   ═══════════════════════════════════════════════════════ */
+
+/* ── 1. Typography
+   One font: Inter. Weights + spacing create all hierarchy.
+   No Archivo. No DM Mono. No font-switching mid-screen. ── */
+
+:root {
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Scale */
+  --text-display:   700  38px / 1.05  var(--font);  /* page headings */
+  --text-title:     600  20px / 1.25  var(--font);  /* card titles, section heads */
+  --text-base:      400  14px / 1.55  var(--font);  /* body copy */
+  --text-sm:        400  13px / 1.5   var(--font);  /* secondary body */
+  --text-caption:   500  12px / 1.4   var(--font);  /* meta, timestamps */
+  --text-label:     600  11px / 1     var(--font);  /* uppercase badges, section labels */
+
+  /* Tabular numerics (times, counts) — still Inter, just feature-enabled */
+  --font-tabular: 600 17px / 1 var(--font);
+  font-variant-numeric: tabular-nums;  /* inherit on all children */
+}
+
+/* ── 2. Color ── */
+:root {
+  /* Primary action — ONE use: Build plan button */
+  --color-action:       #1F62AC;
+  --color-action-hover: #17518F;
+  --color-action-tint:  #E9F1FA;
+  --color-action-tint2: #C3D9F2;
+
+  /* Brand navy — identity, headings, active nav */
+  --color-navy:   #1C3150;
+  --color-navy-2: #243D63;
+
+  /* Text scale */
+  --color-text-primary:   #13243B;
+  --color-text-secondary: #5C6A7D;
+  --color-text-tertiary:  #8B96A6;
+  --color-text-muted:     #A8B3C0;
+
+  /* Surfaces */
+  --color-bg:      #F8F7F4;   /* page background */
+  --color-surface: #FFFFFF;   /* card / panel surface */
+  --color-raised:  #F1F0ED;   /* hover, sidebar bg */
+
+  /* Borders */
+  --color-border:        rgba(14,27,46,0.10);
+  --color-border-strong: rgba(14,27,46,0.18);
+
+  /* Semantic */
+  --color-green:  #10B981;
+  --color-red:    #EF4444;
+
+  /* ── Legacy aliases so old var() refs still work ── */
+  --hh-primary:        var(--color-action);
+  --hh-primary-hover:  var(--color-action-hover);
+  --hh-primary-tint:   var(--color-action-tint);
+  --hh-primary-tint-2: var(--color-action-tint2);
+  --hh-text-primary:   var(--color-text-primary);
+  --hh-text-secondary: var(--color-text-secondary);
+  --hh-text-tertiary:  var(--color-text-tertiary);
+  --hh-text-muted:     var(--color-text-muted);
+  --hh-bg-page:        var(--color-bg);
+  --hh-bg-surface:     var(--color-surface);
+  --hh-bg-tertiary:    var(--color-raised);
+  --hh-border-light:   var(--color-border);
+  --hh-border-default: var(--color-border-strong);
+  --gc-navy:           var(--color-navy);
+  --gc-navy-2:         var(--color-navy-2);
+  /* Drop Archivo/DM Mono — map to Inter */
+  --font-display: var(--font);
+  --font-mono:    var(--font);
+  --font-body:    var(--font);
+}
+
+/* ── 3. Spacing / Radius / Shadow ── */
+:root {
+  --r-sm:  6px;
+  --r-md:  10px;
+  --r-lg:  14px;
+  --r-xl:  18px;
+  --r-2xl: 22px;
+
+  --shadow-xs: 0 1px 2px rgba(14,27,46,0.06);
+  --shadow-sm: 0 1px 4px rgba(14,27,46,0.08);
+  --shadow-md: 0 4px 16px -4px rgba(14,27,46,0.12), 0 1px 2px rgba(14,27,46,0.05);
+  --shadow-lg: 0 8px 32px -8px rgba(14,27,46,0.18), 0 2px 4px rgba(14,27,46,0.06);
+
+  /* Legacy aliases */
+  --hh-shadow-xs: var(--shadow-xs);
+  --hh-shadow-md: var(--shadow-md);
+  --shadow-card:  var(--shadow-xs);
+  --shadow-navy:  0 6px 24px -6px rgba(28,49,80,0.40);
+}
+
+/* ── 4. Avatar tone palette ── */
+:root {
+  --tone-a-bg:   #EDE7DB; --tone-a-fg: var(--color-navy);
+  --tone-b-bg:   #E4EDF7; --tone-b-fg: #2F6FB0;
+  --tone-c-bg:   #E6F4EE; --tone-c-fg: #1A7A4A;
+  --tone-d-bg:   #EDE8F5; --tone-d-fg: #5C34A4;
+}
+
+/* ── 5. Base resets ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-family: var(--font);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variant-numeric: tabular-nums;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  line-height: 1.55;
+}
+
+/* ── 6. Shared sidebar (desktop ≥1024px) ── */
+.gc-sidebar {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .gc-sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 232px;
+    flex-shrink: 0;
+    background: var(--color-raised);
+    border-right: 1px solid var(--color-border);
+    padding: 20px 14px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    gap: 0;
+  }
+}
+
+.gc-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 20px;
+}
+.gc-sidebar-logo {
+  width: 32px; height: 32px;
+  background: #EBE5D8;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgba(14,27,46,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--color-navy);
+  flex-shrink: 0;
+}
+.gc-sidebar-brand-name {
+  font-size: 14px; font-weight: 700;
+  color: #0E1B2E; letter-spacing: -0.01em; line-height: 1.1;
+}
+.gc-sidebar-brand-sub {
+  font-size: 9px; font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px;
+}
+
+.gc-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gc-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 10px;
+  border-radius: 9px;
+  cursor: pointer;
+  position: relative;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  font-family: var(--font);
+  transition: background 0.12s;
+  white-space: nowrap;
+}
+.gc-sidebar-item:hover {
+  background: rgba(28,49,80,0.05);
+  color: var(--color-text-primary);
+}
+.gc-sidebar-item.active {
+  background: var(--color-surface);
+  color: var(--color-navy);
+  font-weight: 600;
+  box-shadow: var(--shadow-xs);
+}
+.gc-sidebar-item.active::before {
+  content: '';
+  position: absolute; left: 0; top: 9px; bottom: 9px;
+  width: 3px; border-radius: 3px;
+  background: var(--color-navy);
+}
+.gc-sidebar-item svg {
+  width: 17px; height: 17px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.gc-sidebar-item:not(.active) svg { opacity: 0.55; }
+
+.gc-sidebar-spacer { flex: 1; }
+
+.gc-sidebar-profile {
+  display: flex; align-items: center; gap: 9px;
+  padding: 9px; border-radius: 11px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xs);
+}
+.gc-sidebar-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--color-navy); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.gc-sidebar-profile-name {
+  font-size: 13px; font-weight: 600; color: var(--color-text-primary);
+  line-height: 1.2;
+}
+.gc-sidebar-profile-role {
+  font-size: 11px; color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ── 7. Shared card base ── */
+.gc-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+/* ── 8. Shared section label ── */
+.gc-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+/* ── 9. Shared pill badge ── */
+.gc-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 20px; padding: 0 7px;
+  border-radius: 5px;
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.04em;
+  background: var(--color-raised);
+  color: var(--color-text-secondary);
+  box-shadow: inset 0 0 0 1px var(--color-border);
+  white-space: nowrap;
+}
+.gc-badge.action {
+  background: var(--color-action-tint);
+  color: var(--color-action);
+  box-shadow: inset 0 0 0 1px var(--color-action-tint2);
+}
+
+/* ── 10. Avatar tones ── */
+.tone-a { background: var(--tone-a-bg); color: var(--tone-a-fg); }
+.tone-b { background: var(--tone-b-bg); color: var(--tone-b-fg); }
+.tone-c { background: var(--tone-c-bg); color: var(--tone-c-fg); }
+.tone-d { background: var(--tone-d-bg); color: var(--tone-d-fg); }
