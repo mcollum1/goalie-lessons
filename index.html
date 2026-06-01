@@ -2501,6 +2501,14 @@
     text-overflow: ellipsis;
   }
   .lc-rink svg { width: 13px; height: 13px; flex-shrink: 0; stroke: var(--hh-text-tertiary); stroke-width: 1.7; }
+  .lc-team {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--hh-primary);
+    letter-spacing: 0.02em;
+    margin-top: 3px;
+    font-weight: 500;
+  }
 
   /* Count badge (1 / 2 goalies pill) — sits next to name */
   .count-badge {
@@ -3918,6 +3926,18 @@
               <svg class="lucide"><use href="#i-map-pin"/></svg>
               <span class="lc-rink-text">${parsed.rink || 'Location TBD'}</span>
             </div>
+            ${(function() {
+              // Pull team/school for the first goalie in this session
+              if (!window.DB) return '';
+              const all = DB.GoalieStore.getAll();
+              const teams = goalies.map(n => {
+                const first = n.split(/\s*\(.*?\)/)[0].trim().toLowerCase();
+                const g = all.find(x => x.name && x.name.toLowerCase().includes(first.split(' ')[0]));
+                return g && g.team ? g.team : null;
+              }).filter(Boolean);
+              const teamStr = [...new Set(teams)].join(' · ');
+              return teamStr ? `<div class="lc-team"><span>${_esc(teamStr)}</span></div>` : '';
+            })()}
           </div>
         </div>
       </div>
@@ -3958,6 +3978,26 @@
 
   function _esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+  /* Navigate to the goalie's profile page, matching by name from GoalieStore */
+  function _navigateToProfile(displayName) {
+    if (!displayName) return;
+    const first = displayName.split(/\s*\(.*?\)\s*/)[0].trim().toLowerCase();
+    let found = null;
+    if (window.DB && DB.GoalieStore) {
+      const all = DB.GoalieStore.getAll();
+      // Exact name match first, then starts-with
+      found = all.find(g => g.name && g.name.toLowerCase() === first)
+           || all.find(g => g.name && first.startsWith(g.name.toLowerCase().split(' ')[0]))
+           || all.find(g => g.name && g.name.toLowerCase().includes(first.split(' ')[0]));
+    }
+    if (found) {
+      window.location.href = 'profiles.html?id=' + encodeURIComponent(found.id);
+    } else {
+      // Fallback: pass the display name so profiles.html can try
+      window.location.href = 'profiles.html?name=' + encodeURIComponent(displayName);
+    }
+  }
+
   function showGoaliePicker(btn, goalies) {
     dismissPicker();
 
@@ -3989,9 +4029,7 @@
       row.addEventListener('click', (e) => {
         e.stopPropagation();
         dismissPicker();
-        if (typeof window._hhOpenProfileSheet === 'function') {
-          window._hhOpenProfileSheet(name);
-        }
+        _navigateToProfile(name);
       });
       picker.appendChild(row);
     });
@@ -4025,13 +4063,11 @@
         const goalies    = goalieName.split(/\s*&\s*/).map(n => n.trim()).filter(Boolean);
 
         if (goalies.length <= 1) {
-          // Single goalie → open directly
+          // Single goalie → navigate to profile page
           dismissPicker();
-          if (typeof window._hhOpenProfileSheet === 'function') {
-            window._hhOpenProfileSheet(goalies[0] || goalieName);
-          }
+          _navigateToProfile(goalies[0] || goalieName);
         } else {
-          // Multi-goalie → show picker
+          // Multi-goalie → show picker, each choice navigates to profile page
           showGoaliePicker(btn, goalies);
         }
       });

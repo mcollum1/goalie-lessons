@@ -64,11 +64,108 @@
   body {
     min-height: 100vh;
     display: flex;
-    justify-content: center;
+    background: var(--hh-bg-page);
+  }
+
+  /* ─── Desktop shell (sidebar + content) ─── */
+  .app-shell {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  /* ─── Sidebar (desktop only) ─── */
+  .sidebar {
+    display: none;
+  }
+  @media (min-width: 1024px) {
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      width: 232px;
+      flex-shrink: 0;
+      background: #F1F0ED;
+      border-right: 1px solid var(--hh-border-light);
+      padding: 22px 16px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 8px 22px;
+    }
+    .sidebar-logo {
+      width: 34px; height: 34px;
+      background: #EBE5D8;
+      border-radius: 9px;
+      box-shadow: inset 0 0 0 1px rgba(14,27,46,0.13);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 13px; font-weight: 800;
+      color: var(--gc-navy); letter-spacing: -0.01em;
+    }
+    .sidebar-brand-text {
+      line-height: 1.1;
+    }
+    .sidebar-brand-name {
+      font-family: var(--font-display); font-weight: 800; font-size: 15px;
+      color: #0E1B2E; letter-spacing: -0.01em;
+    }
+    .sidebar-brand-sub {
+      font-family: var(--font-mono); font-size: 9px;
+      color: var(--hh-text-tertiary); letter-spacing: 0.14em;
+      text-transform: uppercase; margin-top: 2px;
+    }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+    .sidebar-nav-item {
+      display: flex; align-items: center; gap: 11px;
+      height: 42px; padding: 0 12px;
+      border-radius: 10px; cursor: pointer;
+      position: relative; text-decoration: none;
+      font-family: inherit; font-size: 14.5px; font-weight: 500;
+      color: var(--hh-text-secondary);
+      background: transparent; border: none;
+      transition: background 0.13s;
+    }
+    .sidebar-nav-item:hover { background: rgba(28,49,80,0.06); }
+    .sidebar-nav-item.active {
+      background: #FFFFFF;
+      color: var(--gc-navy);
+      font-weight: 600;
+      box-shadow: 0 1px 2px rgba(14,27,46,0.06);
+    }
+    .sidebar-nav-item.active::before {
+      content: '';
+      position: absolute; left: 0; top: 10px; bottom: 10px;
+      width: 3px; border-radius: 3px;
+      background: var(--gc-navy);
+    }
+    .sidebar-nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .sidebar-nav-item:not(.active) svg { stroke: var(--hh-text-tertiary); }
+    .sidebar-spacer { flex: 1; }
+    .sidebar-profile {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px; border-radius: 12px;
+      background: #FFFFFF; border: 1px solid var(--hh-border-light);
+      box-shadow: 0 1px 2px rgba(14,27,46,0.05);
+    }
+    .sidebar-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--gc-navy); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 12px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .sidebar-profile-name { font-size: 13.5px; font-weight: 600; color: var(--hh-text-primary); }
+    .sidebar-profile-role { font-family: var(--font-mono); font-size: 10px; color: var(--hh-text-tertiary); letter-spacing: 0.03em; }
   }
 
   .app {
-    width: 100%;
+    flex: 1;
+    min-width: 0;
     max-width: 390px;
     min-height: 100vh;
     background: var(--hh-bg-page);
@@ -77,10 +174,13 @@
   }
 
   @media (min-width: 768px) {
-    .app { max-width: 960px; padding-bottom: 0; }
+    .app { max-width: 720px; padding-bottom: 0; }
+  }
+  @media (min-width: 1024px) {
+    .app { max-width: none; padding-bottom: 0; }
   }
 
-  /* ─── Header ─── */
+  /* ─── Header (mobile/tablet only) ─── */
   .top-header {
     position: sticky; top: 0; z-index: 50;
     background: rgba(248,247,244,0.94);
@@ -89,6 +189,7 @@
     border-bottom: 1px solid var(--hh-border-light);
     padding: env(safe-area-inset-top) 16px 0;
   }
+  @media (min-width: 1024px) { .top-header { display: none; } }
   .top-header-inner {
     height: 56px; display: flex; align-items: center;
     justify-content: space-between; gap: 12px;
@@ -120,7 +221,12 @@
   /* ─── Page heading ─── */
   .page-heading {
     padding: 20px 18px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
+  .page-heading-left { flex: 1; min-width: 0; }
   .page-heading-title {
     font-family: var(--font-display);
     font-size: 28px; font-weight: 800;
@@ -128,40 +234,67 @@
     line-height: 1.15;
   }
   .page-heading-sub {
-    font-size: 13px; color: var(--hh-text-secondary);
-    margin-top: 4px;
+    font-family: var(--font-mono);
+    font-size: 12px; color: var(--hh-text-tertiary);
+    margin-top: 4px; letter-spacing: 0.06em;
+  }
+  /* Desktop: bigger heading with inline Add Goalie button */
+  @media (min-width: 1024px) {
+    .page-heading {
+      padding: 28px 32px 18px;
+    }
+    .page-heading-title { font-size: 34px; }
+    .page-heading-add-btn {
+      padding: 9px 18px;
+      background: var(--gc-navy);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px; font-weight: 600; font-family: inherit;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      white-space: nowrap;
+    }
+    .page-heading-add-btn:hover { background: var(--gc-navy-2); }
+    .page-heading-add-btn svg { width: 15px; height: 15px; }
   }
 
   /* ─── Roster grid ─── */
   .roster-grid {
-    padding: 4px 16px 24px;
+    padding: 4px 18px 32px;
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
   }
   @media (min-width: 560px) {
-    .roster-grid { grid-template-columns: repeat(2, 1fr); }
+    .roster-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   }
-  @media (min-width: 900px) {
-    .roster-grid { grid-template-columns: repeat(3, 1fr); }
+  @media (min-width: 1024px) {
+    .roster-grid {
+      padding: 4px 32px 48px;
+      grid-template-columns: repeat(3, minmax(0, 320px));
+      gap: 14px;
+    }
   }
   .roster-card {
-    background: var(--hh-bg-surface);
+    background: #FFFFFF;
     border: 1px solid var(--hh-border-light);
-    border-radius: var(--r-lg);
-    padding: 16px;
+    border-radius: 14px;
+    padding: 18px;
     box-shadow: 0 1px 2px rgba(14,27,46,0.06);
     cursor: pointer;
-    transition: transform 0.12s ease, box-shadow 0.15s ease;
+    transition: transform 0.14s ease, box-shadow 0.16s ease;
     display: flex; flex-direction: column; gap: 12px;
     text-decoration: none; color: inherit;
   }
-  .roster-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(14,27,46,0.10); }
-  .roster-card-top { display: flex; align-items: center; gap: 12px; }
+  .roster-card:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(14,27,46,0.10); }
+  .roster-card-top { display: flex; align-items: center; gap: 13px; }
   .avatar {
     width: 44px; height: 44px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
     font-size: 15px; font-weight: 700; flex-shrink: 0;
+    box-shadow: inset 0 0 0 1px rgba(14,27,46,0.08);
   }
   .avatar.lg { width: 64px; height: 64px; font-size: 22px; }
   .avatar.tone-a { background: #EDE7DB; color: var(--gc-navy); }
@@ -169,8 +302,10 @@
   .avatar.tone-c { background: #ecfdf5; color: #047857; }
   .avatar.tone-d { background: #faf5ff; color: #7e22ce; }
   .roster-card-name {
+    font-family: var(--font-display);
     font-size: 16px; font-weight: 700;
     color: var(--hh-text-primary); line-height: 1.2;
+    letter-spacing: -0.01em;
   }
   .level-badge {
     display: inline-block; margin-top: 4px;
@@ -178,6 +313,14 @@
     font-size: 10.5px; font-weight: 500;
     color: var(--hh-text-secondary);
     text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .team-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-top: 3px;
+    font-family: var(--font-mono);
+    font-size: 10px; font-weight: 500;
+    color: var(--hh-primary);
+    letter-spacing: 0.04em;
   }
   .roster-card-focus {
     font-size: 13px; line-height: 1.4;
@@ -634,8 +777,47 @@
   </defs>
 </svg>
 
+<div class="app-shell">
+
+<!-- ─── Desktop Sidebar ─── -->
+<nav class="sidebar" aria-label="Primary">
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">GC</div>
+    <div class="sidebar-brand-text">
+      <div class="sidebar-brand-name">Goalie Coach</div>
+      <div class="sidebar-brand-sub">HockeyHub</div>
+    </div>
+  </div>
+  <div class="sidebar-nav">
+    <a class="sidebar-nav-item" href="index.html">
+      <svg class="lucide" style="stroke:inherit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a class="sidebar-nav-item" href="index.html#plans">
+      <svg class="lucide" style="stroke:inherit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+      Plans
+    </a>
+    <a class="sidebar-nav-item" href="availability.html">
+      <svg class="lucide" style="stroke:inherit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+      Schedule
+    </a>
+    <a class="sidebar-nav-item active" href="profiles.html">
+      <svg class="lucide" style="stroke:inherit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Goalies
+    </a>
+  </div>
+  <div class="sidebar-spacer"></div>
+  <div class="sidebar-profile">
+    <div class="sidebar-avatar">MC</div>
+    <div>
+      <div class="sidebar-profile-name">Mitch</div>
+      <div class="sidebar-profile-role">Head Coach</div>
+    </div>
+  </div>
+</nav>
+
 <div class="app" id="app">
-  <!-- Header -->
+  <!-- Header (mobile/tablet) -->
   <header class="top-header">
     <div class="top-header-inner" id="headerInner">
       <button class="back-btn" id="backBtn" type="button" aria-label="Back">
@@ -652,8 +834,14 @@
   <!-- Roster view (default) -->
   <section id="rosterView">
     <div class="page-heading">
-      <h1 class="page-heading-title">Goalies</h1>
-      <div class="page-heading-sub" id="rosterSub"></div>
+      <div class="page-heading-left">
+        <h1 class="page-heading-title">Goalies</h1>
+        <div class="page-heading-sub" id="rosterSub"></div>
+      </div>
+      <button class="page-heading-add-btn" id="addGoalieBtnDesktop" type="button">
+        <svg class="lucide"><use href="#i-plus"/></svg>
+        Add Goalie
+      </button>
     </div>
     <div class="roster-grid" id="rosterGrid"></div>
   </section>
@@ -674,6 +862,7 @@
                 </button>
               </div>
               <div class="level-badge" id="pLevel"></div>
+              <div class="team-badge" id="pTeam" style="display:none"></div>
             </div>
           </div>
 
@@ -750,7 +939,8 @@
       <span class="tab-label">Goalies</span>
     </a>
   </nav>
-</div>
+</div><!-- /app -->
+</div><!-- /app-shell -->
 
 <!-- Add Note slide-up panel -->
 <div class="note-sheet" id="noteSheet" role="dialog" aria-modal="true" aria-hidden="true">
@@ -788,6 +978,10 @@
         <option value="intermediate" selected>Intermediate</option>
         <option value="advanced">Advanced</option>
       </select>
+    </div>
+    <div class="form-row">
+      <label class="form-label" for="newGoalieTeam">Team / School <span style="font-weight:400;color:var(--hh-text-tertiary)">(optional)</span></label>
+      <input class="form-input" id="newGoalieTeam" type="text" placeholder="e.g. Newington 14U or Pomfret School">
     </div>
     <div class="note-sheet-actions">
       <button class="sheet-btn ghost" id="newGoalieCancel" type="button">Cancel</button>
@@ -854,7 +1048,17 @@
 
   /* ─── Router ───────────────────────────────────────────────── */
   const params = new URLSearchParams(window.location.search);
-  const goalieId = params.get('id');
+  let goalieId = params.get('id');
+
+  // ?name= fallback: find goalie by display name (from index.html profile button)
+  if (!goalieId && params.get('name')) {
+    const displayName = params.get('name').toLowerCase();
+    const all = GoalieStore.getAll();
+    const found = all.find(g => g.name && g.name.toLowerCase() === displayName)
+               || all.find(g => g.name && displayName.includes(g.name.toLowerCase().split(' ')[0]))
+               || all.find(g => g.name && g.name.toLowerCase().includes(displayName.split(' ')[0]));
+    if (found) goalieId = found.id;
+  }
 
   if (goalieId) {
     renderProfile(goalieId);
@@ -884,9 +1088,10 @@
         <a class="roster-card" href="profiles.html?id=${encodeURIComponent(g.id)}">
           <div class="roster-card-top">
             <div class="avatar ${toneClass(g)}">${escHtml(initialsFor(g))}</div>
-            <div style="min-width:0">
+            <div style="min-width:0; flex:1;">
               <div class="roster-card-name">${escHtml(g.name || 'Goalie')}</div>
               <div class="level-badge">${escHtml(g.level || 'intermediate')}</div>
+              ${g.team ? `<div class="team-badge">${escHtml(g.team)}</div>` : ''}
             </div>
           </div>
           <div class="roster-card-focus ${focus ? '' : 'empty'}">${focus ? escHtml(focus) : 'No focus set yet'}</div>
@@ -922,6 +1127,9 @@
     avatar.textContent = initialsFor(g);
     document.getElementById('pName').textContent = g.name || 'Goalie';
     document.getElementById('pLevel').textContent = (g.level || 'intermediate').toUpperCase();
+    const pTeamEl = document.getElementById('pTeam');
+    if (pTeamEl) pTeamEl.textContent = g.team || '';
+    if (pTeamEl) pTeamEl.style.display = g.team ? '' : 'none';
 
     document.getElementById('pNameEdit').onclick = () => editIdentity(g);
 
@@ -1026,7 +1234,9 @@
     const newLevel = prompt('Level (beginner / intermediate / advanced):', g.level || 'intermediate');
     const level = ['beginner','intermediate','advanced'].includes((newLevel||'').trim().toLowerCase())
       ? newLevel.trim().toLowerCase() : g.level;
-    GoalieStore.save({ id: g.id, name: trimmed, level, initials: undefined });
+    const newTeam = prompt('Team / School (leave blank to clear):', g.team || '');
+    if (newTeam === null) { GoalieStore.save({ id: g.id, name: trimmed, level, initials: undefined }); }
+    else { GoalieStore.save({ id: g.id, name: trimmed, level, team: newTeam.trim(), initials: undefined }); }
     renderProfile(g.id);
   }
 
@@ -1176,15 +1386,19 @@
   const addSave      = document.getElementById('newGoalieSave');
   const nameInput    = document.getElementById('newGoalieName');
   const levelSelect  = document.getElementById('newGoalieLevel');
+  const teamInput    = document.getElementById('newGoalieTeam');
 
   function openAddGoalie() {
     nameInput.value = '';
     levelSelect.value = 'intermediate';
+    if (teamInput) teamInput.value = '';
     addModal.classList.add('open');
     setTimeout(() => nameInput.focus(), 80);
   }
   function closeAddGoalie() { addModal.classList.remove('open'); }
   addBtn.onclick      = openAddGoalie;
+  const addBtnDesktop = document.getElementById('addGoalieBtnDesktop');
+  if (addBtnDesktop) addBtnDesktop.onclick = openAddGoalie;
   addBackdrop.onclick = closeAddGoalie;
   addCancel.onclick   = closeAddGoalie;
   addSave.onclick = () => {
@@ -1193,12 +1407,12 @@
     const saved = GoalieStore.save({
       name,
       level: levelSelect.value,
+      team: teamInput ? teamInput.value.trim() : '',
       default_session_minutes: 60,
       default_shooters: 1,
       notes: '',
     });
     closeAddGoalie();
-    // Jump straight into the new profile
     window.location.href = 'profiles.html?id=' + encodeURIComponent(saved.id);
   };
 

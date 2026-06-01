@@ -394,12 +394,12 @@
 
   function seed() {
     [
-      { id: 'goalie_jake_reynolds', name: 'Jake Reynolds',  initials: 'JR', tone: 'a', level: 'intermediate', default_session_minutes: 60, default_shooters: 1, notes: '' },
-      { id: 'goalie_mason_k',       name: 'Mason K.',       initials: 'MK', tone: 'b', level: 'intermediate', default_session_minutes: 60, default_shooters: 2, notes: '' },
-      { id: 'goalie_lily_p',        name: 'Lily P.',        initials: 'LP', tone: 'c', level: 'intermediate', default_session_minutes: 60, default_shooters: 2, notes: '' },
-      { id: 'goalie_aiden_torres',  name: 'Aiden Torres',   initials: 'AT', tone: 'd', level: 'intermediate', default_session_minutes: 60, default_shooters: 1, notes: '' },
-      { id: 'goalie_eli_m',         name: 'Eli M.',         initials: 'EM', tone: 'a', level: 'intermediate', default_session_minutes: 60, default_shooters: 2, notes: '' },
-      { id: 'goalie_sam_c',         name: 'Sam C.',         initials: 'SC', tone: 'b', level: 'intermediate', default_session_minutes: 60, default_shooters: 2, notes: '' },
+      { id: 'goalie_jake_reynolds', name: 'Jake Reynolds',  initials: 'JR', tone: 'a', level: 'intermediate', team: 'Newington High JV',  default_session_minutes: 60, default_shooters: 1, notes: '' },
+      { id: 'goalie_mason_k',       name: 'Mason K.',       initials: 'MK', tone: 'b', level: 'intermediate', team: 'Champions 12U',        default_session_minutes: 60, default_shooters: 2, notes: '' },
+      { id: 'goalie_lily_p',        name: 'Lily P.',        initials: 'LP', tone: 'c', level: 'intermediate', team: 'Champions 12U',        default_session_minutes: 60, default_shooters: 2, notes: '' },
+      { id: 'goalie_aiden_torres',  name: 'Aiden Torres',   initials: 'AT', tone: 'd', level: 'intermediate', team: 'Newington 14U',        default_session_minutes: 60, default_shooters: 1, notes: '' },
+      { id: 'goalie_eli_m',         name: 'Eli M.',         initials: 'EM', tone: 'a', level: 'intermediate', team: 'Champions 14U',        default_session_minutes: 60, default_shooters: 2, notes: '' },
+      { id: 'goalie_sam_c',         name: 'Sam C.',         initials: 'SC', tone: 'b', level: 'intermediate', team: 'Champions 14U',        default_session_minutes: 60, default_shooters: 2, notes: '' },
     ].forEach(g => GoalieStore.save({ ...g, created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' }));
 
     [
