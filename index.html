@@ -2060,28 +2060,26 @@
     /* Main content — constrained width, centered; two-column with right rail */
     .main-content {
       overflow-y: auto;
-      max-width: 920px;
       display: grid;
       grid-template-columns: 1.6fr 1fr;
-      gap: 0 24px;
+      gap: 0 28px;
       align-items: start;
     }
+
+    /* main-col spans its cells, right-rail is the second column */
+    .main-col { min-width: 0; }
 
     /* Greeting */
     .greeting { padding: 32px 36px 24px; }
     .greeting-title { font-size: 44px; }
 
-    /* Today + Upcoming — equal columns, comfortably wide */
+    /* On desktop, schedule-grid is single column inside main-col */
     .schedule-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0 24px;
-      align-items: start;
+      display: block;
       padding: 0;
     }
-    .schedule-grid .section { padding: 0 20px; }
-    .schedule-grid .section:first-child { padding-left: 36px; }
-    .schedule-grid .section:last-child  { padding-right: 36px; }
+    .schedule-grid .section { padding: 0 36px; }
+    .schedule-grid .section + .section { margin-top: 28px; }
 
     /* Day group headers */
     .day-group-header { padding: 12px 0 8px; top: 56px; }
@@ -2530,6 +2528,9 @@
       border-left: 1px solid var(--hh-border-light);
     }
   }
+
+  /* ─── Main col wrapper ─── */
+  .main-col { min-width: 0; }
 </style>
 <!-- Data layer — must load before any inline scripts -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -2642,6 +2643,9 @@
   <!-- ─── MAIN CONTENT ─── -->
   <main class="main-content">
 
+  <!-- ─── MAIN COLUMN (left, 1.6fr on desktop) ─── -->
+  <div class="main-col">
+
   <!-- ─── GREETING ─── -->
   <section class="greeting">
     <div class="greeting-eyebrow" id="greeting-date">Loading…</div>
@@ -2651,7 +2655,7 @@
   <!-- ─── DAY RAIL (week scrubber — mobile only) ─── -->
   <div class="day-rail" id="dayRail"></div>
 
-  <!-- ─── SCHEDULE GRID (Today + Upcoming side-by-side on tablet/desktop) ─── -->
+  <!-- ─── SCHEDULE GRID ─── -->
   <div class="schedule-grid">
 
   <!-- ─── TODAY ─── -->
@@ -2693,7 +2697,11 @@
 
   </div><!-- /schedule-grid -->
 
-  <!-- ─── RECENT LESSONS ─── -->
+  <div class="page-end-spacer"></div>
+
+  </div><!-- /main-col -->
+
+  <!-- ─── RIGHT RAIL (sticky on desktop, 1fr) ─── -->
   <aside class="right-rail">
   <section class="section" id="recent-section" style="display:none;">
     <div class="section-head">
@@ -2704,8 +2712,6 @@
     <div id="cal-recent"></div>
   </section>
   </aside>
-
-  <div class="page-end-spacer"></div>
 
   </main><!-- /main-content -->
   </div><!-- /app-body -->
