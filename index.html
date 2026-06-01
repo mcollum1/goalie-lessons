@@ -47,9 +47,9 @@
     --hh-border-light:   rgba(14,27,46,0.10);
     --hh-border-default: rgba(14,27,46,0.18);
 
-    --hh-bg-page:        #F1ECE0;
+    --hh-bg-page:        #F8F7F4;
     --hh-bg-surface:     #ffffff;
-    --hh-bg-tertiary:    #f5f2eb;
+    --hh-bg-tertiary:    #F1F0ED;
 
     --hh-shadow-xs:  0 1px 2px rgba(14,27,46,0.06);
     --hh-shadow-md:  0 6px 24px -8px rgba(14,27,46,0.16), 0 1px 2px rgba(14,27,46,0.05);
@@ -109,7 +109,7 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(241,236,224,0.94);
+    background: rgba(248,247,244,0.94);
     backdrop-filter: saturate(180%) blur(14px);
     -webkit-backdrop-filter: saturate(180%) blur(14px);
     border-bottom: 1px solid var(--hh-border-light);
@@ -413,7 +413,7 @@
     display: flex;
     gap: 0;
     border-top: 1px solid var(--hh-border-light);
-    background: var(--hh-bg-page);
+    background: transparent;
   }
 
   .lesson-cta {
@@ -422,7 +422,7 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 14px 8px;
+    padding: 13px 8px;
     background: transparent;
     border: none;
     font-family: inherit;
@@ -433,8 +433,18 @@
     transition: background 0.15s ease, color 0.15s ease;
   }
 
+  /* Primary CTA — solid blue, visually dominant */
   .lesson-cta.primary {
-    color: var(--hh-primary);
+    background: var(--hh-primary);
+    color: #fff;
+    border-left: none;
+  }
+  .lesson-cta.primary:hover {
+    background: var(--hh-primary-hover);
+    color: #fff;
+  }
+  .lesson-cta.primary:active {
+    background: var(--hh-primary-hover);
   }
 
   /* "See plan" state — plan already built */
@@ -465,10 +475,12 @@
 
   .lesson-cta svg { width: 15px; height: 15px; }
 
-  .lesson-cta:hover { background: var(--hh-bg-tertiary); }
-  .lesson-cta:active { background: var(--hh-border-light); }
+  /* Ghost Profile button hover */
+  .lesson-cta:not(.primary):hover { background: var(--hh-bg-tertiary); }
+  .lesson-cta:not(.primary):active { background: var(--hh-border-light); }
 
-  .lesson-cta + .lesson-cta {
+  /* Divider — only between ghost and primary */
+  .lesson-cta + .lesson-cta:not(.primary) {
     border-left: 1px solid var(--hh-border-light);
   }
 
@@ -792,7 +804,7 @@
     transform: translateX(-50%);
     width: 100%;
     max-width: 390px;
-    background: rgba(241,236,224,0.94);
+    background: rgba(248,247,244,0.94);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-top: 1px solid var(--hh-border-light);
@@ -2358,27 +2370,32 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 64px;
+    width: 72px;
     flex-shrink: 0;
-    padding: 0 14px 0 16px;
+    padding: 0 12px 0 16px;
     border-right: 1px solid var(--hh-border-light);
-    gap: 0;
+    gap: 3px;
+  }
+  /* Time + AM/PM inline */
+  .lc-time-top {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
   }
   .lc-time-val {
     font-family: var(--font-mono);
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 500;
     color: var(--hh-text-primary);
-    line-height: 1.1;
+    line-height: 1;
     letter-spacing: -0.01em;
   }
   .lc-time-period {
     font-family: var(--font-mono);
-    font-size: 9.5px;
+    font-size: 9px;
     color: var(--hh-text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-top: 2px;
+    letter-spacing: 0.04em;
   }
   .lc-time-dur {
     font-family: var(--font-mono);
@@ -2386,7 +2403,6 @@
     color: var(--hh-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    margin-top: 5px;
   }
   .lc-info {
     flex: 1;
@@ -3721,9 +3737,9 @@
         <button class="hero-cta" type="button"
           data-profile
           data-goalie="${parsed.names.replace(/"/g, '&quot;')}"
-          aria-label="${isMulti ? 'Notes for goalies' : 'Notes'}">
+          aria-label="${isMulti ? 'Profiles' : 'Profile'}">
           <svg class="lucide"><use href="${isMulti ? '#i-users' : '#i-user'}"/></svg>
-          Notes
+          ${isMulti ? 'Profiles' : 'Profile'}
         </button>
         <button class="hero-cta primary" type="button"
           data-build-plan
@@ -3771,9 +3787,10 @@
       <div class="lesson-card-body lc-columns">
         <!-- left: time column -->
         <div class="lc-time">
-          <span class="lc-time-val">${timePart}</span>
-          <span class="lc-time-period">${periodPart}</span>
-          <span class="lc-time-dur">${dur} MIN</span>
+          <div class="lc-time-top">
+            <span class="lc-time-val">${timePart}</span><span class="lc-time-period">${periodPart}</span>
+          </div>
+          <span class="lc-time-dur">${dur} min</span>
         </div>
         <!-- right: goalie + rink -->
         <div class="lc-info">
@@ -3793,9 +3810,9 @@
         <button class="lesson-cta" type="button"
           data-profile
           data-goalie="${parsed.names.replace(/"/g, '&quot;')}"
-          aria-label="${isMulti ? 'Notes for goalies' : 'Notes'}">
+          aria-label="${isMulti ? 'Profiles' : 'Profile'}">
           <svg class="lucide"><use href="${isMulti ? '#i-users' : '#i-user'}"/></svg>
-          Notes
+          ${isMulti ? 'Profiles' : 'Profile'}
         </button>
         <button class="lesson-cta primary" type="button"
           data-build-plan
