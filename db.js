@@ -359,6 +359,31 @@
   });
 
 
+  /* ── CoachNotes ──────────────────────────────────────────────────── */
+  /*
+   Schema:
+   {
+     id:         string,
+     goalie_id:  string,
+     body:       string,
+     tag:        "observation"|"film"|"improvement"|"goal",
+     created_at: ISO string,
+     updated_at: ISO string,
+   }
+  */
+  const CoachNotesStore = Object.assign(createStore('hh_coach_notes', 'coach_notes'), {
+    getByGoalieId(goalieId) {
+      return this.where(n => n.goalie_id === goalieId)
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    },
+
+    latestForGoalie(goalieId) {
+      const list = this.getByGoalieId(goalieId);
+      return list.length ? list[0] : null;
+    },
+  });
+
+
   /* ─────────────────────────────────────────────────────────────────────
      SEED DATA
      Runs once on first load (guarded by hh_seeded version flag).
@@ -458,6 +483,7 @@
     SessionStore,
     PlanStore,
     DrillUsageStore,
+    CoachNotesStore,
 
     hasSavedPlan(sessionId) {
       const session = SessionStore.getById(sessionId);
@@ -510,6 +536,7 @@
         _syncDown('sessions',    'hh_sessions'),
         _syncDown('plans',       'hh_plans'),
         _syncDown('drill_usage', 'hh_drill_usage'),
+        _syncDown('coach_notes', 'hh_coach_notes'),
       ]);
     }).then(() => {
       console.log('[DB] Sync complete');

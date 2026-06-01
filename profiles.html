@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>Goalies · Hockey Hub Goalie Coach</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Archivo:wght@700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --font-display: 'Archivo','Inter',sans-serif;
+    --font-mono:    'DM Mono',ui-monospace,'IBM Plex Mono',monospace;
+    --font-body:    'Inter',-apple-system,sans-serif;
+
+    --hh-primary:        #1F62AC;
+    --hh-primary-hover:  #17518F;
+    --hh-primary-tint:   #E9F1FA;
+    --hh-primary-tint-2: #c3d9f2;
+
+    --hh-text-primary:   #13243B;
+    --hh-text-secondary: #5C6A7D;
+    --hh-text-tertiary:  #8B96A6;
+    --hh-text-muted:     #A8B3C0;
+
+    --hh-border-light:   rgba(14,27,46,0.10);
+    --hh-border-default: rgba(14,27,46,0.18);
+
+    --hh-bg-page:        #F8F7F4;
+    --hh-bg-surface:     #ffffff;
+    --hh-bg-tertiary:    #F1F0ED;
+
+    --gc-navy:           #1c3150;
+    --gc-navy-2:         #243d63;
+
+    /* Tag colors (matched to PRD spec) */
+    --tag-obs-bg:    #E9F1FA; --tag-obs-fg:    #1F62AC;
+    --tag-film-bg:   #F3E8FF; --tag-film-fg:   #7E22CE;
+    --tag-imp-bg:    #ECFDF5; --tag-imp-fg:    #047857;
+    --tag-goal-bg:   #FFF7ED; --tag-goal-fg:   #C2410C;
+
+    --r-sm: 8px;
+    --r-md: 10px;
+    --r-lg: 14px;
+    --r-xl: 18px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    background: var(--hh-bg-page);
+    font-family: 'Inter',-apple-system,sans-serif;
+    color: var(--hh-text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 390px;
+    min-height: 100vh;
+    background: var(--hh-bg-page);
+    position: relative;
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 768px) {
+    .app { max-width: 960px; padding-bottom: 0; }
+  }
+
+  /* ─── Header ─── */
+  .top-header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(248,247,244,0.94);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--hh-border-light);
+    padding: env(safe-area-inset-top) 16px 0;
+  }
+  .top-header-inner {
+    height: 56px; display: flex; align-items: center;
+    justify-content: space-between; gap: 12px;
+  }
+  .back-btn {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: transparent; border: none; color: var(--hh-text-secondary);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-family: inherit;
+  }
+  .back-btn:hover { background: var(--hh-bg-tertiary); }
+  .back-btn svg { width: 20px; height: 20px; }
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 18px; font-weight: 800; letter-spacing: -0.01em;
+    color: var(--hh-text-primary);
+    flex: 1;
+  }
+  .header-action {
+    padding: 8px 14px; border-radius: 10px; border: none;
+    background: var(--gc-navy); color: #fff;
+    font-size: 13px; font-weight: 600; font-family: inherit;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .header-action:hover { background: var(--gc-navy-2); }
+  .header-action svg { width: 14px; height: 14px; }
+
+  /* ─── Page heading ─── */
+  .page-heading {
+    padding: 20px 18px 12px;
+  }
+  .page-heading-title {
+    font-family: var(--font-display);
+    font-size: 28px; font-weight: 800;
+    color: var(--hh-text-primary); letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .page-heading-sub {
+    font-size: 13px; color: var(--hh-text-secondary);
+    margin-top: 4px;
+  }
+
+  /* ─── Roster grid ─── */
+  .roster-grid {
+    padding: 4px 16px 24px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  @media (min-width: 560px) {
+    .roster-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 900px) {
+    .roster-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .roster-card {
+    background: var(--hh-bg-surface);
+    border: 1px solid var(--hh-border-light);
+    border-radius: var(--r-lg);
+    padding: 16px;
+    box-shadow: 0 1px 2px rgba(14,27,46,0.06);
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.15s ease;
+    display: flex; flex-direction: column; gap: 12px;
+    text-decoration: none; color: inherit;
+  }
+  .roster-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(14,27,46,0.10); }
+  .roster-card-top { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; flex-shrink: 0;
+  }
+  .avatar.lg { width: 64px; height: 64px; font-size: 22px; }
+  .avatar.tone-a { background: #EDE7DB; color: var(--gc-navy); }
+  .avatar.tone-b { background: #E4EDF7; color: #2F6FB0; }
+  .avatar.tone-c { background: #ecfdf5; color: #047857; }
+  .avatar.tone-d { background: #faf5ff; color: #7e22ce; }
+  .roster-card-name {
+    font-size: 16px; font-weight: 700;
+    color: var(--hh-text-primary); line-height: 1.2;
+  }
+  .level-badge {
+    display: inline-block; margin-top: 4px;
+    font-family: var(--font-mono);
+    font-size: 10.5px; font-weight: 500;
+    color: var(--hh-text-secondary);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .roster-card-focus {
+    font-size: 13px; line-height: 1.4;
+    color: var(--hh-text-primary);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .roster-card-focus.empty { color: var(--hh-text-tertiary); font-style: italic; }
+  .roster-card-meta {
+    font-size: 11.5px; color: var(--hh-text-tertiary);
+    border-top: 1px solid var(--hh-border-light);
+    padding-top: 10px;
+  }
+
+  /* ─── Profile (detail) layout ─── */
+  .profile-layout {
+    padding: 14px 16px 30px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  @media (min-width: 768px) {
+    .profile-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 340px) 1fr;
+      gap: 24px;
+      padding: 16px 24px 40px;
+      align-items: start;
+    }
+  }
+
+  /* ── Left column card ── */
+  .profile-left {
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  @media (min-width: 768px) {
+    .profile-left { position: sticky; top: 72px; }
+  }
+  .profile-id-card {
+    background: var(--hh-bg-surface);
+    border: 1px solid var(--hh-border-light);
+    border-radius: var(--r-xl);
+    padding: 20px;
+    display: flex; flex-direction: column; gap: 14px;
+    box-shadow: 0 1px 2px rgba(14,27,46,0.05);
+  }
+  .profile-id-row { display: flex; align-items: center; gap: 14px; }
+  .profile-id-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+  .profile-name-row { display: flex; align-items: center; gap: 6px; }
+  .profile-name {
+    font-family: var(--font-display);
+    font-size: 22px; font-weight: 800;
+    color: var(--hh-text-primary); letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .profile-name-edit {
+    background: none; border: none; cursor: pointer;
+    color: var(--hh-text-tertiary); padding: 4px;
+    border-radius: 6px;
+  }
+  .profile-name-edit:hover { color: var(--hh-primary); background: var(--hh-primary-tint); }
+  .profile-name-edit svg { width: 14px; height: 14px; }
+
+  .focus-block {
+    background: var(--hh-bg-tertiary);
+    border-radius: var(--r-md);
+    padding: 14px;
+  }
+  .focus-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .focus-label {
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 600;
+    color: var(--hh-text-secondary);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .focus-add-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--hh-primary); padding: 4px;
+    display: flex; align-items: center; gap: 3px;
+    font-size: 12px; font-weight: 600; font-family: inherit;
+  }
+  .focus-add-btn svg { width: 13px; height: 13px; }
+  .focus-list { display: flex; flex-direction: column; gap: 6px; }
+  .focus-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 6px 8px; border-radius: 6px;
+    background: transparent;
+    transition: background 0.12s;
+  }
+  .focus-item:hover { background: rgba(255,255,255,0.6); }
+  .focus-bullet {
+    color: var(--hh-primary); font-weight: 700;
+    flex-shrink: 0; line-height: 1.5;
+  }
+  .focus-text {
+    flex: 1; font-size: 13.5px; line-height: 1.5;
+    color: var(--hh-text-primary);
+    outline: none; min-height: 20px;
+  }
+  .focus-text:focus {
+    background: #fff; border-radius: 4px;
+    box-shadow: 0 0 0 2px var(--hh-primary-tint-2);
+  }
+  .focus-del {
+    background: none; border: none; cursor: pointer;
+    color: var(--hh-text-tertiary); padding: 2px;
+    border-radius: 4px; opacity: 0; transition: opacity 0.12s;
+  }
+  .focus-item:hover .focus-del { opacity: 1; }
+  .focus-del:hover { color: #c2410c; background: rgba(255,255,255,0.7); }
+  .focus-del svg { width: 13px; height: 13px; }
+  .focus-empty {
+    font-size: 12.5px; color: var(--hh-text-tertiary);
+    font-style: italic; padding: 4px 0;
+  }
+
+  .quick-actions { display: flex; gap: 8px; }
+  .qa-btn {
+    flex: 1; padding: 11px 12px; border-radius: var(--r-md);
+    font-size: 13px; font-weight: 600; font-family: inherit;
+    cursor: pointer; border: none;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+    text-decoration: none;
+    transition: background 0.15s, opacity 0.15s;
+  }
+  .qa-btn.primary { background: var(--hh-primary); color: #fff; }
+  .qa-btn.primary:hover { background: var(--hh-primary-hover); }
+  .qa-btn.ghost {
+    background: var(--hh-bg-tertiary);
+    border: 1px solid var(--hh-border-light);
+    color: var(--hh-text-primary);
+  }
+  .qa-btn.ghost:hover { background: var(--hh-border-light); }
+  .qa-btn svg { width: 14px; height: 14px; }
+
+  .last-session-card {
+    background: var(--hh-bg-surface);
+    border: 1px solid var(--hh-border-light);
+    border-radius: var(--r-lg);
+    padding: 14px 16px;
+  }
+  .last-session-label {
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 600;
+    color: var(--hh-text-secondary);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+  .last-session-date {
+    font-size: 15px; font-weight: 700;
+    color: var(--hh-text-primary);
+  }
+  .last-session-drills {
+    font-size: 12.5px; color: var(--hh-text-secondary);
+    margin-top: 2px;
+  }
+  .last-session-empty {
+    font-size: 12.5px; color: var(--hh-text-tertiary); font-style: italic;
+  }
+
+  /* ── Right column: journal ── */
+  .journal {
+    background: var(--hh-bg-surface);
+    border: 1px solid var(--hh-border-light);
+    border-radius: var(--r-xl);
+    padding: 18px 18px 24px;
+    box-shadow: 0 1px 2px rgba(14,27,46,0.05);
+  }
+  .journal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .journal-title {
+    font-family: var(--font-display);
+    font-size: 18px; font-weight: 800;
+    letter-spacing: -0.01em; color: var(--hh-text-primary);
+  }
+  .journal-add-btn {
+    padding: 8px 12px; border-radius: var(--r-md);
+    background: var(--hh-primary); color: #fff;
+    border: none; cursor: pointer;
+    font-size: 13px; font-weight: 600; font-family: inherit;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .journal-add-btn:hover { background: var(--hh-primary-hover); }
+  .journal-add-btn svg { width: 14px; height: 14px; }
+
+  .journal-filters {
+    display: flex; gap: 6px; overflow-x: auto;
+    margin-bottom: 10px;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+  .journal-filters::-webkit-scrollbar { display: none; }
+  .filter-tab {
+    flex-shrink: 0;
+    padding: 7px 12px; border-radius: 999px;
+    background: var(--hh-bg-tertiary);
+    border: 1px solid transparent;
+    color: var(--hh-text-secondary);
+    font-size: 12.5px; font-weight: 600; font-family: inherit;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .filter-tab:hover { color: var(--hh-text-primary); }
+  .filter-tab.active {
+    background: var(--gc-navy); color: #fff;
+    border-color: var(--gc-navy);
+  }
+
+  .journal-search {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--hh-border-default);
+    border-radius: var(--r-md);
+    font-size: 13.5px; font-family: inherit;
+    background: var(--hh-bg-surface);
+    color: var(--hh-text-primary);
+    outline: none;
+    margin-bottom: 14px;
+    transition: border-color 0.12s;
+  }
+  .journal-search:focus { border-color: var(--hh-primary); }
+  .journal-search::placeholder { color: var(--hh-text-tertiary); }
+
+  .journal-feed {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .note-card {
+    border: 1px solid var(--hh-border-light);
+    border-radius: var(--r-md);
+    padding: 14px 14px 12px;
+    background: var(--hh-bg-surface);
+    position: relative;
+    transition: border-color 0.12s;
+  }
+  .note-card:hover { border-color: var(--hh-border-default); }
+  .note-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 8px;
+  }
+  .tag-badge {
+    font-size: 10.5px; font-weight: 700;
+    padding: 3px 8px; border-radius: 999px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    font-family: var(--font-mono);
+  }
+  .tag-observation { background: var(--tag-obs-bg);  color: var(--tag-obs-fg); }
+  .tag-film        { background: var(--tag-film-bg); color: var(--tag-film-fg); }
+  .tag-improvement { background: var(--tag-imp-bg);  color: var(--tag-imp-fg); }
+  .tag-goal        { background: var(--tag-goal-bg); color: var(--tag-goal-fg); }
+  .note-time {
+    font-size: 11.5px; color: var(--hh-text-tertiary);
+    flex: 1;
+  }
+  .note-actions {
+    display: flex; gap: 2px;
+    opacity: 0; transition: opacity 0.12s;
+  }
+  .note-card:hover .note-actions,
+  .note-card:focus-within .note-actions { opacity: 1; }
+  @media (max-width: 767px) {
+    .note-actions { opacity: 1; }
+  }
+  .note-action-btn {
+    background: none; border: none; cursor: pointer;
+    padding: 6px; border-radius: 6px;
+    color: var(--hh-text-tertiary);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .note-action-btn:hover { background: var(--hh-bg-tertiary); color: var(--hh-text-primary); }
+  .note-action-btn.danger:hover { color: #c2410c; background: #fef2f2; }
+  .note-action-btn svg { width: 14px; height: 14px; }
+  .note-body {
+    font-size: 14px; line-height: 1.55;
+    color: var(--hh-text-primary);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .journal-empty {
+    text-align: center;
+    padding: 28px 16px;
+    color: var(--hh-text-tertiary);
+    font-size: 13.5px;
+    font-style: italic;
+  }
+
+  /* ─── Slide-up note panel ─── */
+  .note-sheet {
+    position: fixed; inset: 0; z-index: 110;
+    pointer-events: none; visibility: hidden;
+  }
+  .note-sheet.open { pointer-events: auto; visibility: visible; }
+  .note-sheet-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(15,24,40,0);
+    transition: background 0.28s ease; cursor: pointer;
+  }
+  .note-sheet.open .note-sheet-backdrop { background: rgba(15,24,40,0.5); }
+  .note-sheet-panel {
+    position: absolute; bottom: 0; left: 50%;
+    transform: translateX(-50%) translateY(calc(100% + 8px));
+    width: 100%; max-width: 480px;
+    background: var(--hh-bg-surface);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -1px 0 rgba(15,24,40,0.06), 0 -8px 40px -4px rgba(15,24,40,0.22);
+    display: flex; flex-direction: column;
+    transition: transform 0.34s cubic-bezier(0.22,0.61,0.36,1);
+    padding: 14px 18px 20px;
+    max-height: calc(100dvh - 44px);
+  }
+  .note-sheet.open .note-sheet-panel { transform: translateX(-50%) translateY(0); }
+  .note-sheet-handle {
+    width: 36px; height: 5px;
+    border-radius: 3px;
+    background: var(--hh-border-default); opacity: 0.7;
+    margin: 0 auto 14px;
+  }
+  .note-sheet-title {
+    font-size: 14px; font-weight: 700;
+    color: var(--hh-text-primary);
+    margin-bottom: 12px;
+  }
+  .tag-picker {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .tag-pick {
+    padding: 9px 6px; border-radius: 10px;
+    border: 1.5px solid transparent;
+    background: var(--hh-bg-tertiary);
+    color: var(--hh-text-secondary);
+    font-size: 12px; font-weight: 600;
+    font-family: var(--font-mono);
+    cursor: pointer;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    transition: all 0.12s;
+  }
+  .tag-pick:hover { color: var(--hh-text-primary); }
+  .tag-pick[data-tag="observation"].active { background: var(--tag-obs-bg);  color: var(--tag-obs-fg);  border-color: var(--tag-obs-fg); }
+  .tag-pick[data-tag="film"].active        { background: var(--tag-film-bg); color: var(--tag-film-fg); border-color: var(--tag-film-fg); }
+  .tag-pick[data-tag="improvement"].active { background: var(--tag-imp-bg);  color: var(--tag-imp-fg);  border-color: var(--tag-imp-fg); }
+  .tag-pick[data-tag="goal"].active        { background: var(--tag-goal-bg); color: var(--tag-goal-fg); border-color: var(--tag-goal-fg); }
+  .note-textarea {
+    width: 100%;
+    min-height: 130px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--hh-border-default);
+    border-radius: var(--r-md);
+    font-size: 14px; line-height: 1.5;
+    font-family: inherit;
+    color: var(--hh-text-primary);
+    background: var(--hh-bg-surface);
+    resize: vertical; outline: none;
+    transition: border-color 0.12s;
+  }
+  .note-textarea:focus { border-color: var(--hh-primary); }
+  .note-sheet-actions {
+    display: flex; gap: 8px; margin-top: 12px;
+  }
+  .sheet-btn {
+    flex: 1; padding: 12px; border-radius: var(--r-md);
+    font-size: 14px; font-weight: 600; font-family: inherit;
+    cursor: pointer; border: none;
+  }
+  .sheet-btn.primary { background: var(--hh-primary); color: #fff; }
+  .sheet-btn.primary:hover:not(:disabled) { background: var(--hh-primary-hover); }
+  .sheet-btn.primary:disabled { opacity: 0.45; cursor: default; }
+  .sheet-btn.ghost {
+    background: var(--hh-bg-tertiary);
+    color: var(--hh-text-primary);
+  }
+  .sheet-btn.ghost:hover { background: var(--hh-border-light); }
+
+  /* ─── Add Goalie modal (simple) ─── */
+  .modal { position: fixed; inset: 0; z-index: 120; display: none; }
+  .modal.open { display: flex; align-items: center; justify-content: center; }
+  .modal-backdrop { position: absolute; inset: 0; background: rgba(15,24,40,0.5); }
+  .modal-panel {
+    position: relative; background: var(--hh-bg-surface);
+    border-radius: var(--r-xl); padding: 22px;
+    width: calc(100% - 32px); max-width: 380px;
+    box-shadow: 0 12px 40px rgba(14,27,46,0.18);
+  }
+  .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 14px; }
+  .form-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .form-label {
+    font-size: 12px; font-weight: 600;
+    color: var(--hh-text-secondary);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    font-family: var(--font-mono);
+  }
+  .form-input, .form-select {
+    width: 100%; padding: 10px 12px;
+    border: 1.5px solid var(--hh-border-default);
+    border-radius: 10px; font-size: 14px;
+    font-family: inherit; color: var(--hh-text-primary);
+    background: var(--hh-bg-surface);
+    outline: none;
+  }
+  .form-input:focus, .form-select:focus { border-color: var(--hh-primary); }
+
+  /* ─── Bottom tab bar ─── */
+  .tab-bar {
+    position: fixed; bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%; max-width: 390px;
+    background: rgba(248,247,244,0.94);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-top: 1px solid var(--hh-border-light);
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+    display: flex; z-index: 50;
+  }
+  .tab {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; gap: 3px;
+    padding: 6px 4px; background: transparent;
+    border: none; font-family: inherit;
+    color: var(--hh-text-tertiary); cursor: pointer;
+    border-radius: 10px; text-decoration: none;
+  }
+  .tab.active { color: var(--gc-navy); }
+  .tab svg { width: 22px; height: 22px; stroke-width: 2; }
+  .tab-label { font-size: 10.5px; font-weight: 600; }
+  @media (min-width: 768px) { .tab-bar { display: none; } }
+
+  svg.lucide {
+    display: block; fill: none; stroke: currentColor;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+    <symbol id="i-clipboard-list" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+  </defs>
+</svg>
+
+<div class="app" id="app">
+  <!-- Header -->
+  <header class="top-header">
+    <div class="top-header-inner" id="headerInner">
+      <button class="back-btn" id="backBtn" type="button" aria-label="Back">
+        <svg class="lucide"><use href="#i-arrow-left"/></svg>
+      </button>
+      <div class="header-title" id="headerTitle">Goalies</div>
+      <button class="header-action" id="addGoalieBtn" type="button">
+        <svg class="lucide"><use href="#i-plus"/></svg>
+        Add Goalie
+      </button>
+    </div>
+  </header>
+
+  <!-- Roster view (default) -->
+  <section id="rosterView">
+    <div class="page-heading">
+      <h1 class="page-heading-title">Goalies</h1>
+      <div class="page-heading-sub" id="rosterSub"></div>
+    </div>
+    <div class="roster-grid" id="rosterGrid"></div>
+  </section>
+
+  <!-- Profile (detail) view -->
+  <section id="profileView" style="display:none">
+    <div class="profile-layout">
+      <!-- LEFT COLUMN -->
+      <div class="profile-left">
+        <div class="profile-id-card">
+          <div class="profile-id-row">
+            <div class="avatar lg" id="pAvatar"></div>
+            <div class="profile-id-meta">
+              <div class="profile-name-row">
+                <div class="profile-name" id="pName"></div>
+                <button class="profile-name-edit" id="pNameEdit" title="Edit name & level" type="button">
+                  <svg class="lucide"><use href="#i-pencil"/></svg>
+                </button>
+              </div>
+              <div class="level-badge" id="pLevel"></div>
+            </div>
+          </div>
+
+          <div class="focus-block">
+            <div class="focus-header">
+              <div class="focus-label">Focus right now</div>
+              <button class="focus-add-btn" id="focusAddBtn" type="button">
+                <svg class="lucide"><use href="#i-plus"/></svg>
+                Add
+              </button>
+            </div>
+            <div class="focus-list" id="focusList"></div>
+          </div>
+
+          <div class="quick-actions">
+            <a class="qa-btn primary" id="qaBuildPlan" href="index.html">
+              <svg class="lucide"><use href="#i-sparkles"/></svg>
+              Build plan
+            </a>
+            <a class="qa-btn ghost" id="qaStartSession" href="session.html">
+              <svg class="lucide"><use href="#i-play"/></svg>
+              Start session
+            </a>
+          </div>
+        </div>
+
+        <div class="last-session-card">
+          <div class="last-session-label">Last session</div>
+          <div id="lastSessionContent"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Journal -->
+      <div class="journal">
+        <div class="journal-header">
+          <div class="journal-title">Coaching Journal</div>
+          <button class="journal-add-btn" id="addNoteBtn" type="button">
+            <svg class="lucide"><use href="#i-plus"/></svg>
+            Add Note
+          </button>
+        </div>
+
+        <div class="journal-filters" id="journalFilters">
+          <button class="filter-tab active" data-filter="all" type="button">All</button>
+          <button class="filter-tab" data-filter="observation" type="button">Observations</button>
+          <button class="filter-tab" data-filter="film" type="button">Film</button>
+          <button class="filter-tab" data-filter="improvement" type="button">Improvements</button>
+          <button class="filter-tab" data-filter="goal" type="button">Goals</button>
+        </div>
+
+        <input class="journal-search" id="journalSearch" type="search" placeholder="Search notes…">
+
+        <div class="journal-feed" id="journalFeed"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom tab bar (mobile) -->
+  <nav class="tab-bar" aria-label="Primary">
+    <a class="tab" href="index.html">
+      <svg class="lucide"><use href="#i-home"/></svg>
+      <span class="tab-label">Home</span>
+    </a>
+    <a class="tab" href="index.html#plans">
+      <svg class="lucide"><use href="#i-clipboard-list"/></svg>
+      <span class="tab-label">Plans</span>
+    </a>
+    <a class="tab" href="availability.html">
+      <svg class="lucide"><use href="#i-calendar"/></svg>
+      <span class="tab-label">Schedule</span>
+    </a>
+    <a class="tab active" href="profiles.html">
+      <svg class="lucide"><use href="#i-users"/></svg>
+      <span class="tab-label">Goalies</span>
+    </a>
+  </nav>
+</div>
+
+<!-- Add Note slide-up panel -->
+<div class="note-sheet" id="noteSheet" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="note-sheet-backdrop" id="noteSheetBackdrop"></div>
+  <div class="note-sheet-panel">
+    <div class="note-sheet-handle"></div>
+    <div class="note-sheet-title" id="noteSheetTitle">Add note</div>
+    <div class="tag-picker" id="tagPicker">
+      <button class="tag-pick active" data-tag="observation" type="button">Observ.</button>
+      <button class="tag-pick" data-tag="film" type="button">Film</button>
+      <button class="tag-pick" data-tag="improvement" type="button">Improv.</button>
+      <button class="tag-pick" data-tag="goal" type="button">Goal</button>
+    </div>
+    <textarea class="note-textarea" id="noteTextarea" placeholder="What did you observe? What needs work? What improved?"></textarea>
+    <div class="note-sheet-actions">
+      <button class="sheet-btn ghost" id="noteCancelBtn" type="button">Cancel</button>
+      <button class="sheet-btn primary" id="noteSaveBtn" type="button" disabled>Save note</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Goalie modal -->
+<div class="modal" id="addGoalieModal">
+  <div class="modal-backdrop" id="addGoalieBackdrop"></div>
+  <div class="modal-panel">
+    <div class="modal-title">Add goalie</div>
+    <div class="form-row">
+      <label class="form-label" for="newGoalieName">Name</label>
+      <input class="form-input" id="newGoalieName" type="text" placeholder="e.g. Jordan Smith">
+    </div>
+    <div class="form-row">
+      <label class="form-label" for="newGoalieLevel">Level</label>
+      <select class="form-select" id="newGoalieLevel">
+        <option value="beginner">Beginner</option>
+        <option value="intermediate" selected>Intermediate</option>
+        <option value="advanced">Advanced</option>
+      </select>
+    </div>
+    <div class="note-sheet-actions">
+      <button class="sheet-btn ghost" id="newGoalieCancel" type="button">Cancel</button>
+      <button class="sheet-btn primary" id="newGoalieSave" type="button">Add</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="db.js"></script>
+<script>
+/* ═════════════════════════════════════════════════════════════════
+   profiles.html — Roster + Individual profile + Coaching Journal
+   ═════════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  const { GoalieStore, SessionStore, CoachNotesStore } = window.DB;
+
+  /* ─── Avatar helpers (match index.html logic) ─── */
+  const TONES = ['tone-a','tone-b','tone-c','tone-d'];
+  function toneClass(g) {
+    if (g && g.tone) {
+      const t = String(g.tone).toLowerCase();
+      if (['a','b','c','d'].includes(t)) return 'tone-' + t;
+    }
+    const name = (g && g.name) || '';
+    let h = 0;
+    for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) | 0;
+    return TONES[Math.abs(h) % TONES.length];
+  }
+  function initialsFor(g) {
+    if (g && g.initials) return g.initials;
+    const clean = ((g && g.name) || '').trim().replace(/\s*\(.*?\)\s*/g,'').trim();
+    const parts = clean.split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0,2).toUpperCase();
+    return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+  }
+  function escHtml(s) {
+    return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function relativeTime(iso) {
+    const then = new Date(iso).getTime();
+    if (!then) return '';
+    const now  = Date.now();
+    const sec  = Math.round((now - then) / 1000);
+    if (sec < 60)       return 'just now';
+    if (sec < 3600)     return Math.floor(sec/60) + 'm ago';
+    if (sec < 86400)    return Math.floor(sec/3600) + 'h ago';
+    if (sec < 86400*7)  return Math.floor(sec/86400) + 'd ago';
+    if (sec < 86400*30) return Math.floor(sec/86400/7) + 'w ago';
+    return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+  }
+  function absoluteTime(iso) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' });
+  }
+
+  /* ─── Profile state (shared between renderProfile / sheets) ─── */
+  let activeFilter  = 'all';
+  let searchQuery   = '';
+  let editingNoteId = null;
+  let selectedTag   = 'observation';
+
+  /* ─── Router ───────────────────────────────────────────────── */
+  const params = new URLSearchParams(window.location.search);
+  const goalieId = params.get('id');
+
+  if (goalieId) {
+    renderProfile(goalieId);
+  } else {
+    renderRoster();
+  }
+
+  /* ──────────────────────────────────────────────────────────
+     ROSTER VIEW
+     ────────────────────────────────────────────────────────── */
+  function renderRoster() {
+    document.getElementById('rosterView').style.display = '';
+    document.getElementById('profileView').style.display = 'none';
+    document.getElementById('headerTitle').textContent = 'Goalies';
+    document.getElementById('backBtn').style.visibility = 'hidden';
+
+    const goalies = GoalieStore.getAll().sort((a,b) => (a.name||'').localeCompare(b.name||''));
+    document.getElementById('rosterSub').textContent =
+      goalies.length === 1 ? '1 goalie' : (goalies.length + ' goalies');
+
+    const grid = document.getElementById('rosterGrid');
+    grid.innerHTML = goalies.map(g => {
+      const latest = CoachNotesStore.latestForGoalie(g.id);
+      const focus  = (g.notes || '').split('\n').find(l => l.trim());
+      const lastNote = latest ? relativeTime(latest.created_at) : 'No notes yet';
+      return `
+        <a class="roster-card" href="profiles.html?id=${encodeURIComponent(g.id)}">
+          <div class="roster-card-top">
+            <div class="avatar ${toneClass(g)}">${escHtml(initialsFor(g))}</div>
+            <div style="min-width:0">
+              <div class="roster-card-name">${escHtml(g.name || 'Goalie')}</div>
+              <div class="level-badge">${escHtml(g.level || 'intermediate')}</div>
+            </div>
+          </div>
+          <div class="roster-card-focus ${focus ? '' : 'empty'}">${focus ? escHtml(focus) : 'No focus set yet'}</div>
+          <div class="roster-card-meta">Last note · ${escHtml(lastNote)}</div>
+        </a>
+      `;
+    }).join('');
+
+    if (!goalies.length) {
+      grid.innerHTML = `<div class="journal-empty" style="grid-column:1/-1">No goalies yet. Tap "Add Goalie" to get started.</div>`;
+    }
+  }
+
+  /* ──────────────────────────────────────────────────────────
+     PROFILE (DETAIL) VIEW
+     ────────────────────────────────────────────────────────── */
+  function renderProfile(id) {
+    const g = GoalieStore.getById(id);
+    if (!g) { window.location.href = 'profiles.html'; return; }
+
+    document.getElementById('rosterView').style.display = 'none';
+    document.getElementById('profileView').style.display = '';
+    document.getElementById('headerTitle').textContent = g.name || 'Goalie';
+    document.getElementById('addGoalieBtn').style.display = 'none';
+
+    const backBtn = document.getElementById('backBtn');
+    backBtn.style.visibility = '';
+    backBtn.onclick = () => { window.location.href = 'profiles.html'; };
+
+    // Identity
+    const avatar = document.getElementById('pAvatar');
+    avatar.className = 'avatar lg ' + toneClass(g);
+    avatar.textContent = initialsFor(g);
+    document.getElementById('pName').textContent = g.name || 'Goalie';
+    document.getElementById('pLevel').textContent = (g.level || 'intermediate').toUpperCase();
+
+    document.getElementById('pNameEdit').onclick = () => editIdentity(g);
+
+    // Focus items
+    renderFocusList(g);
+    document.getElementById('focusAddBtn').onclick = () => addFocusItem(g.id);
+
+    // Quick actions
+    document.getElementById('qaBuildPlan').href    = 'index.html?goalie=' + encodeURIComponent(g.id);
+    document.getElementById('qaStartSession').href = 'session.html?goalie=' + encodeURIComponent(g.id);
+
+    // Last session
+    renderLastSession(g.id);
+
+    // Journal
+    document.getElementById('addNoteBtn').onclick = () => openNoteSheet(g.id);
+    document.querySelectorAll('.filter-tab').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        renderJournal(g.id);
+      };
+    });
+    const search = document.getElementById('journalSearch');
+    search.oninput = () => { searchQuery = search.value.trim().toLowerCase(); renderJournal(g.id); };
+    renderJournal(g.id);
+  }
+
+  /* ─── Focus items (stored on goalie.focus_items) ─── */
+  function renderFocusList(g) {
+    const list = document.getElementById('focusList');
+    const items = Array.isArray(g.focus_items) ? g.focus_items : [];
+    if (!items.length) {
+      list.innerHTML = `<div class="focus-empty">No focus items yet. Tap "Add" to set 1–4 priorities.</div>`;
+      return;
+    }
+    list.innerHTML = items.map((txt, i) => `
+      <div class="focus-item">
+        <span class="focus-bullet">•</span>
+        <div class="focus-text" contenteditable="true" data-idx="${i}">${escHtml(txt)}</div>
+        <button class="focus-del" data-del="${i}" type="button" title="Remove">
+          <svg class="lucide"><use href="#i-x"/></svg>
+        </button>
+      </div>
+    `).join('');
+
+    list.querySelectorAll('.focus-text').forEach(el => {
+      el.addEventListener('blur', () => {
+        const idx = parseInt(el.dataset.idx, 10);
+        const fresh = GoalieStore.getById(g.id);
+        const arr = Array.isArray(fresh.focus_items) ? fresh.focus_items.slice() : [];
+        const newVal = el.textContent.trim();
+        if (newVal) { arr[idx] = newVal; } else { arr.splice(idx, 1); }
+        GoalieStore.save({ id: g.id, focus_items: arr });
+        renderFocusList(GoalieStore.getById(g.id));
+      });
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+      });
+    });
+    list.querySelectorAll('[data-del]').forEach(btn => {
+      btn.onclick = () => {
+        const idx = parseInt(btn.dataset.del, 10);
+        const fresh = GoalieStore.getById(g.id);
+        const arr = Array.isArray(fresh.focus_items) ? fresh.focus_items.slice() : [];
+        arr.splice(idx, 1);
+        GoalieStore.save({ id: g.id, focus_items: arr });
+        renderFocusList(GoalieStore.getById(g.id));
+      };
+    });
+  }
+
+  function addFocusItem(goalieId) {
+    const fresh = GoalieStore.getById(goalieId);
+    const arr = Array.isArray(fresh.focus_items) ? fresh.focus_items.slice() : [];
+    if (arr.length >= 4) { alert('Focus list is limited to 4 items — remove one first.'); return; }
+    arr.push('New focus item');
+    GoalieStore.save({ id: goalieId, focus_items: arr });
+    renderFocusList(GoalieStore.getById(goalieId));
+    // Focus the newly added editable cell
+    setTimeout(() => {
+      const editables = document.querySelectorAll('.focus-text');
+      const last = editables[editables.length - 1];
+      if (last) {
+        const range = document.createRange();
+        range.selectNodeContents(last);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        last.focus();
+      }
+    }, 30);
+  }
+
+  /* ─── Identity edit (simple prompt-based) ─── */
+  function editIdentity(g) {
+    const newName = prompt('Goalie name:', g.name || '');
+    if (newName === null) return;
+    const trimmed = newName.trim();
+    if (!trimmed) return;
+    const newLevel = prompt('Level (beginner / intermediate / advanced):', g.level || 'intermediate');
+    const level = ['beginner','intermediate','advanced'].includes((newLevel||'').trim().toLowerCase())
+      ? newLevel.trim().toLowerCase() : g.level;
+    GoalieStore.save({ id: g.id, name: trimmed, level, initials: undefined });
+    renderProfile(g.id);
+  }
+
+  /* ─── Last session card ─── */
+  function renderLastSession(goalieId) {
+    const sessions = SessionStore.getByGoalieId(goalieId)
+      .filter(s => s.status === 'completed')
+      .sort((a, b) => new Date(b.scheduled_at) - new Date(a.scheduled_at));
+    const container = document.getElementById('lastSessionContent');
+    if (!sessions.length) {
+      container.innerHTML = `<div class="last-session-empty">No completed sessions yet.</div>`;
+      return;
+    }
+    const s = sessions[0];
+    const date = new Date(s.scheduled_at).toLocaleDateString('en-US',
+      { month:'short', day:'numeric', year:'numeric' });
+    let drillCount = 0;
+    if (s.plan_id && window.DB.PlanStore) {
+      const plan = window.DB.PlanStore.getById(s.plan_id);
+      if (plan && plan.sections) {
+        drillCount = plan.sections.reduce((sum, sec) => sum + (sec.drills ? sec.drills.length : 0), 0);
+      }
+    }
+    container.innerHTML = `
+      <div class="last-session-date">${escHtml(date)}</div>
+      <div class="last-session-drills">${drillCount ? drillCount + ' drills' : 'Session complete'}</div>
+    `;
+  }
+
+  /* ─── Journal ─── */
+  function renderJournal(goalieId) {
+    let notes = CoachNotesStore.getByGoalieId(goalieId);
+    if (activeFilter !== 'all') notes = notes.filter(n => n.tag === activeFilter);
+    if (searchQuery) notes = notes.filter(n => (n.body || '').toLowerCase().includes(searchQuery));
+
+    const feed = document.getElementById('journalFeed');
+    if (!notes.length) {
+      feed.innerHTML = `<div class="journal-empty">${
+        searchQuery || activeFilter !== 'all'
+          ? 'No notes match that filter.'
+          : 'No notes yet — tap "Add Note" to capture an observation.'
+      }</div>`;
+      return;
+    }
+    feed.innerHTML = notes.map(n => `
+      <div class="note-card" data-id="${escHtml(n.id)}">
+        <div class="note-meta">
+          <span class="tag-badge tag-${escHtml(n.tag)}">${escHtml(tagLabel(n.tag))}</span>
+          <span class="note-time" title="${escHtml(absoluteTime(n.created_at))}">${escHtml(relativeTime(n.created_at))}</span>
+          <div class="note-actions">
+            <button class="note-action-btn" data-edit="${escHtml(n.id)}" type="button" title="Edit">
+              <svg class="lucide"><use href="#i-pencil"/></svg>
+            </button>
+            <button class="note-action-btn danger" data-del="${escHtml(n.id)}" type="button" title="Delete">
+              <svg class="lucide"><use href="#i-trash"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="note-body">${escHtml(n.body || '')}</div>
+      </div>
+    `).join('');
+
+    feed.querySelectorAll('[data-edit]').forEach(b => {
+      b.onclick = () => openNoteSheet(goalieId, b.dataset.edit);
+    });
+    feed.querySelectorAll('[data-del]').forEach(b => {
+      b.onclick = () => {
+        if (!confirm('Delete this note?')) return;
+        CoachNotesStore.remove(b.dataset.del);
+        renderJournal(goalieId);
+      };
+    });
+  }
+
+  function tagLabel(tag) {
+    return ({ observation:'Observation', film:'Film', improvement:'Improvement', goal:'Goal' })[tag] || tag;
+  }
+
+  /* ─── Add/Edit Note Sheet ─── */
+  const noteSheet  = document.getElementById('noteSheet');
+  const noteText   = document.getElementById('noteTextarea');
+  const noteSave   = document.getElementById('noteSaveBtn');
+  const noteCancel = document.getElementById('noteCancelBtn');
+  const noteTitle  = document.getElementById('noteSheetTitle');
+
+  function setSelectedTag(tag) {
+    selectedTag = tag;
+    document.querySelectorAll('#tagPicker .tag-pick').forEach(b => {
+      b.classList.toggle('active', b.dataset.tag === tag);
+    });
+  }
+  document.querySelectorAll('#tagPicker .tag-pick').forEach(b => {
+    b.onclick = () => setSelectedTag(b.dataset.tag);
+  });
+
+  function openNoteSheet(goalieId, noteId) {
+    editingNoteId = noteId || null;
+    if (noteId) {
+      const n = CoachNotesStore.getById(noteId);
+      if (!n) return;
+      noteTitle.textContent = 'Edit note';
+      noteText.value = n.body || '';
+      setSelectedTag(n.tag || 'observation');
+    } else {
+      noteTitle.textContent = 'Add note';
+      noteText.value = '';
+      setSelectedTag('observation');
+    }
+    noteSave.disabled = !noteText.value.trim();
+    noteSheet.classList.add('open');
+    noteSheet.setAttribute('aria-hidden','false');
+    setTimeout(() => noteText.focus(), 100);
+
+    noteSave.onclick = () => {
+      const body = noteText.value.trim();
+      if (!body) return;
+      if (editingNoteId) {
+        CoachNotesStore.update(editingNoteId, { body, tag: selectedTag });
+      } else {
+        CoachNotesStore.save({
+          goalie_id: goalieId,
+          body,
+          tag: selectedTag,
+        });
+      }
+      closeNoteSheet();
+      renderJournal(goalieId);
+    };
+  }
+
+  function closeNoteSheet() {
+    noteSheet.classList.remove('open');
+    noteSheet.setAttribute('aria-hidden','true');
+    editingNoteId = null;
+  }
+  noteCancel.onclick = closeNoteSheet;
+  document.getElementById('noteSheetBackdrop').onclick = closeNoteSheet;
+  noteText.addEventListener('input', () => {
+    noteSave.disabled = !noteText.value.trim();
+  });
+
+  /* ─── Add Goalie Modal ─── */
+  const addModal     = document.getElementById('addGoalieModal');
+  const addBtn       = document.getElementById('addGoalieBtn');
+  const addBackdrop  = document.getElementById('addGoalieBackdrop');
+  const addCancel    = document.getElementById('newGoalieCancel');
+  const addSave      = document.getElementById('newGoalieSave');
+  const nameInput    = document.getElementById('newGoalieName');
+  const levelSelect  = document.getElementById('newGoalieLevel');
+
+  function openAddGoalie() {
+    nameInput.value = '';
+    levelSelect.value = 'intermediate';
+    addModal.classList.add('open');
+    setTimeout(() => nameInput.focus(), 80);
+  }
+  function closeAddGoalie() { addModal.classList.remove('open'); }
+  addBtn.onclick      = openAddGoalie;
+  addBackdrop.onclick = closeAddGoalie;
+  addCancel.onclick   = closeAddGoalie;
+  addSave.onclick = () => {
+    const name = nameInput.value.trim();
+    if (!name) { nameInput.focus(); return; }
+    const saved = GoalieStore.save({
+      name,
+      level: levelSelect.value,
+      default_session_minutes: 60,
+      default_shooters: 1,
+      notes: '',
+    });
+    closeAddGoalie();
+    // Jump straight into the new profile
+    window.location.href = 'profiles.html?id=' + encodeURIComponent(saved.id);
+  };
+
+  /* ─── Back button (roster view: home) ─── */
+  if (!goalieId) {
+    document.getElementById('backBtn').onclick = () => { window.location.href = 'index.html'; };
+  }
+})();
+</script>
+
+</body>
+</html>

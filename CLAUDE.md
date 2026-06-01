@@ -89,7 +89,15 @@ clip_source_url: string,   // original URL for audit trail
 ```
 UI: small "CM" badge on drill cards in plan page + session page for own content. Content status dashboard in `drill-review.html`.
 
-### 4 — Pre-commercial Architecture
+### 4 — Calendar Sync (Post-Revenue)
+Allow coaches/parents to sync session schedules to external calendars. Defer until the app generates revenue — implement only with free-tier or zero-cost options.
+
+- **Google Calendar** — already partially wired (OAuth in `index.html`). Extend to let users subscribe to their goalie's schedule. Free via Google Calendar API.
+- **Apple Calendar / iCal** — serve a static `.ics` feed (no auth required, zero cost). One URL per coach or per goalie that any calendar app can subscribe to.
+- **Outlook / Microsoft 365** — `.ics` subscription works here too; no additional cost.
+- **Constraint:** do not add any paid third-party scheduling service (Calendly, Cronofy, etc.) until revenue justifies it. `.ics` feed covers 90% of the use case for free.
+
+### 5 — Pre-commercial Architecture
 - **Rename** `lesson_plan_preview_crease_positioning.html` → `plan.html`
 - **Extract** shared CSS to `tokens.css` + `styles.css` (currently inline per file)
 - **Multi-tenant auth:** Supabase RLS per `coach_id` when scaling beyond single coach
