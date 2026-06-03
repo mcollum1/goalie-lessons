@@ -1,0 +1,37 @@
+{
+  "id": "glove-save-post-recover-backdoor",
+  "name": "Glove Save + Post Recover + Backdoor",
+  "description": "Two-shot technique drill focusing on glove save, post recovery, and backdoor reaction. F1 positions at the dot, slightly inside. The goalie partner or rebound board is set up backdoor. The goalie starts in butterfly, square to F1. F1 shoots high glove (shot 1); the goalie makes the glove save, recovers to the near side post, then shuffles back out to F1. F1 passes or pass-shoots backdoor off the goalie partner or rebound board (shot 2). The goalie tracks and makes the backdoor save. Can be run with a goalie partner or a rebound board as the backdoor target.",
+  "drill_category": ["save_technique", "crease_movement"],
+  "session_slot": "skill_work",
+  "duration_minutes": 10,
+  "difficulty": "intermediate",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 2,
+  "ice_zone": ["hash_marks", "in_tight"],
+  "requires_goalie_partner": true,
+  "goalie_starting_position": "butterfly, square to F1 at dot",
+  "movement_sequence": [
+    "set_in_butterfly_square_to_f1",
+    "make_glove_save_on_high_shot",
+    "recover_to_near_side_post",
+    "shuffle_back_out_to_f1",
+    "track_f1_pass_backdoor_to_gp_or_rebound_board",
+    "make_save_on_backdoor_shot"
+  ],
+  "save_types": ["glove_save", "pad_save", "blocker_save", "desperation_save"],
+  "coaching_cues": [
+    "Start square in butterfly — set your base before F1 shoots",
+    "Reach up and through the puck on the glove save — don't wave at it",
+    "Recover all the way to the post — don't shortcut the recovery",
+    "Shuffle back out with purpose — reset your depth before F1 passes",
+    "Eyes lead on the backdoor — track F1's pass before your body moves"
+  ],
+  "tags": ["butterfly", "glove_save", "post_play", "recovery", "shuffle", "backdoor", "tracking", "two_puck"],
+  "variations": [],
+  "clip_file": "drill-clips/glove-save-post-recover-backdoor.mp4",
+  "clip_loop": true,
+  "has_animation": false,
+  "coach_notes": "Similar structure to blocker-save-rebound-tip-smother but with a glove focus on shot 1 and a full post recovery before shuffling back out. The rebound board alternative makes this runnable in a 1-goalie, 1-shooter session — versatile drill. Watch for goalies who cheat the post recovery, going only partway before shuffling back out; that leaves short side open and puts the goalie in a poor shuffle angle. The glove save technique is as important as the recovery — 'reach through the puck' is the key cue."
+}
