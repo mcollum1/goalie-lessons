@@ -382,23 +382,53 @@ function buildMergedTitle(existingSummary) {
   return `Goalie Lesson – ${mergedNames} – ${existingRink}`;
 }
 
-async function patchCalendarEvent(eventId, newTitle) {
-  const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events/${encodeURIComponent(eventId)}`;
+/**
+ * PATCH a calendar event with the merged title and merged attendee list.
+ *
+ * IMPORTANT: Google Calendar's PATCH replaces the entire `attendees` array
+ * with whatever you send. To avoid evicting existing attendees (and
+ * triggering cancellation emails to them), we must merge the new parent's
+ * email into `existingAttendees` rather than overwrite.
+ *
+ * Privacy: `guestsCanSeeOtherGuests: false` hides attendee emails from each
+ * other — required because parents from different families share these events.
+ *
+ * `?sendUpdates=all` re-sends the updated invite to every attendee so both
+ * parents see the new title (with both goalies' names) on their calendar.
+ */
+async function patchCalendarEvent(eventId, newTitle, existingAttendees) {
+  // Merge: keep everyone already on the event, append B.email if not present
+  const mergedAttendees = [...(existingAttendees || [])];
+  if (B.email) {
+    const newEmail = B.email.trim().toLowerCase();
+    const alreadyIn = mergedAttendees.some(
+      a => (a.email || "").trim().toLowerCase() === newEmail
+    );
+    if (!alreadyIn) mergedAttendees.push({ email: B.email.trim() });
+  }
+
+  const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}`
+    + `/events/${encodeURIComponent(eventId)}?sendUpdates=all`;
+
+  const body = {
+    summary: newTitle,
+    colorId: "11",
+    guestsCanSeeOtherGuests: false,
+    guestsCanInviteOthers: false,
+    ...(mergedAttendees.length ? { attendees: mergedAttendees } : {}),
+  };
+
   const res = await fetch(url, {
     method: "PATCH",
     headers: {
       "Authorization": `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      summary: newTitle,
-      colorId: "11",
-      ...(B.email ? { attendees: [{ email: B.email }] } : {}),
-    }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) {
-    const body = await res.json().catch(() => ({}));
-    throw new Error(body.error?.message || `HTTP ${res.status}`);
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.error?.message || `HTTP ${res.status}`);
   }
   return res.json();
 }
@@ -440,10 +470,11 @@ async function doApproval(btn, statusEl) {
     approvalStep = "updating-cal";
     setBtn(btn, "loading", `<span class="spinner"></span> Updating calendar…`);
     try {
-      // Fetch the current event so we can merge goalie names instead of overwriting
+      // Fetch the current event so we can merge goalie names AND attendees
+      // (rather than overwriting and evicting the first parent's invite).
       const currentEvent = await getCalendarEvent(B.eid);
       const title = buildMergedTitle(currentEvent?.summary);
-      await patchCalendarEvent(B.eid, title);
+      await patchCalendarEvent(B.eid, title, currentEvent?.attendees || []);
     } catch (err) {
       setBtn(btn, "", "🏒 Approve Lesson");
       showStatus("error", "Calendar update failed", `${err.message}. Try signing out of Google and trying again, or update the event title manually.`);
