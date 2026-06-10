@@ -719,12 +719,18 @@ const MAPS = {
 async function loadSessions() {
   if (!GCAL.ENABLED || !GCAL.API_KEY || GCAL.API_KEY === "YOUR_API_KEY_HERE") return;
   try {
-    const now      = new Date().toISOString();
-    const twoWeeks = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
+    const now        = new Date();
+    const nowIso     = now.toISOString();
+    const twoWeeksMs = 14 * 24 * 60 * 60 * 1000;
+    const twoWeeksCutoff = new Date(now.getTime() + twoWeeksMs);
+    // Look further out (8 weeks) so far-future Wednesday slots can be surfaced early
+    // for goalies who want to book a recurring weekly time. Anything beyond the normal
+    // 2-week window is filtered to Wednesdays only (see below).
+    const farOut     = new Date(now.getTime() + 56 * 24 * 60 * 60 * 1000).toISOString();
     const base     = "https://www.googleapis.com/calendar/v3/calendars";
     const url      = `${base}/${encodeURIComponent(GCAL.CALENDAR_ID)}/events`
       + `?key=${GCAL.API_KEY}`
-      + `&timeMin=${encodeURIComponent(now)}&timeMax=${encodeURIComponent(twoWeeks)}`
+      + `&timeMin=${encodeURIComponent(nowIso)}&timeMax=${encodeURIComponent(farOut)}`
       + `&singleEvents=true&orderBy=startTime&maxResults=100`;
 
     const res  = await fetch(url);
@@ -742,6 +748,9 @@ async function loadSessions() {
       if (!rink) return;  // not one of our sessions
       const start   = new Date(ev.start.dateTime);
       const end     = new Date(ev.end.dateTime);
+      // Beyond the normal 2-week window, only surface Wednesday sessions
+      // (lets a goalie book a recurring Wednesday slot further ahead).
+      if (start > twoWeeksCutoff && start.getDay() !== 3) return;
       const dateStr = `${start.getFullYear()}-${pad(start.getMonth()+1)}-${pad(start.getDate())}`;
       const time    = start.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",hour12:true});
       const endTime = end.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",hour12:true});

@@ -173,6 +173,10 @@ function isAfter230PM(date) {
   return date.getHours() > 14 || (date.getHours() === 14 && date.getMinutes() >= 30);
 }
 
+function isMorning(date) {
+  return date.getHours() < 12;
+}
+
 // ─── Event key (stable, local-time based) ──────────────────────────────────
 
 /**
@@ -269,8 +273,8 @@ async function main() {
       const [startDt, endDt] = parseTimes(date, row['Time'] || '');
       if (!startDt || !endDt) continue;
 
-      // Time filter: weekdays must be ≥ 2:30 PM; weekends any time
-      if (!isWeekend(startDt) && !isAfter230PM(startDt)) continue;
+      // Time filter: weekdays must be a morning slot (before noon) or ≥ 2:30 PM; weekends any time
+      if (!isWeekend(startDt) && !isMorning(startDt) && !isAfter230PM(startDt)) continue;
 
       const space = (row['Space'] || rink.name)
         .replace(/\s*-\s*Champions Skating Center/i, '')
