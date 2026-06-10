@@ -1,0 +1,39 @@
+{
+  "id": "puck-circuit-backward-butterfly-slide-lead-edge-powerslide",
+  "name": "Puck Circuit — Backward Butterfly Slide, Lead Edge Powerslide",
+  "description": "Four pucks arranged in the shape of a crease. G starts at P4, shuffles to P3, shuffles to P2, t-pushes back to P4, performs a backward butterfly slide around P1, powerslides to P2 stopping on the lead skate edge, then rotates into a t-push back to P4.",
+  "drill_category": ["skating", "crease_movement"],
+  "session_slot": "warmup",
+  "duration_minutes": 8,
+  "difficulty": "intermediate",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": ["in_tight", "hash_marks"],
+  "setup_required": "puck_setup",
+  "goalie_starting_position": "P4 — near-side crease position",
+  "movement_sequence": [
+    "start_at_P4",
+    "shuffle_to_P3",
+    "shuffle_to_P2",
+    "t_push_to_P4",
+    "backward_butterfly_slide_around_P1",
+    "powerslide_to_P2_stop_on_lead_skate_edge",
+    "rotate_t_push_to_P4"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Stay tall and crisp through the shuffles — no slouching between pucks",
+    "Sharp pivot before the t-push — generate power from the hip",
+    "Backward butterfly slide: lead with the pad, stay controlled, go around the puck cleanly",
+    "Lead skate edge stop on the powerslide — absorb the stop, don't overshoot the puck",
+    "Rotate through the hips into the final t-push — don't just step, generate power"
+  ],
+  "tags": ["shuffle", "t_push", "backward_butterfly_slide", "powerslide", "lead_edge_stop", "rotate", "crease_movement", "puck_circuit"],
+  "variations": [],
+  "own_content": false,
+  "clip_source_url": "https://www.youtube.com/watch?v=oGSxVRM126M",
+  "clip_file": "drill-clips/puck-circuit-backward-butterfly-slide-lead-edge-powerslide.mp4",
+  "clip_loop": true,
+  "has_animation": false
+}

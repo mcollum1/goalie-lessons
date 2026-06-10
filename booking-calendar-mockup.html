@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Calendar — HockeyHub Design Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════
+   DESIGN TOKENS — pulled from tokens.css
+   ═══════════════════════════════════════ */
+:root {
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Text scale */
+  --text-display:   700  38px / 1.05  var(--font);
+  --text-title:     600  20px / 1.25  var(--font);
+  --text-base:      400  14px / 1.55  var(--font);
+  --text-sm:        400  13px / 1.5   var(--font);
+  --text-caption:   500  12px / 1.4   var(--font);
+  --text-label:     600  11px / 1     var(--font);
+
+  /* Color */
+  --color-action:       #1F62AC;
+  --color-action-hover: #17518F;
+  --color-action-tint:  #E9F1FA;
+  --color-action-tint2: #C3D9F2;
+  --color-navy:   #1C3150;
+  --color-navy-2: #243D63;
+
+  --color-text-primary:   #13243B;
+  --color-text-secondary: #5C6A7D;
+  --color-text-tertiary:  #8B96A6;
+  --color-text-muted:     #A8B3C0;
+
+  --color-bg:      #F8F7F4;
+  --color-surface: #FFFFFF;
+  --color-raised:  #F1F0ED;
+
+  --color-border:        rgba(14,27,46,0.10);
+  --color-border-strong: rgba(14,27,46,0.18);
+
+  --color-green:  #10B981;
+  --color-green-tint: #E6F7F1;
+  --color-red:    #EF4444;
+  --color-amber:  #F59E0B;
+  --color-amber-tint: #FEF3C7;
+
+  /* Radius */
+  --r-sm:  6px;
+  --r-md:  10px;
+  --r-lg:  14px;
+  --r-xl:  18px;
+  --r-2xl: 22px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(14,27,46,0.06);
+  --shadow-sm: 0 1px 4px rgba(14,27,46,0.08);
+  --shadow-md: 0 4px 16px -4px rgba(14,27,46,0.12), 0 1px 2px rgba(14,27,46,0.05);
+  --shadow-lg: 0 8px 32px -8px rgba(14,27,46,0.18), 0 2px 4px rgba(14,27,46,0.06);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box; margin: 0; padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+  background: #E8E6E0;
+}
+
+/* ═══════════════════════════════════════
+   ANNOTATION SYSTEM
+   ═══════════════════════════════════════ */
+.annotation-wrap {
+  position: relative;
+}
+
+.annotation {
+  position: absolute;
+  right: -248px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 232px;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: var(--r-md);
+  padding: 8px 10px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: #78350F;
+  font-family: var(--font);
+  z-index: 100;
+}
+.annotation::before {
+  content: '';
+  position: absolute;
+  left: -6px; top: 50%;
+  transform: translateY(-50%);
+  width: 0; height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 6px solid #FDE68A;
+}
+.annotation strong {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #92400E;
+  margin-bottom: 3px;
+}
+
+/* ═══════════════════════════════════════
+   LAYOUT CHROME
+   ═══════════════════════════════════════ */
+.page-chrome {
+  min-height: 100vh;
+  padding: 32px 16px 32px calc(16px + 248px);
+  display: flex;
+  justify-content: flex-start;
+  gap: 0;
+  position: relative;
+}
+
+.annotation-column {
+  position: fixed;
+  left: 16px;
+  top: 32px;
+  width: 220px;
+}
+
+.annotation-column h1 {
+  font: 700 13px/1.3 var(--font);
+  color: var(--color-navy);
+  margin-bottom: 4px;
+}
+
+.annotation-column p {
+  font: 400 11px/1.5 var(--font);
+  color: var(--color-text-secondary);
+  margin-bottom: 16px;
+}
+
+.annotation-column .legend-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  margin-bottom: 8px;
+}
+
+.annotation-column .legend-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 2px;
+}
+
+.annotation-column .legend-text {
+  font: 400 11px/1.4 var(--font);
+  color: var(--color-text-secondary);
+}
+
+.annotation-column .legend-text strong {
+  font-weight: 600; color: var(--color-text-primary);
+  display: block;
+}
+
+/* ═══════════════════════════════════════
+   DEVICE SHELL
+   ═══════════════════════════════════════ */
+.device {
+  width: 390px;
+  min-height: 844px;
+  background: var(--color-bg);
+  border-radius: 48px;
+  box-shadow:
+    0 0 0 10px #1A1A1A,
+    0 0 0 12px #333,
+    0 32px 80px rgba(0,0,0,0.4),
+    0 8px 24px rgba(0,0,0,0.25);
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.device-notch {
+  width: 120px; height: 34px;
+  background: #1A1A1A;
+  border-radius: 0 0 20px 20px;
+  margin: 0 auto;
+  position: relative; z-index: 10;
+}
+
+/* ═══════════════════════════════════════
+   APP CONTENT
+   ═══════════════════════════════════════ */
+.app {
+  width: 100%;
+  background: var(--color-bg);
+  overflow-y: auto;
+  max-height: 810px;
+}
+
+/* ─── COACH CONTEXT PANEL (Pattern 3) ─── */
+.coach-panel {
+  background: var(--color-navy);
+  padding: 16px 16px 20px;
+  position: relative;
+}
+
+.coach-panel-back {
+  display: flex; align-items: center; gap: 6px;
+  font: 500 13px/1 var(--font);
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.coach-panel-back svg {
+  width: 16px; height: 16px;
+  stroke: rgba(255,255,255,0.65);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.coach-profile-row {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 14px;
+}
+
+.coach-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb 0%, #1c3150 100%);
+  border: 2px solid rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font: 700 16px/1 var(--font);
+  color: #fff;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.coach-avatar img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+
+.coach-name {
+  font: 600 16px/1.2 var(--font);
+  color: #fff;
+}
+
+.coach-tag {
+  font: 500 12px/1 var(--font);
+  color: rgba(255,255,255,0.55);
+  margin-top: 3px;
+}
+
+.coach-meta-pills {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+
+.coach-meta-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 20px;
+  font: 500 12px/1 var(--font);
+  color: rgba(255,255,255,0.85);
+}
+
+.coach-meta-pill svg {
+  width: 13px; height: 13px;
+  stroke: rgba(255,255,255,0.65);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ─── SESSION TYPE SELECTOR (Pattern 1) ─── */
+.session-selector {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 14px 16px;
+}
+
+.section-label {
+  font: 600 11px/1 var(--font);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-text-tertiary);
+  margin-bottom: 10px;
+}
+
+.session-cards {
+  display: flex; gap: 8px; overflow-x: auto;
+  scrollbar-width: none; -ms-overflow-style: none;
+  padding-bottom: 2px;
+}
+.session-cards::-webkit-scrollbar { display: none; }
+
+.session-card {
+  flex-shrink: 0;
+  min-width: 144px;
+  background: var(--color-raised);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: 11px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.session-card.selected {
+  background: var(--color-action-tint);
+  border-color: var(--color-action);
+  box-shadow: 0 0 0 2px var(--color-action-tint2);
+}
+
+.session-card-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.session-card-name {
+  font: 600 13px/1.25 var(--font);
+  color: var(--color-text-primary);
+}
+
+.session-card.selected .session-card-name {
+  color: var(--color-action);
+}
+
+.session-card-price {
+  font: 700 13px/1 var(--font);
+  color: var(--color-action);
+  white-space: nowrap;
+  margin-left: 6px;
+}
+
+.session-card-meta {
+  font: 400 11px/1.4 var(--font);
+  color: var(--color-text-tertiary);
+}
+
+.session-card.selected .session-card-meta {
+  color: #4B80B8;
+}
+
+.session-selected-check {
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 16px; height: 16px;
+  background: var(--color-action);
+  border-radius: 50%;
+  display: none;
+  align-items: center; justify-content: center;
+}
+.session-card.selected .session-selected-check {
+  display: flex;
+}
+.session-selected-check svg {
+  width: 9px; height: 9px;
+  stroke: white; fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ─── CALENDAR HEADER ─── */
+.cal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px 10px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cal-month {
+  font: 600 15px/1 var(--font);
+  color: var(--color-text-primary);
+}
+
+.cal-nav {
+  display: flex; gap: 4px;
+}
+
+.cal-nav-btn {
+  width: 32px; height: 32px;
+  border-radius: var(--r-md);
+  background: var(--color-raised);
+  border: 1px solid var(--color-border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+
+.cal-nav-btn svg {
+  width: 14px; height: 14px;
+  stroke: var(--color-text-secondary);
+  fill: none; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ─── CALENDAR GRID (Pattern 2) ─── */
+.cal-grid-wrap {
+  background: var(--color-surface);
+  padding: 0 12px 4px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cal-dow-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4px;
+}
+
+.cal-dow {
+  height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font: 600 10px/1 var(--font);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-text-muted);
+}
+
+.cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.cal-day {
+  aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  font: 400 13px/1 var(--font);
+  color: var(--color-text-muted);
+  border-radius: 50%;
+  cursor: default;
+  position: relative;
+  transition: all 0.12s;
+}
+
+.cal-day.past {
+  color: var(--color-text-muted);
+  opacity: 0.4;
+}
+
+.cal-day.available {
+  color: var(--color-text-primary);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.cal-day.available::after {
+  content: '';
+  position: absolute;
+  bottom: 3px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--color-green);
+}
+
+.cal-day.limited::after {
+  background: var(--color-amber);
+}
+
+.cal-day.available:hover {
+  background: var(--color-raised);
+}
+
+.cal-day.selected {
+  background: var(--color-navy) !important;
+  color: #fff !important;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cal-day.selected::after {
+  background: rgba(255,255,255,0.7);
+}
+
+.cal-day.today {
+  font-weight: 700;
+}
+
+.cal-day.blocked {
+  color: var(--color-text-muted);
+  opacity: 0.45;
+}
+
+.cal-next-hint {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 0 10px;
+  font: 500 12px/1 var(--font);
+  color: var(--color-action);
+}
+.cal-next-hint svg {
+  width: 13px; height: 13px;
+  stroke: var(--color-action); fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ─── SLOTS PANEL (Pattern 2) ─── */
+.slots-panel {
+  padding: 14px 16px;
+  background: var(--color-bg);
+}
+
+.slots-date-label {
+  font: 600 13px/1 var(--font);
+  color: var(--color-text-primary);
+  margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.slots-scarcity {
+  font: 600 11px/1 var(--font);
+  color: var(--color-amber);
+  background: var(--color-amber-tint);
+  padding: 3px 8px;
+  border-radius: 20px;
+  display: flex; align-items: center; gap: 4px;
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.slot-btn {
+  padding: 12px 4px;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--r-md);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.12s;
+  box-shadow: var(--shadow-xs);
+}
+
+.slot-btn:hover {
+  border-color: var(--color-action);
+  background: var(--color-action-tint);
+}
+
+.slot-btn.selected {
+  background: var(--color-action-tint);
+  border-color: var(--color-action);
+  box-shadow: 0 0 0 2px var(--color-action-tint2);
+}
+
+.slot-time {
+  font: 600 14px/1 var(--font);
+  color: var(--color-text-primary);
+  display: block;
+  margin-bottom: 3px;
+}
+
+.slot-btn.selected .slot-time {
+  color: var(--color-action);
+}
+
+.slot-period {
+  font: 500 11px/1 var(--font);
+  color: var(--color-text-tertiary);
+}
+
+.slot-btn.selected .slot-period {
+  color: var(--color-action);
+  opacity: 0.75;
+}
+
+/* ─── BOOKING SUMMARY (Pattern 5) ─── */
+.booking-summary {
+  margin: 0 16px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+.booking-summary-header {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--color-border);
+  font: 600 13px/1 var(--font);
+  color: var(--color-text-primary);
+  display: flex; align-items: center; gap: 8px;
+}
+
+.booking-summary-header svg {
+  width: 15px; height: 15px;
+  stroke: var(--color-action); fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.booking-summary-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.booking-summary-row:last-child { border-bottom: none; }
+
+.booking-summary-label {
+  font: 400 12px/1 var(--font);
+  color: var(--color-text-secondary);
+  display: flex; align-items: center; gap: 6px;
+}
+.booking-summary-label svg {
+  width: 13px; height: 13px;
+  stroke: var(--color-text-muted); fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.booking-summary-value {
+  font: 600 12px/1 var(--font);
+  color: var(--color-text-primary);
+  text-align: right;
+}
+
+.booking-summary-price-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--color-action-tint);
+}
+
+.booking-summary-price-label {
+  font: 600 13px/1 var(--font);
+  color: var(--color-action);
+}
+
+.booking-summary-price-value {
+  font: 700 18px/1 var(--font);
+  color: var(--color-action);
+}
+
+/* ─── CTA FOOTER (Pattern 4) ─── */
+.cta-footer {
+  padding: 12px 16px 20px;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  position: sticky; bottom: 0; z-index: 20;
+}
+
+.cta-main {
+  width: 100%;
+  padding: 15px 20px;
+  background: var(--color-navy);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-lg);
+  font: 600 15px/1 var(--font);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: var(--shadow-md);
+  transition: background 0.15s;
+}
+
+.cta-main svg {
+  width: 16px; height: 16px;
+  stroke: rgba(255,255,255,0.7); fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.cta-guest-note {
+  margin-top: 9px;
+  text-align: center;
+  font: 400 11px/1.45 var(--font);
+  color: var(--color-text-muted);
+}
+
+.cta-guest-note a {
+  color: var(--color-action);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════
+   RIGHT PANEL: STATES + ANNOTATIONS
+   ═══════════════════════════════════════ */
+.right-panel {
+  width: 240px;
+  flex-shrink: 0;
+  margin-left: 32px;
+  padding-top: 16px;
+  position: sticky;
+  top: 32px;
+  align-self: flex-start;
+}
+
+.right-panel h2 {
+  font: 700 13px/1.3 var(--font);
+  color: var(--color-navy);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.pattern-ref {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-xs);
+}
+
+.pattern-ref-label {
+  font: 700 10px/1 var(--font);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-action);
+  margin-bottom: 5px;
+}
+
+.pattern-ref-title {
+  font: 600 12px/1.3 var(--font);
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+
+.pattern-ref-desc {
+  font: 400 11px/1.5 var(--font);
+  color: var(--color-text-secondary);
+}
+
+/* ═══════════════════════════════════════
+   CONFIRMATION SCREEN (Pattern 7) — shown as secondary device
+   ═══════════════════════════════════════ */
+.screens-row {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.screen-label {
+  text-align: center;
+  font: 600 12px/1 var(--font);
+  color: var(--color-text-secondary);
+  margin-top: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* confirmation styles */
+.confirm-header {
+  background: var(--color-surface);
+  padding: 32px 16px 24px;
+  text-align: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.confirm-icon-wrap {
+  width: 64px; height: 64px;
+  background: var(--color-green-tint);
+  border-radius: 50%;
+  margin: 0 auto 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.confirm-icon-wrap svg {
+  width: 32px; height: 32px;
+  stroke: var(--color-green); fill: none;
+  stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.confirm-title {
+  font: 700 20px/1.2 var(--font);
+  color: var(--color-text-primary);
+  margin-bottom: 6px;
+}
+
+.confirm-subtitle {
+  font: 400 13px/1.5 var(--font);
+  color: var(--color-text-secondary);
+  max-width: 260px; margin: 0 auto;
+}
+
+.confirm-card {
+  margin: 16px 16px 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+.confirm-card-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.confirm-card-row:last-child { border-bottom: none; }
+
+.confirm-icon {
+  width: 32px; height: 32px; border-radius: var(--r-sm);
+  background: var(--color-raised);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.confirm-icon svg {
+  width: 15px; height: 15px;
+  stroke: var(--color-text-secondary); fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.confirm-row-label {
+  font: 400 11px/1 var(--font);
+  color: var(--color-text-tertiary);
+  margin-bottom: 3px;
+}
+
+.confirm-row-value {
+  font: 600 13px/1.3 var(--font);
+  color: var(--color-text-primary);
+}
+
+.confirm-actions {
+  padding: 14px 16px 20px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.confirm-btn-primary {
+  width: 100%;
+  padding: 14px 20px;
+  background: var(--color-navy);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-lg);
+  font: 600 14px/1 var(--font);
+  cursor: pointer;
+  text-align: center;
+}
+
+.confirm-btn-secondary {
+  width: 100%;
+  padding: 13px 20px;
+  background: var(--color-surface);
+  color: var(--color-action);
+  border: 1.5px solid var(--color-action-tint2);
+  border-radius: var(--r-lg);
+  font: 600 13px/1 var(--font);
+  cursor: pointer;
+  text-align: center;
+}
+
+.confirm-upsell {
+  margin: 0 16px 16px;
+  background: var(--color-action-tint);
+  border: 1px solid var(--color-action-tint2);
+  border-radius: var(--r-lg);
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+
+.confirm-upsell-icon {
+  width: 36px; height: 36px; border-radius: var(--r-md);
+  background: var(--color-action);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.confirm-upsell-icon svg {
+  width: 18px; height: 18px;
+  stroke: #fff; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.confirm-upsell-title {
+  font: 600 12px/1.3 var(--font);
+  color: var(--color-action);
+  margin-bottom: 2px;
+}
+.confirm-upsell-desc {
+  font: 400 11px/1.4 var(--font);
+  color: var(--color-text-secondary);
+}
+
+.page-title {
+  text-align: center;
+  font: 800 22px/1 var(--font);
+  color: var(--color-navy);
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+  text-align: center;
+  font: 400 13px/1.5 var(--font);
+  color: var(--color-text-secondary);
+  margin-bottom: 28px;
+  max-width: 480px;
+}
+</style>
+</head>
+<body>
+
+<div style="padding: 32px 32px 48px; max-width: 1200px; margin: 0 auto;">
+
+  <div style="margin-bottom: 32px; padding-left: 248px;">
+    <h1 class="page-title">HockeyHub — Lesson Booking Calendar</h1>
+    <p class="page-subtitle">Client-facing booking flow · Mobile-first mockup · Built on HockeyHub design system</p>
+  </div>
+
+  <div style="display: flex; gap: 32px; align-items: flex-start;">
+
+    <!-- ── LEFT LEGEND ── -->
+    <div class="annotation-column">
+      <h1>Patterns Applied</h1>
+      <p>Each screen section maps to a research pattern. Annotations appear inline on the right side of the device.</p>
+
+      <div class="legend-item">
+        <div class="legend-dot" style="background: var(--color-navy);"></div>
+        <div class="legend-text">
+          <strong>P1 · Session Type Cards</strong>
+          Gate calendar behind session selection. Price visible before any date interaction. (Acuity, CoachNow)
+        </div>
+      </div>
+
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #2563eb;"></div>
+        <div class="legend-text">
+          <strong>P2 · Month + Day on One Screen</strong>
+          Calendar and time slots visible simultaneously, no page reload. (Calendly)
+        </div>
+      </div>
+
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #7C3AED;"></div>
+        <div class="legend-text">
+          <strong>P3 · Persistent Context Panel</strong>
+          Coach photo, price, location always visible — never scroll to find them. (Calendly, Acuity)
+        </div>
+      </div>
+
+      <div class="legend-item">
+        <div class="legend-dot" style="background: var(--color-green);"></div>
+        <div class="legend-text">
+          <strong>P4 · Zero-Account Guest Booking</strong>
+          No sign-up required to see or book availability. (Calendly core principle)
+        </div>
+      </div>
+
+      <div class="legend-item">
+        <div class="legend-dot" style="background: var(--color-amber);"></div>
+        <div class="legend-text">
+          <strong>P5 · Inline Price Transparency</strong>
+          Price visible at 3 checkpoints before payment. (Acuity, Calendly Payments)
+        </div>
+      </div>
+
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #EF4444;"></div>
+        <div class="legend-text">
+          <strong>P6 · Scarcity Nudges</strong>
+          "Only 2 slots left" when genuinely true. Never manufactured. (Mindbody, ClassPass)
+        </div>
+      </div>
+
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #0D9488;"></div>
+        <div class="legend-text">
+          <strong>P7 · Confirmation as Retention</strong>
+          Post-booking screen does 4 jobs: celebrate, calendar add, account offer, upsell. (Acuity 2025)
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCREENS ROW ── -->
+    <div class="screens-row">
+
+      <!-- SCREEN 1: BOOKING CALENDAR -->
+      <div>
+        <div class="device">
+          <div class="device-notch"></div>
+
+          <div class="app">
+
+            <!-- ── PATTERN 3: Coach Context Panel ── -->
+            <div class="annotation-wrap">
+              <div class="coach-panel">
+                <div class="coach-panel-back">
+                  <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                  All coaches
+                </div>
+
+                <div class="coach-profile-row">
+                  <div class="coach-avatar">MC</div>
+                  <div>
+                    <div class="coach-name">Coach Mitch</div>
+                    <div class="coach-tag">Goalie-specific · All ages &amp; levels</div>
+                  </div>
+                </div>
+
+                <div class="coach-meta-pills">
+                  <div class="coach-meta-pill">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                    Rocket Ice Arena
+                  </div>
+                  <div class="coach-meta-pill">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    45–60 min
+                  </div>
+                  <div class="coach-meta-pill">
+                    <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    From $175
+                  </div>
+                </div>
+              </div>
+              <div class="annotation" style="top: 40%;">
+                <strong>P3 · Persistent Context</strong>
+                Coach photo, location, duration, and starting price are always visible. A parent landing from a text link immediately sees "who is this person." Navy panel = coach's branding zone — multi-coach SaaS renders this per-coach.
+              </div>
+            </div>
+
+            <!-- ── PATTERN 1: Session Type Selector ── -->
+            <div class="annotation-wrap">
+              <div class="session-selector">
+                <div class="section-label">Choose a session type</div>
+                <div class="session-cards">
+
+                  <div class="session-card selected">
+                    <div class="session-card-header">
+                      <div class="session-card-name">Skill Work</div>
+                      <div class="session-card-price">$175</div>
+                    </div>
+                    <div class="session-card-meta">60 min · On-ice · 1-on-1</div>
+                    <div class="session-selected-check">
+                      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                  </div>
+
+                  <div class="session-card">
+                    <div class="session-card-header">
+                      <div class="session-card-name">Compete Prep</div>
+                      <div class="session-card-price">$175</div>
+                    </div>
+                    <div class="session-card-meta">60 min · On-ice · 1-on-1</div>
+                  </div>
+
+                  <div class="session-card">
+                    <div class="session-card-header">
+                      <div class="session-card-name">Evaluation</div>
+                      <div class="session-card-price">$120</div>
+                    </div>
+                    <div class="session-card-meta">45 min · On-ice · 1-on-1</div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="annotation" style="top: 50%;">
+                <strong>P1 · Session Type First</strong>
+                Price is visible on each card before touching the calendar — prevents checkout price shock. Cards are horizontally scrollable; selected state is unmissable. 3 types shown; design handles up to 6 before needing a "see all" expand.
+              </div>
+            </div>
+
+            <!-- ── PATTERN 2: Calendar + Slots ── -->
+            <div class="annotation-wrap">
+
+              <!-- Calendar header -->
+              <div class="cal-header">
+                <div class="cal-month">June 2026</div>
+                <div class="cal-nav">
+                  <div class="cal-nav-btn">
+                    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                  </div>
+                  <div class="cal-nav-btn">
+                    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Calendar grid -->
+              <div class="cal-grid-wrap">
+                <div class="cal-dow-row">
+                  <div class="cal-dow">Su</div>
+                  <div class="cal-dow">Mo</div>
+                  <div class="cal-dow">Tu</div>
+                  <div class="cal-dow">We</div>
+                  <div class="cal-dow">Th</div>
+                  <div class="cal-dow">Fr</div>
+                  <div class="cal-dow">Sa</div>
+                </div>
+
+                <div class="cal-days">
+                  <!-- week 1 -->
+                  <div class="cal-day"></div>
+                  <div class="cal-day past">2</div>
+                  <div class="cal-day past">3</div>
+                  <div class="cal-day past today">4</div>
+                  <div class="cal-day available limited">5</div>
+                  <div class="cal-day blocked">6</div>
+                  <div class="cal-day blocked">7</div>
+                  <!-- week 2 -->
+                  <div class="cal-day blocked">8</div>
+                  <div class="cal-day available">9</div>
+                  <div class="cal-day available">10</div>
+                  <div class="cal-day available">11</div>
+                  <div class="cal-day available selected">12</div>
+                  <div class="cal-day blocked">13</div>
+                  <div class="cal-day blocked">14</div>
+                  <!-- week 3 -->
+                  <div class="cal-day blocked">15</div>
+                  <div class="cal-day available">16</div>
+                  <div class="cal-day available">17</div>
+                  <div class="cal-day blocked">18</div>
+                  <div class="cal-day available">19</div>
+                  <div class="cal-day blocked">20</div>
+                  <div class="cal-day blocked">21</div>
+                  <!-- week 4 -->
+                  <div class="cal-day blocked">22</div>
+                  <div class="cal-day available">23</div>
+                  <div class="cal-day blocked">24</div>
+                  <div class="cal-day available">25</div>
+                  <div class="cal-day blocked">26</div>
+                  <div class="cal-day blocked">27</div>
+                  <div class="cal-day blocked">28</div>
+                  <!-- week 5 -->
+                  <div class="cal-day blocked">29</div>
+                  <div class="cal-day available">30</div>
+                  <div class="cal-day"></div>
+                  <div class="cal-day"></div>
+                  <div class="cal-day"></div>
+                  <div class="cal-day"></div>
+                  <div class="cal-day"></div>
+                </div>
+
+                <!-- Legend -->
+                <div style="display: flex; gap: 14px; padding: 10px 2px 8px; align-items: center;">
+                  <div style="display: flex; align-items: center; gap: 5px; font: 400 10.5px/1 var(--font); color: var(--color-text-muted);">
+                    <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--color-green);"></div>
+                    Available
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 5px; font: 400 10.5px/1 var(--font); color: var(--color-text-muted);">
+                    <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--color-amber);"></div>
+                    Limited slots
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 5px; font: 400 10.5px/1 var(--font); color: var(--color-text-muted);">
+                    <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--color-navy); opacity: 0.3;"></div>
+                    Unavailable
+                  </div>
+                </div>
+              </div>
+
+              <div class="annotation" style="top: 52%;">
+                <strong>P2 · Month + Day on One Screen</strong>
+                Green dot = open slots. Amber = limited (P6 scarcity, only shown when &lt;3 slots remain). Gray = fully blocked. Navy fill = selected date. No page navigation to see times — slots appear immediately below on tap.
+              </div>
+            </div>
+
+            <!-- Time slots for selected date -->
+            <div class="annotation-wrap">
+              <div class="slots-panel">
+                <div class="slots-date-label">
+                  Thu, June 12
+                  <span class="slots-scarcity">
+                    <svg viewBox="0 0 24 24" width="11" height="11" style="stroke: var(--color-amber); fill: none; stroke-width: 2.5;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    Only 2 left
+                  </span>
+                </div>
+
+                <div class="slots-grid">
+                  <div class="slot-btn">
+                    <span class="slot-time">6:00</span>
+                    <span class="slot-period">AM</span>
+                  </div>
+                  <div class="slot-btn selected">
+                    <span class="slot-time">7:30</span>
+                    <span class="slot-period">AM</span>
+                  </div>
+                  <div class="slot-btn">
+                    <span class="slot-time">4:00</span>
+                    <span class="slot-period">PM</span>
+                  </div>
+                  <div class="slot-btn">
+                    <span class="slot-time">5:30</span>
+                    <span class="slot-period">PM</span>
+                  </div>
+                  <div class="slot-btn">
+                    <span class="slot-time">7:00</span>
+                    <span class="slot-period">PM</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="annotation" style="top: 50%;">
+                <strong>P2 + P6 · Slots + Scarcity</strong>
+                Times appear below selected date with no reload. "Only 2 left" amber badge only renders when ≤2 slots remain — never shown on normal days. 3-column grid fits thumb reach without scrolling on 375px viewport.
+              </div>
+            </div>
+
+            <!-- ── PATTERN 5: Price Summary ── -->
+            <div class="annotation-wrap">
+              <div class="booking-summary">
+                <div class="booking-summary-header">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Booking summary
+                </div>
+
+                <div class="booking-summary-row">
+                  <div class="booking-summary-label">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Date &amp; time
+                  </div>
+                  <div class="booking-summary-value">Thu Jun 12 · 7:30 AM</div>
+                </div>
+
+                <div class="booking-summary-row">
+                  <div class="booking-summary-label">
+                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    Session
+                  </div>
+                  <div class="booking-summary-value">Skill Work · 60 min</div>
+                </div>
+
+                <div class="booking-summary-row">
+                  <div class="booking-summary-label">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                    Location
+                  </div>
+                  <div class="booking-summary-value">Rocket Ice Arena</div>
+                </div>
+
+                <div class="booking-summary-price-row">
+                  <div class="booking-summary-price-label">Total due today</div>
+                  <div class="booking-summary-price-value">$175.00</div>
+                </div>
+              </div>
+
+              <div class="annotation" style="top: 50%;">
+                <strong>P5 · Price Checkpoint 3 of 3</strong>
+                Full price summary before entering any payment info. Price was already visible on: (1) session type card, (2) coach meta pills. This third appearance confirms — it doesn't surprise. Blue price section draws the eye without requiring the parent to search.
+              </div>
+            </div>
+
+            <!-- ── PATTERN 4: CTA + Guest note ── -->
+            <div class="annotation-wrap">
+              <div class="cta-footer">
+                <button class="cta-main">
+                  <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                  Confirm &amp; pay · $175
+                </button>
+                <div class="cta-guest-note">No account needed · <a href="#">Sign in</a> to autofill your info</div>
+              </div>
+
+              <div class="annotation" style="top: 50%;">
+                <strong>P4 · Zero-Account Guest Booking</strong>
+                CTA label echoes price one final time (no surprise on next screen). Guest note below reinforces frictionlessness: "no account needed." Sign-in link for returning clients to autofill — not a gate. Name, email, phone collected on next screen only.
+              </div>
+            </div>
+
+          </div><!-- /app -->
+        </div><!-- /device -->
+        <div class="screen-label">Screen 1 — Booking Calendar</div>
+      </div>
+
+      <!-- SCREEN 2: CONFIRMATION -->
+      <div>
+        <div class="device" style="min-height: 760px;">
+          <div class="device-notch"></div>
+
+          <div class="app">
+
+            <div class="annotation-wrap">
+              <div class="confirm-header">
+                <div class="confirm-icon-wrap">
+                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="confirm-title">You're booked! 🎉</div>
+                <div class="confirm-subtitle">A confirmation email is on its way to you with everything you need.</div>
+              </div>
+
+              <div class="annotation" style="top: 50%;">
+                <strong>P7 · Confirmation as Retention</strong>
+                "You're booked" moment = highest trust point in the flow. Green checkmark celebrates the action. Confirmation email with .ics attachment triggers immediately. Page now pivots to: what's next?
+              </div>
+            </div>
+
+            <div class="confirm-card" style="margin-top: 16px;">
+              <div class="confirm-card-row">
+                <div class="confirm-icon">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div>
+                  <div class="confirm-row-label">Date &amp; time</div>
+                  <div class="confirm-row-value">Thu, June 12 · 7:30 AM</div>
+                </div>
+              </div>
+              <div class="confirm-card-row">
+                <div class="confirm-icon">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                </div>
+                <div>
+                  <div class="confirm-row-label">Location</div>
+                  <div class="confirm-row-value">Rocket Ice Arena · Rink 2<br><span style="font-weight: 400; font-size: 11px; color: var(--color-action);">Get directions →</span></div>
+                </div>
+              </div>
+              <div class="confirm-card-row">
+                <div class="confirm-icon">
+                  <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div>
+                  <div class="confirm-row-label">Coach</div>
+                  <div class="confirm-row-value">Coach Mitch · Skill Work</div>
+                </div>
+              </div>
+              <div class="confirm-card-row" style="background: var(--color-action-tint);">
+                <div class="confirm-icon" style="background: var(--color-action-tint2);">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <div>
+                  <div class="confirm-row-label" style="color: var(--color-action); opacity: 0.75;">Quick action</div>
+                  <div class="confirm-row-value" style="color: var(--color-action);">Add to Apple Calendar</div>
+                </div>
+                <svg viewBox="0 0 24 24" width="16" height="16" style="stroke: var(--color-action); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; margin-left: auto; flex-shrink: 0;"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+            </div>
+
+            <div class="annotation-wrap">
+              <!-- Session pack upsell -->
+              <div class="confirm-upsell">
+                <div class="confirm-upsell-icon">
+                  <svg viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+                </div>
+                <div>
+                  <div class="confirm-upsell-title">Save $75 on your next 4 lessons</div>
+                  <div class="confirm-upsell-desc">5-session pack · $800 vs. $875 singles</div>
+                </div>
+              </div>
+              <div class="annotation" style="top: 50%;">
+                <strong>P7 · Upsell at the right moment</strong>
+                Session pack offer only shown to clients who just booked a single session. One upsell, shown once. Never shown to clients who already have a pack. Timing = peak satisfaction, not mid-flow friction.
+              </div>
+            </div>
+
+            <div class="annotation-wrap">
+              <div class="confirm-actions">
+                <button class="confirm-btn-primary">Book another session</button>
+                <button class="confirm-btn-secondary">Save my info for next time</button>
+              </div>
+              <div class="annotation" style="top: 50%;">
+                <strong>P7 · Two CTAs, no more</strong>
+                Primary: "Book another session" (revenue). Secondary: "Save my info" (account creation, frictionless, benefit-framed). Account CTA uses benefit language, not "Create account." No third action — three CTAs = zero CTAs.
+              </div>
+            </div>
+
+          </div><!-- /app -->
+        </div><!-- /device -->
+        <div class="screen-label">Screen 2 — Confirmation</div>
+      </div>
+
+    </div><!-- /screens-row -->
+
+    <!-- ── RIGHT: PATTERN REFS ── -->
+    <div class="right-panel">
+      <h2>Design System Notes</h2>
+
+      <div class="pattern-ref">
+        <div class="pattern-ref-label">✓ Using existing tokens</div>
+        <div class="pattern-ref-title">All colors from tokens.css</div>
+        <div class="pattern-ref-desc">Navy panel uses <code>--color-navy</code>. Action blue uses <code>--color-action</code>. Surfaces, borders, and text scale are all from the shared token file.</div>
+      </div>
+
+      <div class="pattern-ref">
+        <div class="pattern-ref-label">✓ Using existing tokens</div>
+        <div class="pattern-ref-title">Typography unchanged</div>
+        <div class="pattern-ref-desc">Inter at existing scale: <code>--text-title</code> for section heads, <code>--text-sm</code> for meta, <code>--text-caption</code> for badges. No new type ramp needed.</div>
+      </div>
+
+      <div class="pattern-ref">
+        <div class="pattern-ref-label">🆕 New component needed</div>
+        <div class="pattern-ref-title">Session Type Card</div>
+        <div class="pattern-ref-desc">A horizontally-scrollable card with name, price, duration, and a selected state. Not in current component set. Extends <code>.gc-card</code> with a selection ring using <code>--color-action</code>.</div>
+      </div>
+
+      <div class="pattern-ref">
+        <div class="pattern-ref-label">🆕 New component needed</div>
+        <div class="pattern-ref-title">Calendar Grid</div>
+        <div class="pattern-ref-desc">7-col day grid with 3 slot states: available (green dot), limited (amber dot), blocked (gray). Selected day uses navy fill + white text. Needs its own component — nothing like this exists in current system.</div>
+      </div>
+
+      <div class="pattern-ref">
+        <div class="pattern-ref-label">🆕 New component needed</div>
+        <div class="pattern-ref-title">Time Slot Picker</div>
+        <div class="pattern-ref-desc">3-col grid of pill buttons with time + AM/PM. Selected state mirrors session card selection ring. New, but reuses selection pattern from session card.</div>
+      </div>
+
+      <div class="pattern-ref">
+        <div class="pattern-ref-label">🆕 New component needed</div>
+        <div class="pattern-ref-title">Coach Context Panel</div>
+        <div class="pattern-ref-desc">Navy header with avatar, name, and meta pills. "Meta pill" pattern (semi-transparent background, icon + label) is new. Structurally similar to existing <code>top-header</code> but with brand-color override.</div>
+      </div>
+
+      <div class="pattern-ref">
+        <div class="pattern-ref-label">⚠️ Token gap</div>
+        <div class="pattern-ref-title">Green tint missing</div>
+        <div class="pattern-ref-desc"><code>--color-green</code> exists but no <code>--color-green-tint</code> is defined in tokens.css. Confirmation screen needs it for the success icon background. Proposed: <code>#E6F7F1</code>. Add to tokens.css.</div>
+      </div>
+
+      <div class="pattern-ref">
+        <div class="pattern-ref-label">⚠️ Token gap</div>
+        <div class="pattern-ref-title">Amber / warning palette</div>
+        <div class="pattern-ref-desc">Only <code>--status-warning: #b54708</code> exists in index.html (not in tokens.css). Scarcity nudge needs amber + amber-tint. Proposed: add <code>--color-amber: #F59E0B</code> and <code>--color-amber-tint: #FEF3C7</code> to tokens.css.</div>
+      </div>
+
+      <div class="pattern-ref" style="border-color: var(--color-action-tint2);">
+        <div class="pattern-ref-label" style="color: var(--color-navy);">📐 Responsive note</div>
+        <div class="pattern-ref-title">Desktop layout</div>
+        <div class="pattern-ref-desc">On ≥768px, the coach panel (P3) moves to a fixed left sidebar, and the calendar + slots panels use a 2-column layout (calendar left, slots right) — the Calendly pattern. Mobile layout shown here is the primary design surface.</div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

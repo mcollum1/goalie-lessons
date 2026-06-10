@@ -34,6 +34,7 @@
   "tags": ["shuffle", "butterfly_slide", "t_push", "crease_movement", "lateral_movement", "recovery", "warmup", "rebound"],
   "variations": [],
   "clip_file": "drill-clips/shuffle-butterfly-slide-recover-t-push.mp4",
+  "progression_of": "shuffle-t-push-shot",
   "clip_loop": true,
   "has_animation": false,
   "coach_notes": "A progression from the tall shuffle t-push drill — same setup and finish, but now the goalie adds a butterfly slide and recovery in the middle of the sequence. The pivot into the slide must be sharp; a lazy pivot kills the slide angle. The recovery has to be complete before generating the t-push — goalies who try to push while still coming up off the ice lose power and depth. Run this after the simpler shuffle-t-push drill is clean."

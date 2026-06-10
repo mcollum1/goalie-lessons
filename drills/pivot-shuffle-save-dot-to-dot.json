@@ -1,0 +1,40 @@
+{
+  "id": "pivot-shuffle-save-dot-to-dot",
+  "name": "Pivot — Shuffle, Save, Dot to Dot",
+  "description": "F1 is positioned just above the hash marks in the middle of the ice with a stack of pucks. G starts at one face-off dot angle, pivots toward F1, and shuffles to the middle of the crease. F1 shoots; G makes the save and recovers to the opposite (blocker-side) face-off dot. G finds F1, pivots, shuffles back to the middle, makes the save on the far side, and rotates to that face-off dot. The pattern repeats continuously, shuttling back and forth between the two face-off dot angles with a save in the middle each rep. Good for all levels — reinforces pivoting, efficient shuffles to depth, and consistent save position from multiple angles.",
+  "drill_category": ["warmup", "crease_movement", "save_technique"],
+  "session_slot": "warmup",
+  "duration_minutes": 5,
+  "difficulty": "beginner",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 1,
+  "ice_zone": ["hash_marks", "top_of_circles"],
+  "goalie_starting_position": "Face-off dot angle, one side",
+  "movement_sequence": [
+    "start_at_faceoff_dot_angle",
+    "pivot_toward_F1",
+    "shuffle_to_middle_of_crease",
+    "save_shot",
+    "recover_to_opposite_faceoff_dot",
+    "pivot_toward_F1",
+    "shuffle_to_middle_of_crease",
+    "save_shot_far_side",
+    "rotate_to_far_side_faceoff_dot",
+    "repeat_continuously"
+  ],
+  "save_types": ["blocker_save", "glove_save", "pad_save"],
+  "coaching_cues": [
+    "Sharp pivot before the shuffle — don't start moving before you've turned",
+    "Shuffle to your depth — get all the way to the middle, don't stop short",
+    "Square up to F1 before the shot — hips and shoulders facing the puck",
+    "Recover clean to the dot before the next rep — don't cheat the reset"
+  ],
+  "tags": ["pivot", "shuffle", "blocker_save", "glove_save", "continuous", "warmup", "dot_to_dot", "crease_movement"],
+  "variations": [],
+  "own_content": false,
+  "clip_source_url": "instagram",
+  "clip_file": "drill-clips/pivot-shuffle-save-dot-to-dot.mov",
+  "clip_loop": true,
+  "has_animation": false
+}

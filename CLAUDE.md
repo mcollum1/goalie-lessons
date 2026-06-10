@@ -1,108 +1,111 @@
-# HockeyHub Goalie Coach App — CLAUDE.md
+# CLAUDE.md
 
-**Owner:** Coach Mitch (mitchcollum@gmail.com)  
-**Live URL:** https://goalie-coach.pages.dev (Cloudflare Pages)  
-**Repo:** `/Users/mmartins-collum/Documents/Claude/Projects/Goalie Lessons/`
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ---
 
-## Stack & Architecture
-
-- **Pure HTML/CSS/JS** — no framework, no build step, no bundler. Keep it that way until there's a real reason to change.
-- **`db.js`** — localStorage-backed data layer (`GoalieStore`, `SessionStore`, `PlanStore`, `DrillUsageStore`). The API is intentionally designed to swap to Supabase without changing call sites. Don't bypass it with raw `localStorage` calls.
-- **`drill_library.js`** — 45 drills as `window.DRILL_LIBRARY` array + `window.filterDrills(params)`. Each drill has `name`, `description`, `session_slot` (`warmup|skill_work|compete`), `difficulty_level`, `requires_goalie_partner`, `min_shooters`, `max_shooters`, `duration_minutes`, `focus_tags[]`, `coach_notes`, `clip`. Fields `own_content` (bool) and `clip_credit` (string) are planned but not yet added to schema.
-- **`sw.js`** — Service worker, cache version `hh-goalie-v2`.
-- **AI plan generation** — POST to `https://whawnvlctxrfzkyvivca.supabase.co/functions/v1/generate-plan` with `{ params, drills }`. `params` includes `goalie_notes` (injected from `GoalieStore`).
-- **Google Calendar** — OAuth 2.0 via Google Identity Services (GIS). Client ID: `329026777999-v4hljil36dfe58e3bvpsibdet15a4oa1.apps.googleusercontent.com`. Token cached in localStorage. OAuth flow lives in `index.html` ~line 3047–3580.
+**Owner:** Coach Mitch (mitchcollum@gmail.com)
+**Live URL:** https://goalie-coach.pages.dev (Cloudflare Pages — auto-deploys on push to `main`)
+**Product:** HockeyHub Goalie Coach — a PWA for an ice hockey goalie coach to plan and run on-ice sessions.
 
 ---
 
-## File Map
+## Commands
+
+```bash
+# Rebuild drill_library.js after editing any drills/*.json file
+node build_drill_library.js
+
+# Sync rink ice times to Google Calendar (runs automatically every Sunday via scheduled task)
+node fetch-ice-times.js
+
+# Deploy Supabase Edge Function
+supabase functions deploy generate-plan --project-ref whawnvlctxrfzkyvivca
+```
+
+There is no build step, bundler, or dev server for the frontend. Open HTML files directly in a browser or deploy to Cloudflare Pages. There are no tests.
+
+If you see `.git/index.lock` or `.git/HEAD.lock` errors: `rm -f .git/index.lock .git/HEAD.lock`
+
+---
+
+## Architecture
+
+**Pure HTML/CSS/JS — no framework, no build step.** Keep it that way.
+
+### Frontend pages
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Home — session cards, AI plan chat sheet, goalie profile sheet, Google Calendar auth |
-| `session.html` | On-ice drill runner — video, timer, swipe nav, completion screen |
+| `index.html` | Home — session cards from Google Calendar, AI plan chat sheet, goalie profile sheet |
 | `lesson_plan_preview_crease_positioning.html` | Lesson plan view/editor *(rename target: `plan.html`)* |
-| `db.js` | Data layer — GoalieStore, SessionStore, PlanStore, DrillUsageStore |
-| `drill_library.js` | Drill library — `window.DRILL_LIBRARY`, `window.filterDrills()` |
-| `sw.js` | Service worker |
-| `manifest.json` | PWA manifest |
-| `drill-review.html` | Admin drill review page |
-| `fetch-ice-times.js` | Cloudflare Worker for secondary calendar |
-| `drill-clips/` | Video clips folder |
+| `session.html` | On-ice drill runner — video, timer, swipe nav, completion screen |
+| `drill-review.html` | Admin drill review tool |
+| `admin.html` | Booking approval page (Google Calendar OAuth) |
+| `availability.html` | Coach availability configuration |
+| `profiles.html` | Goalie profiles list |
 
----
+### Key JS files
 
-## Key Globals & localStorage Patterns
+**`db.js`** — the entire client-side data layer. All reads/writes go through this; never touch `localStorage` directly from other files. Architecture is localStorage-first with fire-and-forget Supabase sync in the background:
+- Synchronous LS reads/writes preserve offline-first behavior
+- Every write fires `_syncWrite()` async to Supabase
+- Offline writes are enqueued in `hh_sync_queue` and flushed on next online write
+- On startup, `_syncDown()` pulls Supabase → LS (remote wins on `updated_at` conflict)
+- `_migrate()` is a one-time LS → Supabase migration, guarded by `hh_migrated` flag
+- Stores: `GoalieStore` (`hh_goalies`), `SessionStore` (`hh_sessions`), `PlanStore` (`hh_plans`), `DrillUsageStore` (`hh_drill_usage`)
+- `COACH_ID = 'coach_mitch'` scopes all Supabase rows (single-coach for now)
 
-```javascript
-// Data access (always use db.js, never raw localStorage)
-window.DB.GoalieStore.save({ id, name, notes, level, ... })
-window.DB.GoalieStore.getById(id)
-window.DB.GoalieStore.getAll()
+**`drill_library.js`** — auto-generated file, do not edit directly. Source of truth is `drills/*.json`. After editing any drill JSON, run `node build_drill_library.js` to regenerate. Exports `window.DRILL_LIBRARY` (array) and `window.filterDrills(params)`. Each drill has: `id`, `name`, `description`, `drill_category[]`, `session_slot` (`warmup|skill_work|compete`), `duration_minutes`, `difficulty`, `shooter_count_min/max`, `ice_zone[]`, `movement_sequence[]`, `save_types[]`, `coaching_cues[]`, `tags[]`, `clip`.
 
-// Sheet inter-script communication (IIFE scope isolation workaround)
-window._hhOpenSheet(context)           // open AI plan chat sheet
-window._hhOpenProfileSheet(name, id)   // open goalie profile sheet
-window._hhApplySavedPlanState(btn)     // toggle "View plan" vs "Build plan"
+**`sw.js`** — service worker, cache version `hh-goalie-v2`.
 
-// Plan flow keys (direct localStorage — outside db.js by design)
-localStorage.getItem('hh_pending_plan')          // plan JSON in transit to plan page
-localStorage.getItem('hh_rebuild_context')       // session context for rebuild flow
-localStorage.getItem('savedPlan_<goalie>')       // saved plan per goalie
-localStorage.getItem('hh_raw_notes_<goalieId>')  // raw note queue per goalie
+**`fetch-ice-times.js`** — Node.js script (not frontend). Reads Newington + Champions rink schedules from public Google Sheets CSV and syncs "Hockey Skills" slots into the Goalie Sessions Google Calendar for the next 14 days. Uses a service account (`service-account.json`). Remembers user-deleted events in `deleted-events.json` to avoid re-adding them.
+
+**`build_drill_library.js`** — Node.js script that reads all `drills/*.json` files, sorts by `id`, and writes `drill_library.js`.
+
+### Supabase Edge Function
+
+`supabase/functions/generate-plan/` — Deno edge function. Called via POST from `index.html` with `{ params, drills }`. `params` includes `goalie_notes` injected from `GoalieStore`. Uses `claude-sonnet-4-6` to generate a structured lesson plan.
+
+Supabase project: `https://whawnvlctxrfzkyvivca.supabase.co`
+
+### Cross-page data flow (plan lifecycle)
+
+The plan flow crosses page boundaries using `localStorage` keys that are intentionally outside `db.js`:
+
+```
+index.html (AI chat) 
+  → writes localStorage['hh_pending_plan'] = planJSON
+  → navigates to lesson_plan_preview_crease_positioning.html
+
+lesson_plan_preview_crease_positioning.html
+  → reads hh_pending_plan on load
+  → saves to PlanStore on "Save" / "Save & Start"
+  → writes localStorage['hh_rebuild_context'] + navigates back to index for rebuild
+
+session.html
+  → reads plan from PlanStore by goalieId
 ```
 
----
+Per-goalie persistence keys: `savedPlan_<goalieId>`, `hh_raw_notes_<goalieId>`.
 
-## Design Tokens
+### Inter-script communication
 
-CSS custom properties in `index.html` (should eventually move to shared `tokens.css`):
-- `--gc-navy: #1c3150`
-- `--hh-primary: #2563eb`
-- Phase color variables per drill type (`--phase-warmup`, `--phase-skill`, `--phase-compete`)
+`index.html` uses multiple IIFEs for scope isolation. Cross-IIFE calls use globals:
+- `window._hhOpenSheet(context)` — open AI plan chat sheet
+- `window._hhOpenProfileSheet(name, id)` — open goalie profile sheet
+- `window._hhApplySavedPlanState(btn)` — toggle "View plan" vs "Build plan" button
 
----
+### Google Calendar (frontend)
 
-## Open Priorities
+OAuth 2.0 via Google Identity Services (GIS). Client ID: `329026777999-v4hljil36dfe58e3bvpsibdet15a4oa1.apps.googleusercontent.com`. Token cached in `localStorage`. OAuth flow lives in `index.html` ~line 3047–3580. Calendar ID for goalie sessions: `721f102eadb73ee43a9d593c80643347c806fccf57b0def9604515a8b2a73a7b@group.calendar.google.com`.
 
-### 1 — Google OAuth Error (UNRESOLVED — manual fix needed)
-**Error:** `Error 400: invalid_request` on live deployment.  
-**Cause:** `https://goalie-coach.pages.dev` not in the OAuth client's Authorized JavaScript Origins.  
-**Fix:** Google Cloud Console → APIs & Services → Credentials → "Coach Mitch" OAuth 2.0 Client → add `https://goalie-coach.pages.dev` to Authorized JavaScript Origins. Also add any Cloudflare preview URLs. Takes ~5 min to propagate.  
-**Also check:** OAuth consent screen — app must be in "Production" mode, or mitchcollum@gmail.com listed as test user.
+**Known issue:** `Error 400: invalid_request` on live deployment — `https://goalie-coach.pages.dev` must be added to Authorized JavaScript Origins in Google Cloud Console → APIs & Services → Credentials → "Coach Mitch" OAuth client. Also verify app is in Production mode (or mitchcollum@gmail.com is a test user).
 
-### 2 — Expand Drill Library
-Add to `drill_library.js` (full library sent to edge function on every plan build):
-- Powerslide circuit drills (tall upper body, full hip rotation)
-- Pivot-to-powerslide chains
-- Glove tracking / hand save drills
-- More compete formats
+### Design tokens
 
-### 3 — Own Content Tagging
-Add to drill schema in `drill_library.js`:
-```javascript
-own_content:     boolean,  // true = filmed by Coach Mitch, monetizable
-clip_credit:     string,   // e.g. "HockeyShare" when own_content: false
-clip_source_url: string,   // original URL for audit trail
-```
-UI: small "CM" badge on drill cards in plan page + session page for own content. Content status dashboard in `drill-review.html`.
-
-### 4 — Calendar Sync (Post-Revenue)
-Allow coaches/parents to sync session schedules to external calendars. Defer until the app generates revenue — implement only with free-tier or zero-cost options.
-
-- **Google Calendar** — already partially wired (OAuth in `index.html`). Extend to let users subscribe to their goalie's schedule. Free via Google Calendar API.
-- **Apple Calendar / iCal** — serve a static `.ics` feed (no auth required, zero cost). One URL per coach or per goalie that any calendar app can subscribe to.
-- **Outlook / Microsoft 365** — `.ics` subscription works here too; no additional cost.
-- **Constraint:** do not add any paid third-party scheduling service (Calendly, Cronofy, etc.) until revenue justifies it. `.ics` feed covers 90% of the use case for free.
-
-### 5 — Pre-commercial Architecture
-- **Rename** `lesson_plan_preview_crease_positioning.html` → `plan.html`
-- **Extract** shared CSS to `tokens.css` + `styles.css` (currently inline per file)
-- **Multi-tenant auth:** Supabase RLS per `coach_id` when scaling beyond single coach
-- **Data migration:** localStorage → Supabase tables (`goalies`, `sessions`, `plans`, `drill_usage`, `coach_notes`)
-- **Clip serving:** `drill-clips/*.mp4` → Cloudflare R2 or Supabase Storage with signed URLs
+`tokens.css` — shared CSS custom properties. Key values: `--gc-navy: #1c3150`, `--hh-primary: #2563eb`, plus phase color variables (`--phase-warmup`, `--phase-skill`, `--phase-compete`). Some pages still have inline tokens — the intent is to consolidate everything into `tokens.css`.
 
 ---
 
@@ -110,26 +113,20 @@ Allow coaches/parents to sync session schedules to external calendars. Defer unt
 
 Jake Reynolds, Mason K., Lily P., Aiden Torres, Eli M., Sam C., Fischer Rogers (Pomfret)
 
-**Fischer Rogers coaching notes** — paste in browser DevTools if not already saved:
-```javascript
-(function() {
-  const all = JSON.parse(localStorage.getItem('hh_goalies') || '[]');
-  const idx = all.findIndex(g => g.name && g.name.toLowerCase().includes('fischer'));
-  if (idx < 0) { console.warn('Fischer not found:', all.map(g=>g.name)); return; }
-  all[idx].notes = `PRIORITY — Glove hand: snapping DOWN after the save instead of tracking straight to the puck. Hand needs to hold its line through contact and stay on the puck path, not collapse. This is the #1 thing.\n\nPOWERSLIDE mechanics (multiple issues):\n- Not completing full hip rotation before initiating the push — rotation must finish first\n- Back leg too slow coming through; needs to be sharper and more decisive\n- Oversliding and flattening out at the end — losing butterfly base at finish\n- Loading too low: butt dropping, which collapses the upper body forward\n- Fix: keep upper body tall through the load; drive the pivot up and out, not down across\n\nDRILL FOCUS (next session):\n- Powerslide circuit — tall upper body through load, full rotation before push\n- Pivot-to-powerslide chain — clean up rotation timing into the push\n- Warmup tracking drill — cue "straight line to the puck" on every glove save\n\nWARMUP NOTE: Watch hands immediately after each save. Reset cue: "straight line."`;
-  all[idx].updated_at = new Date().toISOString();
-  localStorage.setItem('hh_goalies', JSON.stringify(all));
-  console.log('✓ Notes saved for', all[idx].name);
-})();
-```
+---
+
+## Stripe Integration (Active)
+
+HockeyHub is being built as a SaaS. Business model: **$29/mo Solo Coach · $79/mo School · 3% platform fee on all Stripe-processed payments.** Stripe Connect is the payment architecture (coaches get paid, HockeyHub takes application fee). See `ROADMAP.md` for full feature backlog.
 
 ---
 
-## Git Notes
+## Open Priorities (summary)
 
-If you see `.git/index.lock` or `.git/HEAD.lock` errors, remove them:
-```bash
-rm -f .git/index.lock .git/HEAD.lock
-```
+1. **Google OAuth fix** — add live domain to GCP OAuth client (manual, 5 min)
+2. **Schedule integration** — wire Google Calendar events into home screen as real lesson cards
+3. **Stripe Connect onboarding** — coach payment setup flow
+4. **Booking page** — public-facing client booking UI (see `booking-calendar-mockup.html` for mockup)
+5. **Drill schema additions** — `own_content` (bool), `clip_credit` (string), `clip_source_url` (string) in `drills/*.json`
 
-The app deploys automatically to Cloudflare Pages on push to `main`.
+Full detail in `ROADMAP.md`.

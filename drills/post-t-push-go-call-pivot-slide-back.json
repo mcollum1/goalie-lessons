@@ -1,0 +1,39 @@
+{
+  "id": "post-t-push-go-call-pivot-slide-back",
+  "name": "Post T-Push — Go Call, Pivot, Slide Back",
+  "description": "F1 is positioned just inside the top of the circle on the near side with a stack of pucks. G starts on the near-side post, t-pushes out to the far-side face-off dot, and holds. F1 yells go; G pivots, butterfly slides back toward the net, and makes the save with hands leading. G resets to the near-side post and repeats. Good for all levels — reinforces the full push-out and explosive reaction back on the go call.",
+  "drill_category": ["warmup", "crease_movement", "save_technique"],
+  "session_slot": "warmup",
+  "duration_minutes": 5,
+  "difficulty": "beginner",
+  "shooter_count_min": 1,
+  "shooter_count_max": 1,
+  "shot_count": 1,
+  "ice_zone": ["hash_marks", "top_of_circles"],
+  "goalie_starting_position": "Near-side post",
+  "movement_sequence": [
+    "start_near_side_post",
+    "t_push_to_far_faceoff_dot",
+    "hold_at_depth",
+    "react_to_go_call",
+    "pivot",
+    "butterfly_slide_back_toward_net",
+    "save_shot_hands_leading",
+    "reset_to_near_side_post"
+  ],
+  "save_types": ["pad_save", "blocker_save", "glove_save"],
+  "coaching_cues": [
+    "Full t-push to the far dot — commit to depth before stopping",
+    "React on the go call — don't anticipate, wait for the cue",
+    "Sharp pivot before the slide — don't start sliding before you've turned",
+    "Hands lead back toward the puck — don't let the hands drag behind the slide",
+    "Reset clean to the post before the next rep"
+  ],
+  "tags": ["t_push", "pivot", "butterfly_slide", "lateral_release", "go_call", "hands", "warmup", "crease_movement"],
+  "variations": [],
+  "own_content": false,
+  "clip_source_url": "https://www.youtube.com/watch?v=oGSxVRM126M",
+  "clip_file": "drill-clips/post-t-push-go-call-pivot-slide-back.mp4",
+  "clip_loop": true,
+  "has_animation": false
+}

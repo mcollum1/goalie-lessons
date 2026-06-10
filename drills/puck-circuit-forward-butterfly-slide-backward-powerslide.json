@@ -1,0 +1,36 @@
+{
+  "id": "puck-circuit-forward-butterfly-slide-backward-powerslide",
+  "name": "Puck Circuit — Forward Butterfly Slide, Backward Powerslide",
+  "description": "Three pucks arranged in a line or arc. G starts at P3, butterfly slides forward around P2, powerslides to P3 and stops on the edge, powerslides backward around P1, then t-pushes back to P3.",
+  "drill_category": ["skating", "crease_movement"],
+  "session_slot": "warmup",
+  "duration_minutes": 8,
+  "difficulty": "intermediate",
+  "shooter_count_min": 0,
+  "shooter_count_max": 0,
+  "shot_count": 0,
+  "ice_zone": ["in_tight", "hash_marks"],
+  "setup_required": "puck_setup",
+  "goalie_starting_position": "P3",
+  "movement_sequence": [
+    "start_at_P3",
+    "butterfly_slide_forward_around_P2",
+    "powerslide_to_P3_stop_on_edge",
+    "powerslide_backward_around_P1",
+    "t_push_to_P3"
+  ],
+  "save_types": [],
+  "coaching_cues": [
+    "Forward butterfly slide: lead with the pad, stay low and controlled around P2",
+    "Edge stop on the powerslide to P3 — absorb the stop cleanly, don't overshoot",
+    "Backward powerslide around P1: stay on a tight arc, control the glide",
+    "Drive through the hips on the t-push back to P3 — generate power, don't just step"
+  ],
+  "tags": ["butterfly_slide", "powerslide", "backward_powerslide", "edge_stop", "t_push", "crease_movement", "puck_circuit"],
+  "variations": [],
+  "own_content": false,
+  "clip_source_url": "https://www.youtube.com/watch?v=oGSxVRM126M",
+  "clip_file": "drill-clips/puck-circuit-forward-butterfly-slide-backward-powerslide.mp4",
+  "clip_loop": true,
+  "has_animation": false
+}

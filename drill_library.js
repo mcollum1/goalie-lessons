@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════════
    drill_library.js — Goalie Coach App · Drill Library Bundle
-   Auto-generated from drills/*.json (46 drills)
+   Auto-generated from drills/*.json (52 drills)
    Run: node build_drill_library.js
 
    Exports: window.DRILL_LIBRARY (array) + window.filterDrills(params)
@@ -72,6 +72,7 @@
       ],
       "variations": [],
       "clip_file": "drill-clips/backdoor-one-timer-wrap-around.mp4",
+      "progression_of": "pass-slot-shot-rvh-bump-out",
       "clip_loop": true,
       "has_animation": false,
       "coach_notes": "A natural progression from the pass-slot-shot-rvh-bump-out drill — same pivot demand on shot 1, but the second rep is a wrap-around instead of a bump-out pass. The backdoor pivot is the same habit: eyes and hands arrive before the puck. On the wrap-around, patience on the post is key — the goalie needs to track F2 around the net and wait for the commitment to a side before moving. Goalies who guess early on the wrap get beaten to the short side. Run this after the RVH bump-out drill is clean."
@@ -134,6 +135,7 @@
       ],
       "variations": [],
       "clip_file": "drill-clips/backdoor-pass-loop-walk-in.mp4",
+      "progression_of": "backdoor-one-timer-wrap-around",
       "clip_loop": false,
       "has_animation": false,
       "coach_notes": "The hand read on shot 1 is the same habit as the backdoor one-timer wrap-around drill — G needs to identify F2's hand before the pass arrives to know which side to push. Shot 2 is the key progression: the goalie has to actively gain ice as F2 loops around the circle rather than sitting back and waiting. A goalie who stays deep gives F2 too much net on the walk-in. Rebound control on shot 2 is emphasized because F1 is still active and can convert a loose puck."
@@ -824,6 +826,77 @@
       "clip_loop": true,
       "has_animation": false,
       "coach_notes": "This drill chains two distinct goalie challenges: tracking a shooter through a wide arc, then immediately transitioning to a net-front read with a pass option. Common error is the goalie over-committing to the first save and losing their feet, leaving no time to reset for the net drive. Watch for goalies who collapse to the ice on puck 1 — they need to stay alive and mobile. The pass option to F1 cutting is a late read, so goalies should default to protecting short side and reacting to F1 if the pass comes."
+    },
+    {
+      "id": "corner-pass-circle-shot-loop-backdoor-read",
+      "name": "Corner Pass — Circle Shot, F1 Loop, Backdoor Read",
+      "description": "F1 starts in the corner just above the goal line on the near side. F2 is at the top near-side edge of the circle above the hash marks. F1 passes to F2; G reads the pass and pushes out to challenge F2 at the circle. F2 shoots and G makes the save, controlling the rebound. G recovers back to the near-side post. F1 then loops up and around the face-off dot with a second puck and reads: either shoot from the dot or pass backdoor to F2 for a one-timer. G tracks F1 coming around the dot, gains backward momentum, and reads the decision. If F1 passes backdoor, G pivots and pushes on the correct angle toward F2 — not straight across the crease — leading with the hands to reach the backdoor shot. Play out the rebound on the second shot.",
+      "drill_category": [
+        "crease_movement",
+        "positioning_angles",
+        "tracking_vision",
+        "save_technique"
+      ],
+      "session_slot": "skill_work",
+      "duration_minutes": 10,
+      "difficulty": "intermediate",
+      "shooter_count_min": 2,
+      "shooter_count_max": 2,
+      "shot_count": 2,
+      "ice_zone": [
+        "in_tight",
+        "hash_marks",
+        "top_of_circles",
+        "behind_net"
+      ],
+      "goalie_starting_position": "Crease, set to F1 angle in near-side corner",
+      "movement_sequence": [
+        "set_to_F1_angle_in_corner",
+        "track_pass_from_F1_to_F2",
+        "push_out_to_F2_angle_at_circle",
+        "save_F2_shot",
+        "control_rebound",
+        "recover_to_near_side_post",
+        "track_F1_looping_around_dot",
+        "gain_backward_momentum",
+        "read_F1_shoot_or_pass_backdoor",
+        "if_shoot_challenge_and_save",
+        "if_pass_backdoor_pivot_and_push_on_angle_to_F2",
+        "save_backdoor_shot",
+        "play_rebound"
+      ],
+      "save_types": [
+        "pad_save",
+        "blocker_save",
+        "glove_save",
+        "butterfly_slide"
+      ],
+      "coaching_cues": [
+        "Gain depth on shot 1 — hands out, project toward F2 at the circle",
+        "Dead rebound on shot 1 — control it before moving back to post",
+        "Recover to the near-side post clean before F1 commits to shoot or pass",
+        "Track F1 looping around the dot — gain backward momentum, don't freeze at the post",
+        "Pivot and push on the correct angle toward the backdoor — not straight across or you can't get there",
+        "Lead with the hands on the backdoor slide — hands over the puck",
+        "Play out the rebound on shot 2"
+      ],
+      "tags": [
+        "t_push",
+        "butterfly_slide",
+        "post_play",
+        "backdoor",
+        "tracking_vision",
+        "rebound",
+        "pass_and_shoot",
+        "two_shot",
+        "crease_movement",
+        "pivot",
+        "lateral_release"
+      ],
+      "variations": [],
+      "clip_file": "drill-clips/corner-pass-circle-shot-loop-backdoor-read.mp4",
+      "clip_loop": true,
+      "has_animation": false
     },
     {
       "id": "cross-circle-rim-walk-out-screen",
@@ -1656,6 +1729,66 @@
       "coach_notes": "Hands should be attacking — out and over the puck, not passive. On a glove-to-blocker side slide, paddle down is a good variation to work in."
     },
     {
+      "id": "pivot-shuffle-save-dot-to-dot",
+      "name": "Pivot — Shuffle, Save, Dot to Dot",
+      "description": "F1 is positioned just above the hash marks in the middle of the ice with a stack of pucks. G starts at one face-off dot angle, pivots toward F1, and shuffles to the middle of the crease. F1 shoots; G makes the save and recovers to the opposite (blocker-side) face-off dot. G finds F1, pivots, shuffles back to the middle, makes the save on the far side, and rotates to that face-off dot. The pattern repeats continuously, shuttling back and forth between the two face-off dot angles with a save in the middle each rep. Good for all levels — reinforces pivoting, efficient shuffles to depth, and consistent save position from multiple angles.",
+      "drill_category": [
+        "warmup",
+        "crease_movement",
+        "save_technique"
+      ],
+      "session_slot": "warmup",
+      "duration_minutes": 5,
+      "difficulty": "beginner",
+      "shooter_count_min": 1,
+      "shooter_count_max": 1,
+      "shot_count": 1,
+      "ice_zone": [
+        "hash_marks",
+        "top_of_circles"
+      ],
+      "goalie_starting_position": "Face-off dot angle, one side",
+      "movement_sequence": [
+        "start_at_faceoff_dot_angle",
+        "pivot_toward_F1",
+        "shuffle_to_middle_of_crease",
+        "save_shot",
+        "recover_to_opposite_faceoff_dot",
+        "pivot_toward_F1",
+        "shuffle_to_middle_of_crease",
+        "save_shot_far_side",
+        "rotate_to_far_side_faceoff_dot",
+        "repeat_continuously"
+      ],
+      "save_types": [
+        "blocker_save",
+        "glove_save",
+        "pad_save"
+      ],
+      "coaching_cues": [
+        "Sharp pivot before the shuffle — don't start moving before you've turned",
+        "Shuffle to your depth — get all the way to the middle, don't stop short",
+        "Square up to F1 before the shot — hips and shoulders facing the puck",
+        "Recover clean to the dot before the next rep — don't cheat the reset"
+      ],
+      "tags": [
+        "pivot",
+        "shuffle",
+        "blocker_save",
+        "glove_save",
+        "continuous",
+        "warmup",
+        "dot_to_dot",
+        "crease_movement"
+      ],
+      "variations": [],
+      "own_content": false,
+      "clip_source_url": "instagram",
+      "clip_file": "drill-clips/pivot-shuffle-save-dot-to-dot.mov",
+      "clip_loop": true,
+      "has_animation": false
+    },
+    {
       "id": "post-entry-exit-rvh-powerslide",
       "name": "Post Entry & Exit — RVH to Powerslide",
       "description": "G starts at the top center of the crease and shuffles toward the post as if tracking a player coming down. Comes into the post and sets RVH. Bumps off the RVH out to center landing in butterfly. Pivots and powerslides to the opposite post. Recovers to feet and t-pushes back to center. Repeat. Trains post entry and exit, RVH positioning, butterfly pivoting, and powerslide generation.",
@@ -1765,6 +1898,65 @@
       "clip_loop": true,
       "has_animation": false,
       "coach_notes": "The 30 degree angle is critical — a goalie flat on the goal line has to take extra steps to pivot and challenge a shooter coming out from behind the net. The angle keeps them primed to push. The window check is the other key habit; goalies need to track the puck carrier continuously when play goes behind the net."
+    },
+    {
+      "id": "post-t-push-go-call-pivot-slide-back",
+      "name": "Post T-Push — Go Call, Pivot, Slide Back",
+      "description": "F1 is positioned just inside the top of the circle on the near side with a stack of pucks. G starts on the near-side post, t-pushes out to the far-side face-off dot, and holds. F1 yells go; G pivots, butterfly slides back toward the net, and makes the save with hands leading. G resets to the near-side post and repeats. Good for all levels — reinforces the full push-out and explosive reaction back on the go call.",
+      "drill_category": [
+        "warmup",
+        "crease_movement",
+        "save_technique"
+      ],
+      "session_slot": "warmup",
+      "duration_minutes": 5,
+      "difficulty": "beginner",
+      "shooter_count_min": 1,
+      "shooter_count_max": 1,
+      "shot_count": 1,
+      "ice_zone": [
+        "hash_marks",
+        "top_of_circles"
+      ],
+      "goalie_starting_position": "Near-side post",
+      "movement_sequence": [
+        "start_near_side_post",
+        "t_push_to_far_faceoff_dot",
+        "hold_at_depth",
+        "react_to_go_call",
+        "pivot",
+        "butterfly_slide_back_toward_net",
+        "save_shot_hands_leading",
+        "reset_to_near_side_post"
+      ],
+      "save_types": [
+        "pad_save",
+        "blocker_save",
+        "glove_save"
+      ],
+      "coaching_cues": [
+        "Full t-push to the far dot — commit to depth before stopping",
+        "React on the go call — don't anticipate, wait for the cue",
+        "Sharp pivot before the slide — don't start sliding before you've turned",
+        "Hands lead back toward the puck — don't let the hands drag behind the slide",
+        "Reset clean to the post before the next rep"
+      ],
+      "tags": [
+        "t_push",
+        "pivot",
+        "butterfly_slide",
+        "lateral_release",
+        "go_call",
+        "hands",
+        "warmup",
+        "crease_movement"
+      ],
+      "variations": [],
+      "own_content": false,
+      "clip_source_url": "https://www.youtube.com/watch?v=oGSxVRM126M",
+      "clip_file": "drill-clips/post-t-push-go-call-pivot-slide-back.mp4",
+      "clip_loop": true,
+      "has_animation": false
     },
     {
       "id": "puck-circuit-arc-back-cut-pivot",
@@ -1910,6 +2102,60 @@
       "clip_loop": true,
       "has_animation": false,
       "coach_notes": "Four pucks evenly spaced on the crease arc. Shorter and cleaner than the other arc circuits — good for earlier in a session or as a warm-up circuit before progressing to the back-cut or forward-cut versions. The two t-pushes should both be full-extension explosions, not lazy glides. The butterfly slide to P4 is the transition between them and should be controlled and low. Run multiple reps and switch directions."
+    },
+    {
+      "id": "puck-circuit-backward-butterfly-slide-lead-edge-powerslide",
+      "name": "Puck Circuit — Backward Butterfly Slide, Lead Edge Powerslide",
+      "description": "Four pucks arranged in the shape of a crease. G starts at P4, shuffles to P3, shuffles to P2, t-pushes back to P4, performs a backward butterfly slide around P1, powerslides to P2 stopping on the lead skate edge, then rotates into a t-push back to P4.",
+      "drill_category": [
+        "skating",
+        "crease_movement"
+      ],
+      "session_slot": "warmup",
+      "duration_minutes": 8,
+      "difficulty": "intermediate",
+      "shooter_count_min": 0,
+      "shooter_count_max": 0,
+      "shot_count": 0,
+      "ice_zone": [
+        "in_tight",
+        "hash_marks"
+      ],
+      "setup_required": "puck_setup",
+      "goalie_starting_position": "P4 — near-side crease position",
+      "movement_sequence": [
+        "start_at_P4",
+        "shuffle_to_P3",
+        "shuffle_to_P2",
+        "t_push_to_P4",
+        "backward_butterfly_slide_around_P1",
+        "powerslide_to_P2_stop_on_lead_skate_edge",
+        "rotate_t_push_to_P4"
+      ],
+      "save_types": [],
+      "coaching_cues": [
+        "Stay tall and crisp through the shuffles — no slouching between pucks",
+        "Sharp pivot before the t-push — generate power from the hip",
+        "Backward butterfly slide: lead with the pad, stay controlled, go around the puck cleanly",
+        "Lead skate edge stop on the powerslide — absorb the stop, don't overshoot the puck",
+        "Rotate through the hips into the final t-push — don't just step, generate power"
+      ],
+      "tags": [
+        "shuffle",
+        "t_push",
+        "backward_butterfly_slide",
+        "powerslide",
+        "lead_edge_stop",
+        "rotate",
+        "crease_movement",
+        "puck_circuit"
+      ],
+      "variations": [],
+      "own_content": false,
+      "clip_source_url": "https://www.youtube.com/watch?v=oGSxVRM126M",
+      "clip_file": "drill-clips/puck-circuit-backward-butterfly-slide-lead-edge-powerslide.mp4",
+      "clip_loop": true,
+      "has_animation": false
     },
     {
       "id": "puck-circuit-butterfly-powerslide",
@@ -2070,6 +2316,56 @@
       "clip_loop": true,
       "has_animation": false,
       "coach_notes": "Five pucks placed at key outline points of the crease shape — goalie uses the puck positions to train precise edge control and clean movement transitions around the crease footprint. The butterfly cuts around P5 and P1 are the technical focal points: the puck acts as a pivot marker and the cut must be tight. The two back-to-back powerslides (P1→P4→P3) are the most physically demanding sequence and where form tends to break down first. Run multiple reps and switch directions."
+    },
+    {
+      "id": "puck-circuit-forward-butterfly-slide-backward-powerslide",
+      "name": "Puck Circuit — Forward Butterfly Slide, Backward Powerslide",
+      "description": "Three pucks arranged in a line or arc. G starts at P3, butterfly slides forward around P2, powerslides to P3 and stops on the edge, powerslides backward around P1, then t-pushes back to P3.",
+      "drill_category": [
+        "skating",
+        "crease_movement"
+      ],
+      "session_slot": "warmup",
+      "duration_minutes": 8,
+      "difficulty": "intermediate",
+      "shooter_count_min": 0,
+      "shooter_count_max": 0,
+      "shot_count": 0,
+      "ice_zone": [
+        "in_tight",
+        "hash_marks"
+      ],
+      "setup_required": "puck_setup",
+      "goalie_starting_position": "P3",
+      "movement_sequence": [
+        "start_at_P3",
+        "butterfly_slide_forward_around_P2",
+        "powerslide_to_P3_stop_on_edge",
+        "powerslide_backward_around_P1",
+        "t_push_to_P3"
+      ],
+      "save_types": [],
+      "coaching_cues": [
+        "Forward butterfly slide: lead with the pad, stay low and controlled around P2",
+        "Edge stop on the powerslide to P3 — absorb the stop cleanly, don't overshoot",
+        "Backward powerslide around P1: stay on a tight arc, control the glide",
+        "Drive through the hips on the t-push back to P3 — generate power, don't just step"
+      ],
+      "tags": [
+        "butterfly_slide",
+        "powerslide",
+        "backward_powerslide",
+        "edge_stop",
+        "t_push",
+        "crease_movement",
+        "puck_circuit"
+      ],
+      "variations": [],
+      "own_content": false,
+      "clip_source_url": "https://www.youtube.com/watch?v=oGSxVRM126M",
+      "clip_file": "drill-clips/puck-circuit-forward-butterfly-slide-backward-powerslide.mp4",
+      "clip_loop": true,
+      "has_animation": false
     },
     {
       "id": "puck-circuit-four-point-arc",
@@ -2509,6 +2805,78 @@
       "coach_notes": "The screen is the constant — the goalie must find the release rather than watch traffic in front. On shot 2, the tip is predictable since F1 is already planted at the net; cue the goalie to locate F1's stick early and hold position until release. Shot 3 is the decision rep: the goalie reads F2's hand (lefty/righty) and drive direction to choose the right movement — push to challenge vs. slide if F2 is going cross-crease."
     },
     {
+      "id": "shuffle-butterfly-slide-backdoor-recover-loop-shot",
+      "name": "Shuffle — Butterfly Slide, Backdoor Recovery, F2 Loop Shot",
+      "description": "F1 is at the inside arc of the circle between the hash marks and the top of the circle on the near side, with pucks. F2 starts backdoor on the far side. G starts in the middle of the crease, takes two shuffles toward F2, then butterfly slides to F1's angle. F1 immediately passes backdoor to F2; G recovers from the F1 slide and butterfly slides backdoor to make the save, projecting hands out and over the puck. After shot 1, F2 peels off and loops down around the bottom half of the circle, coming up above the face-off dot. F1 makes a pocket cross pass to F2; G challenges F2 collecting the pass and makes the save. Play out the rebound on shot 2.",
+      "drill_category": [
+        "crease_movement",
+        "save_technique",
+        "tracking_vision"
+      ],
+      "session_slot": "skill_work",
+      "duration_minutes": 10,
+      "difficulty": "intermediate",
+      "shooter_count_min": 2,
+      "shooter_count_max": 2,
+      "shot_count": 2,
+      "ice_zone": [
+        "hash_marks",
+        "top_of_circles",
+        "in_tight",
+        "behind_net"
+      ],
+      "goalie_starting_position": "Middle of crease",
+      "movement_sequence": [
+        "start_middle_of_crease",
+        "two_shuffles_toward_F2",
+        "butterfly_slide_to_F1_angle",
+        "recover_from_slide_immediately",
+        "butterfly_slide_backdoor_to_F2_hands_leading",
+        "save_F2_backdoor_shot",
+        "track_F2_peeling_off_and_looping",
+        "read_F1_pocket_cross_pass_to_F2",
+        "challenge_F2_above_faceoff_dot",
+        "save_F2_shot",
+        "play_rebound"
+      ],
+      "save_types": [
+        "butterfly_slide",
+        "pad_save",
+        "blocker_save",
+        "glove_save"
+      ],
+      "coaching_cues": [
+        "Two shuffles toward F2 — stay low and controlled, don't drift",
+        "Commit to the butterfly slide to F1's angle — don't half-slide",
+        "Recover immediately after the F1 slide — the pass backdoor is already happening",
+        "Hands out and over the puck on the backdoor slide — hands lead, don't trail",
+        "Project hands on the backdoor save — cover the puck, not just the body",
+        "Track F2 peeling off after shot 1 — read the loop before it develops",
+        "Challenge F2 on the cross pass — get to your angle before F2 collects",
+        "Play the rebound all the way out on shot 2"
+      ],
+      "tags": [
+        "shuffle",
+        "butterfly_slide",
+        "backdoor",
+        "lateral_release",
+        "hands",
+        "recovery",
+        "two_shot",
+        "crease_movement",
+        "tracking_vision",
+        "pass_and_shoot",
+        "loop"
+      ],
+      "variations": [],
+      "progression_of": "post-t-push-go-call-pivot-slide-back",
+      "own_content": false,
+      "clip_source_url": "https://www.youtube.com/watch?v=oGSxVRM126M",
+      "clip_file": "drill-clips/shuffle-butterfly-slide-backdoor-recover-loop-shot.mp4",
+      "clip_loop": true,
+      "has_animation": false
+    },
+    {
       "id": "shuffle-butterfly-slide-recover-t-push",
       "name": "Shuffle — Butterfly Slide, Recover, T-Push",
       "description": "F1 is positioned just inside the top of the circle above the hash marks on one side. G starts at the top center of the crease, takes 2 shuffles toward F1, pivots and butterfly slides to the far face-off dot angle, then pivots, recovers to feet, and t-pushes back out to F1 for a shot. G follows and plays out the rebound. Links shuffle movement, a butterfly slide, and recovery into a single fluid sequence before challenging the shooter.",
@@ -2564,6 +2932,7 @@
       ],
       "variations": [],
       "clip_file": "drill-clips/shuffle-butterfly-slide-recover-t-push.mp4",
+      "progression_of": "shuffle-t-push-shot",
       "clip_loop": true,
       "has_animation": false,
       "coach_notes": "A progression from the tall shuffle t-push drill — same setup and finish, but now the goalie adds a butterfly slide and recovery in the middle of the sequence. The pivot into the slide must be sharp; a lazy pivot kills the slide angle. The recovery has to be complete before generating the t-push — goalies who try to push while still coming up off the ice lose power and depth. Run this after the simpler shuffle-t-push drill is clean."
