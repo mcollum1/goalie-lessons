@@ -28,7 +28,7 @@ const SERVICE_ACCOUNT_FILE  = path.join(__dirname, 'service-account.json');
 const MANAGED_EVENTS_FILE   = path.join(__dirname, 'managed-events.json');
 const DELETED_EVENTS_FILE   = path.join(__dirname, 'deleted-events.json');
 
-const DAYS_AHEAD = 14;
+const DAYS_AHEAD = 40;
 
 const RINKS = [
   {
@@ -169,8 +169,8 @@ function isWeekend(date) {
   return d === 0 || d === 6;
 }
 
-function isAfter230PM(date) {
-  return date.getHours() > 14 || (date.getHours() === 14 && date.getMinutes() >= 30);
+function isAfter1PM(date) {
+  return date.getHours() >= 13;
 }
 
 function isMorning(date) {
@@ -273,8 +273,8 @@ async function main() {
       const [startDt, endDt] = parseTimes(date, row['Time'] || '');
       if (!startDt || !endDt) continue;
 
-      // Time filter: weekdays must be a morning slot (before noon) or ≥ 2:30 PM; weekends any time
-      if (!isWeekend(startDt) && !isMorning(startDt) && !isAfter230PM(startDt)) continue;
+      // Time filter: weekdays must be a morning slot (before noon) or ≥ 1:00 PM; weekends any time
+      if (!isWeekend(startDt) && !isMorning(startDt) && !isAfter1PM(startDt)) continue;
 
       const space = (row['Space'] || rink.name)
         .replace(/\s*-\s*Champions Skating Center/i, '')
