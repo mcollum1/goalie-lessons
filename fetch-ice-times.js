@@ -2,9 +2,9 @@
 /**
  * fetch-ice-times.js
  *
- * Reads Newington + Champions rink schedules (public Google Sheets CSV)
- * and syncs Hockey Skills slots into your Goalie Sessions Google Calendar
- * for the next 14 days.
+ * Reads Newington (Bond Sports monthly calendar page) + Champions (public
+ * Google Sheets CSV) rink schedules and syncs Hockey Skills slots into your
+ * Goalie Sessions Google Calendar for the next DAYS_AHEAD days.
  *
  * Deletion memory: if you delete an event from your calendar, the script
  * remembers and will never re-add it. Deletions are stored in deleted-events.json.
@@ -33,13 +33,17 @@ const DAYS_AHEAD = 40;
 const RINKS = [
   {
     name: 'Newington',
-    csvUrl:
-      'https://docs.google.com/spreadsheets/d/e/2PACX-1vS3zMYwJDv0UuIXq2I4JVF0pZ7ubVEWFPQ1bcqGZqJxrIoDUNySomT3h3paJMmVe-7VYv6H08lfJXIX/pub?output=csv&gid=433713822',
+    source: 'bondsports',
+    // Bond Sports monthly calendar view. Server-renders the full current month
+    // as embedded JSON (unlike the old public Google Sheet CSV export, which
+    // only ever exposed a rolling ~1-week window).
+    url: 'https://schedule.bondsports.co/schedule/Newington-Arena-Schedule?layout=calendar&view=monthly&session=Hockey+Skills',
     keyword: 'Hockey Skills',
     colorId: '7', // Peacock (teal)
   },
   {
     name: 'Champions',
+    source: 'csv',
     csvUrl:
       'https://docs.google.com/spreadsheets/d/e/2PACX-1vTxNJGMpP8MzswDYp5aCteUncCXWF_1fE-dShXZF0d6tgPHZnTRyQNgHOlAG5rSHnUBXFYaeD1DoTAV/pub?output=csv&gid=433713822',
     keyword: 'Open Hockey Skills',
@@ -120,6 +124,43 @@ function parseCsv(text) {
       headers.forEach((h, i) => (row[h.trim()] = (vals[i] || '').trim()));
       return row;
     });
+}
+
+// ─── Bond Sports calendar page helpers ─────────────────────────────────────
+
+/**
+ * The Bond Sports monthly calendar page is a Next.js app that server-renders
+ * the full schedule as JSON embedded in the initial HTML (inside
+ * self.__next_f.push(...) flight-protocol chunks, with quotes backslash-escaped).
+ * There's no documented public API, so we unescape the HTML and regex out each
+ * slot object. Each slot's "startDate" carries a T00:00:00.000Z sentinel (the
+ * real time lives in "startTime"/"endTime"), and "timezone" is sometimes null.
+ */
+const BOND_SPORTS_SLOT_RE = new RegExp(
+  '"title":"([^"]*)","slotType":"[^"]*","paymentStatus":"[^"]*","approvalStatus":"[^"]*",' +
+  '"startDate":"(\\d{4}-\\d\\d-\\d\\d)T00:00:00\\.000Z","startTime":"(\\d\\d:\\d\\d:\\d\\d)",' +
+  '"endDate":"\\d{4}-\\d\\d-\\d\\dT00:00:00\\.000Z","endTime":"(\\d\\d:\\d\\d:\\d\\d)",' +
+  '"timezone":(?:null|"[^"]*"),"spaceId":\\d+,"instructorsIds":\\[[^\\]]*\\],' +
+  '"colorCodeId":(?:\\d+|null),"space":\\{"id":\\d+,"name":"([^"]*)"\\}',
+  'g'
+);
+
+function parseBondSportsSlots(html, keyword) {
+  const text = html.replace(/\\"/g, '"');
+  const rows = [];
+  let m;
+  while ((m = BOND_SPORTS_SLOT_RE.exec(text))) {
+    const [, title, dateStr, startTime, endTime, space] = m;
+    if (!title.includes(keyword)) continue;
+    const [y, mo, d] = dateStr.split('-').map(Number);
+    const [sh, sm] = startTime.split(':').map(Number);
+    const [eh, em] = endTime.split(':').map(Number);
+    const startDt = new Date(y, mo - 1, d, sh, sm, 0, 0);
+    const endDt = new Date(y, mo - 1, d, eh, em, 0, 0);
+    const timeLabel = `${startTime.slice(0, 5)}–${endTime.slice(0, 5)}`;
+    rows.push({ startDt, endDt, space, timeLabel });
+  }
+  return rows;
 }
 
 // ─── Date / time helpers ───────────────────────────────────────────────────
@@ -249,37 +290,43 @@ async function main() {
 
   for (const rink of RINKS) {
     console.log(`📋  Fetching ${rink.name} schedule…`);
-    let csvText;
+    let rows;
     try {
-      csvText = await fetchUrl(rink.csvUrl);
+      if (rink.source === 'bondsports') {
+        const html = await fetchUrl(rink.url);
+        rows = parseBondSportsSlots(html, rink.keyword);
+      } else {
+        const csvText = await fetchUrl(rink.csvUrl);
+        rows = parseCsv(csvText)
+          .filter((row) => (row['Event Name'] || '').includes(rink.keyword))
+          .map((row) => {
+            const date = parseSheetDate(row['Start Date']);
+            if (!date) return null;
+            const [startDt, endDt] = parseTimes(date, row['Time'] || '');
+            if (!startDt || !endDt) return null;
+            const space = (row['Space'] || rink.name)
+              .replace(/\s*-\s*Champions Skating Center/i, '')
+              .replace(/\s*-\s*Newington Ice/i, '')
+              .trim();
+            return { startDt, endDt, space, timeLabel: row['Time'] || '' };
+          })
+          .filter(Boolean);
+      }
       fetchedRinks.add(rink.keyword);
     } catch (err) {
-      console.error(`  ❌  Could not fetch CSV: ${err.message}`);
+      console.error(`  ❌  Could not fetch schedule: ${err.message}`);
       console.error(`  ⚠️   Skipping stale removal for ${rink.name} to avoid accidental deletions.`);
       continue;
     }
 
-    const rows = parseCsv(csvText);
     console.log(`  ${rows.length} rows parsed`);
 
     for (const row of rows) {
-      const eventName = row['Event Name'] || '';
-      if (!eventName.includes(rink.keyword)) continue;
-
-      const date = parseSheetDate(row['Start Date']);
-      if (!date) continue;
-      if (date < windowStart || date > windowEnd) continue;
-
-      const [startDt, endDt] = parseTimes(date, row['Time'] || '');
-      if (!startDt || !endDt) continue;
+      const { startDt, endDt, space, timeLabel } = row;
+      if (startDt < windowStart || startDt > windowEnd) continue;
 
       // Time filter: weekdays must be a morning slot (before noon) or ≥ 1:00 PM; weekends any time
       if (!isWeekend(startDt) && !isMorning(startDt) && !isAfter1PM(startDt)) continue;
-
-      const space = (row['Space'] || rink.name)
-        .replace(/\s*-\s*Champions Skating Center/i, '')
-        .replace(/\s*-\s*Newington Ice/i, '')
-        .trim();
 
       const summary = `Open Lesson – ${space}`;
       const key = eventKey(startDt, summary);
@@ -299,7 +346,7 @@ async function main() {
 
       // 3. If it was previously managed but is now missing from calendar → user deleted it
       if (managed[key]) {
-        console.log(`  🚫  Blocked (you deleted this): ${summary} on ${startDt.toDateString()} @ ${row['Time']}`);
+        console.log(`  🚫  Blocked (you deleted this): ${summary} on ${startDt.toDateString()} @ ${timeLabel}`);
         deleted[key] = true;
         deletedDirty = true;
         blocked++;
@@ -315,10 +362,10 @@ async function main() {
             start: { dateTime: startDt.toISOString(), timeZone: 'America/New_York' },
             end:   { dateTime: endDt.toISOString(),   timeZone: 'America/New_York' },
             colorId: rink.colorId,
-            description: `Rink: ${row['Space'] || rink.name}\nSource: ${rink.name} schedule`,
+            description: `Rink: ${space}\nSource: ${rink.name} schedule`,
           },
         });
-        console.log(`  ✅  Added: ${summary} on ${startDt.toDateString()} @ ${row['Time']}`);
+        console.log(`  ✅  Added: ${summary} on ${startDt.toDateString()} @ ${timeLabel}`);
         managed[key] = true;
         managedDirty = true;
         added++;
